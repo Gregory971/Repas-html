@@ -1,53 +1,53 @@
-# PlanRepas
+﻿# PlanRepas
 
 Application web de planification de repas : planning hebdomadaire, recettes, liste de
 courses, inventaire du frigo et banque d'aliments.
 
-**➡️ [Ouvrir l'application](https://gregory971.github.io/repas-html/)**
+**âž¡ï¸ [Ouvrir l'application](https://gregory971.github.io/Repas-html/)**
 
-Fichier HTML unique, sans build ni dépendance à installer. Version courante : **v0.21**.
+Fichier HTML unique, sans build ni dÃ©pendance Ã  installer. Version courante : **v0.21**.
 
-## Fonctionnalités
+## FonctionnalitÃ©s
 
 - Planning hebdomadaire midi / soir sur plusieurs semaines, avec navigation par dates
-- Glisser-déposer des recettes (souris) et mode « placement » en deux touches (tactile)
+- Glisser-dÃ©poser des recettes (souris) et mode Â« placement Â» en deux touches (tactile)
 - Portions ajustables par repas et accompagnements
-- Liste de courses générée depuis le planning, quantités agrégées et rangées par rayon
-- Inventaire du frigo avec dates de péremption
-- Générateur de menu local (équilibré, végétarien, express, antillais)
-- Exclusions d'ingrédients, score d'équilibre, impression, thème clair / sombre
+- Liste de courses gÃ©nÃ©rÃ©e depuis le planning, quantitÃ©s agrÃ©gÃ©es et rangÃ©es par rayon
+- Inventaire du frigo avec dates de pÃ©remption
+- GÃ©nÃ©rateur de menu local (Ã©quilibrÃ©, vÃ©gÃ©tarien, express, antillais)
+- Exclusions d'ingrÃ©dients, score d'Ã©quilibre, impression, thÃ¨me clair / sombre
 - Export et import JSON
 
-## Données
+## DonnÃ©es
 
-Tout est stocké dans le `localStorage` de votre navigateur, sous la clé `planrepas_v21`.
-**Rien n'est envoyé sur un serveur.** Les données sont propres à chaque navigateur et à
-chaque appareil : utilisez l'export / import JSON pour les transférer.
+Tout est stockÃ© dans le `localStorage` de votre navigateur, sous la clÃ© `planrepas_v21`.
+**Rien n'est envoyÃ© sur un serveur.** Les donnÃ©es sont propres Ã  chaque navigateur et Ã 
+chaque appareil : utilisez l'export / import JSON pour les transfÃ©rer.
 
-L'application récupère automatiquement les sauvegardes des versions antérieures
-(`planrepas_*` de la v0.20, `pr15_data` à `pr7_data` des versions v0.7 à v0.15). Ces clés
-sont lues sans jamais être modifiées. En cas de besoin :
-**Réglages → Récupérer mes données des versions v0.7 à v0.15**.
+L'application rÃ©cupÃ¨re automatiquement les sauvegardes des versions antÃ©rieures
+(`planrepas_*` de la v0.20, `pr15_data` Ã  `pr7_data` des versions v0.7 Ã  v0.15). Ces clÃ©s
+sont lues sans jamais Ãªtre modifiÃ©es. En cas de besoin :
+**RÃ©glages â†’ RÃ©cupÃ©rer mes donnÃ©es des versions v0.7 Ã  v0.15**.
 
-> Sauvegardez régulièrement via le bouton d'export : vider les données de navigation
+> Sauvegardez rÃ©guliÃ¨rement via le bouton d'export : vider les donnÃ©es de navigation
 > efface le `localStorage`.
 
-## Connexion réseau
+## Connexion rÃ©seau
 
 La mise en page utilise Tailwind CSS et Google Fonts via CDN : une connexion est
-nécessaire au chargement de la page. L'application prévient si la feuille de style n'a pas
-pu être récupérée. Une fois chargée, l'utilisation se fait entièrement hors ligne.
+nÃ©cessaire au chargement de la page. L'application prÃ©vient si la feuille de style n'a pas
+pu Ãªtre rÃ©cupÃ©rÃ©e. Une fois chargÃ©e, l'utilisation se fait entiÃ¨rement hors ligne.
 
-## Structure du dépôt
+## Structure du dÃ©pÃ´t
 
-| Chemin | Rôle |
+| Chemin | RÃ´le |
 |---|---|
-| `index.html` | Application servie par GitHub Pages — copie de la version courante |
+| `index.html` | Application servie par GitHub Pages â€” copie de la version courante |
 | `Repas v0.21 Modern UX.html` | Fichier de travail de la version courante |
-| `archives/` | Versions précédentes, v0.1 à v0.20 |
+| `archives/` | Versions prÃ©cÃ©dentes, v0.1 Ã  v0.20 |
 
-À chaque nouvelle version : créer `Repas v0.N.html`, déplacer la précédente dans
-`archives/`, puis recopier la nouvelle vers `index.html` pour mettre le site à jour.
+Ã€ chaque nouvelle version : crÃ©er `Repas v0.N.html`, dÃ©placer la prÃ©cÃ©dente dans
+`archives/`, puis recopier la nouvelle vers `index.html` pour mettre le site Ã  jour.
 
 ## Licence
 

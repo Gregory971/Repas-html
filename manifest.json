@@ -1,0 +1,20 @@
+{
+  "name": "PlanRepas — Planification de repas",
+  "short_name": "PlanRepas",
+  "description": "Planning hebdomadaire de repas, recettes, liste de courses et inventaire du frigo. Données stockées localement.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "id": "/Repas-html/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1326",
+  "theme_color": "#0b1326",
+  "categories": ["food", "lifestyle", "productivity"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

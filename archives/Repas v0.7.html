@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanRepas v0.7</title>
+<style>
+:root {
+  --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#e2e8f0;
+  --text-primary:#1a202c;--text-secondary:#4a5568;--text-muted:#718096;
+  --border-color:#e2e8f0;--accent-color:#3182ce;--accent-hover:#2c5aa0;
+  --success-color:#38a169;--warning-color:#d69e2e;--danger-color:#e53e3e;
+  --shadow:0 1px 3px rgba(0,0,0,.1);--shadow-lg:0 4px 6px -1px rgba(0,0,0,.1);
+}
+[data-theme="dark"] {
+  --bg-primary:#1a202c;--bg-secondary:#2d3748;--bg-tertiary:#4a5568;
+  --text-primary:#f7fafc;--text-secondary:#e2e8f0;--text-muted:#a0aec0;
+  --border-color:#4a5568;--accent-color:#63b3ed;--accent-hover:#4299e1;
+  --success-color:#68d391;--warning-color:#f6e05e;--danger-color:#fc8181;
+  --shadow:0 1px 3px rgba(0,0,0,.3);--shadow-lg:0 4px 6px -1px rgba(0,0,0,.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg-secondary);color:var(--text-primary);line-height:1.6;min-height:100vh;}
+.app-container{display:grid;grid-template-columns:280px 1fr 300px;grid-template-rows:auto 1fr;height:100vh;gap:.75rem;padding:.75rem;}
+.app-header{grid-column:1/-1;background:var(--bg-primary);padding:.75rem 1rem;border-radius:8px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.app-title{font-size:1.3rem;font-weight:bold;color:var(--accent-color);}
+.header-controls{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;}
+.panel{background:var(--bg-primary);border-radius:8px;box-shadow:var(--shadow);padding:.75rem;overflow:hidden;display:flex;flex-direction:column;}
+.panel-header{font-weight:600;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;gap:.4rem;flex-wrap:wrap;}
+.panel-content{flex:1;overflow-y:auto;}
+.recipes-panel{grid-row:2;grid-column:1;}
+.planning-panel{grid-row:2;grid-column:2;}
+.right-panel{grid-row:2;grid-column:3;}
+.search-box{width:100%;padding:.45rem .6rem;border:1px solid var(--border-color);border-radius:4px;background:var(--bg-secondary);color:var(--text-primary);margin-bottom:.75rem;font-size:.875rem;}
+.filters{margin-bottom:.75rem;}
+.filter-group{margin-bottom:.4rem;}
+.filter-label{font-size:.8rem;color:var(--text-secondary);margin-bottom:.2rem;display:block;}
+.filter-select{width:100%;padding:.25rem;border:1px solid var(--border-color);border-radius:4px;background:var(--bg-secondary);color:var(--text-primary);font-size:.8rem;}
+.recipe-list{display:flex;flex-direction:column;gap:.4rem;}
+.recipe-item{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:6px;padding:.6rem;cursor:grab;transition:all .2s;position:relative;}
+.recipe-item:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);}
+.recipe-item:active{cursor:grabbing;}
+.recipe-item.dragging{opacity:.5;}
+.recipe-actions{display:none;position:absolute;top:.4rem;right:.4rem;gap:.2rem;}
+.recipe-item:hover .recipe-actions{display:flex;}
+.recipe-title{font-weight:600;margin-bottom:.2rem;font-size:.875rem;padding-right:3.5rem;}
+.recipe-meta{font-size:.72rem;color:var(--text-muted);margin-bottom:.35rem;}
+.recipe-tags{display:flex;flex-wrap:wrap;gap:.2rem;}
+.tag{background:var(--accent-color);color:#fff;padding:.1rem .35rem;border-radius:10px;font-size:.6rem;font-weight:500;}
+.tag.vege{background:var(--success-color);}
+.tag.rapide{background:var(--warning-color);}
+.tag.épicé{background:#d69e2e;}
+.tag.healthy{background:#319795;}
+.tag.street-food{background:#3182ce;}
+.tag.flambé{background:#dd6b20;}
+/* Tag filter pills */
+.tag-pills{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem;}
+.tag-pill{background:var(--bg-tertiary);color:var(--text-secondary);border:1px solid var(--border-color);border-radius:12px;padding:.15rem .55rem;font-size:.72rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tag-pill:hover{border-color:var(--accent-color);color:var(--accent-color);}
+.tag-pill.active{background:var(--accent-color);color:#fff;border-color:var(--accent-color);}
+.tag-pill.active.vege{background:var(--success-color);border-color:var(--success-color);}
+.tag-pill.active.rapide{background:var(--warning-color);border-color:var(--warning-color);}
+.tag-pill.active.healthy{background:#319795;border-color:#319795;}
+.tag-pill.active.épicé{background:#d69e2e;border-color:#d69e2e;}
+.recipe-count{font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem;}
+/* Recipe detail */
+.detail-section{margin-bottom:.75rem;}
+.detail-section-title{font-size:.8rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem;}
+.detail-ing-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.2rem .75rem;}
+.detail-ing-list li{font-size:.85rem;padding:.15rem 0;border-bottom:1px solid var(--border-color);}
+.detail-ing-list li:before{content:'·';color:var(--accent-color);margin-right:.3rem;}
+.detail-steps{counter-reset:step;list-style:none;}
+.detail-steps li{counter-increment:step;font-size:.85rem;padding:.35rem 0;border-bottom:1px solid var(--border-color);display:flex;gap:.5rem;}
+.detail-steps li:before{content:counter(step);min-width:20px;height:20px;background:var(--accent-color);color:#fff;border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem;}
+.detail-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.5rem;}
+.detail-meta-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem;}
+.detail-meta-item{background:var(--bg-secondary);border-radius:6px;padding:.4rem .6rem;text-align:center;}
+.detail-meta-value{font-size:1rem;font-weight:700;color:var(--accent-color);}
+.detail-meta-label{font-size:.65rem;color:var(--text-muted);}
+/* Save indicator */
+.save-indicator{font-size:.72rem;color:var(--success-color);opacity:0;transition:opacity .4s;display:flex;align-items:center;gap:.2rem;}
+.save-indicator.visible{opacity:1;}
+/* Week rename */
+.week-label[contenteditable]{outline:none;border-bottom:1px dashed var(--accent-color);cursor:text;min-width:60px;}
+/* Tag checkboxes */
+.tag-check-group{display:flex;flex-wrap:wrap;gap:.4rem;}
+.tag-check{display:flex;align-items:center;gap:.25rem;font-size:.8rem;cursor:pointer;}
+/* Planning */
+.week-nav{display:flex;align-items:center;gap:.3rem;}
+.week-label{font-size:.78rem;font-weight:600;color:var(--text-secondary);white-space:nowrap;min-width:80px;text-align:center;}
+.week-controls{display:flex;gap:.35rem;flex-wrap:wrap;}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem;}
+.day-column{display:flex;flex-direction:column;gap:2px;}
+.day-header{background:var(--bg-tertiary);padding:.4rem;text-align:center;font-weight:700;border-radius:4px;font-size:.8rem;}
+.period-label{background:rgba(49,130,206,.1);padding:.2rem .4rem;font-size:.7rem;font-weight:700;color:var(--accent-color);text-align:center;border-radius:3px;margin-top:3px;}
+.meal-slot{background:var(--bg-secondary);border:2px dashed var(--border-color);min-height:60px;padding:.35rem;display:flex;flex-direction:column;gap:.2rem;position:relative;border-radius:4px;}
+.meal-slot.drag-over{border-color:var(--accent-color);background:rgba(49,130,206,.08);}
+.meal-label{font-size:.65rem;color:var(--text-muted);font-weight:600;}
+.people-input{position:absolute;top:.2rem;right:.2rem;width:36px;padding:.1rem;border:1px solid var(--border-color);border-radius:3px;background:var(--bg-primary);color:var(--text-primary);font-size:.65rem;text-align:center;}
+.planned-recipe{background:var(--accent-color);color:#fff;padding:.25rem .35rem;border-radius:4px;font-size:.68rem;font-weight:500;cursor:pointer;position:relative;word-break:break-word;}
+.planned-recipe .remove-btn{position:absolute;top:-5px;right:-5px;background:var(--danger-color);color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:.6rem;cursor:pointer;display:none;line-height:16px;text-align:center;}
+.planned-recipe:hover .remove-btn{display:block;}
+.meal-accompagnements{margin-top:.25rem;padding-top:.25rem;border-top:1px dashed var(--border-color);}
+.accompagnement-tag{display:inline-flex;align-items:center;gap:.2rem;padding:.15rem .35rem;background:#805ad5;color:#fff;border-radius:4px;font-size:.62rem;margin:.1rem;}
+.accompagnement-tag .remove-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:.75rem;padding:0;margin-left:.15rem;line-height:1;}
+.add-accompagnement-btn{display:inline-flex;align-items:center;gap:.2rem;padding:.15rem .35rem;background:var(--bg-tertiary);color:var(--text-secondary);border:1px dashed var(--border-color);border-radius:4px;font-size:.62rem;cursor:pointer;transition:all .2s;}
+.add-accompagnement-btn:hover{background:var(--accent-color);color:#fff;border-color:var(--accent-color);}
+.nutrition-score{background:var(--bg-tertiary);padding:.75rem;border-radius:6px;margin-top:.75rem;flex-shrink:0;}
+.score-bar{width:100%;height:16px;background:var(--border-color);border-radius:8px;overflow:hidden;margin:.4rem 0;}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--danger-color),var(--warning-color),var(--success-color));transition:width .3s;}
+/* Right panel tabs */
+.panel-tabs{display:flex;border-bottom:1px solid var(--border-color);margin-bottom:.75rem;flex-shrink:0;}
+.tab-btn{background:none;border:none;padding:.4rem .6rem;cursor:pointer;color:var(--text-secondary);border-bottom:2px solid transparent;font-size:.8rem;white-space:nowrap;}
+.tab-btn.active{color:var(--accent-color);border-bottom-color:var(--accent-color);}
+.shopping-list{display:flex;flex-direction:column;gap:.4rem;}
+.shopping-section{background:var(--bg-secondary);border-radius:6px;padding:.6rem;}
+.section-title{font-weight:600;margin-bottom:.4rem;color:var(--text-secondary);font-size:.8rem;}
+.ingredient-item{display:flex;align-items:center;gap:.4rem;padding:.2rem 0;}
+.ingredient-text{flex:1;font-size:.8rem;}
+.ingredient-text.checked{text-decoration:line-through;color:var(--text-muted);}
+.inventory-list{display:flex;flex-direction:column;gap:.4rem;}
+.inventory-item{background:var(--bg-secondary);border-radius:6px;padding:.6rem;display:flex;justify-content:space-between;align-items:center;}
+.inventory-item.expiring{border-left:4px solid var(--warning-color);}
+.inventory-item.expired{border-left:4px solid var(--danger-color);}
+.inventory-name{font-weight:500;font-size:.85rem;}
+.inventory-meta{font-size:.72rem;color:var(--text-muted);}
+.inventory-actions{display:flex;gap:.25rem;}
+/* Food bank */
+.foodbank-add-form{display:flex;gap:.4rem;margin-bottom:.75rem;flex-wrap:wrap;}
+.foodbank-add-form input,.foodbank-add-form select{flex:1;min-width:70px;padding:.35rem .5rem;border:1px solid var(--border-color);border-radius:4px;background:var(--bg-secondary);color:var(--text-primary);font-size:.8rem;}
+.food-category{margin-bottom:.6rem;}
+.food-category-header{font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:.3rem;padding:.2rem .4rem;background:var(--bg-tertiary);border-radius:3px;}
+.food-item{display:flex;justify-content:space-between;align-items:center;padding:.2rem .35rem;border-radius:3px;font-size:.8rem;}
+.food-item:hover{background:var(--bg-tertiary);}
+/* Buttons */
+.btn{background:var(--accent-color);color:#fff;border:none;padding:.4rem .8rem;border-radius:4px;cursor:pointer;font-size:.8rem;transition:background .2s;display:inline-flex;align-items:center;gap:.3rem;}
+.btn:hover{background:var(--accent-hover);}
+.btn-secondary{background:var(--bg-tertiary);color:var(--text-primary);}
+.btn-secondary:hover{background:var(--border-color);}
+.btn-small{padding:.2rem .5rem;font-size:.72rem;}
+.btn-danger{background:var(--danger-color);}
+.btn-danger:hover{background:#c53030;}
+.btn-success{background:var(--success-color);}
+/* Touch drag ghost */
+.touch-drag-ghost{position:fixed;pointer-events:none;z-index:9000;opacity:.85;background:var(--accent-color);color:#fff;padding:.4rem .7rem;border-radius:6px;font-size:.8rem;font-weight:600;transform:translate(-50%,-120%);box-shadow:var(--shadow-lg);}
+/* Modal */
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;}
+.modal-content{background:var(--bg-primary);border-radius:8px;padding:1.5rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.modal-title{font-size:1.1rem;font-weight:600;}
+.close-btn{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted);}
+.form-group{margin-bottom:.75rem;}
+.form-label{display:block;margin-bottom:.35rem;font-weight:500;font-size:.875rem;}
+.form-input{width:100%;padding:.45rem .6rem;border:1px solid var(--border-color);border-radius:4px;background:var(--bg-secondary);color:var(--text-primary);font-size:.875rem;}
+.form-textarea{min-height:90px;resize:vertical;}
+.form-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem;}
+.accompagnements-grid{display:grid;gap:1rem;padding:.5rem 0;}
+.accompagnements-category h3{color:var(--text-primary);margin-bottom:.4rem;font-size:.9rem;}
+.accompagnements-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.35rem;}
+.accompagnement-btn{display:flex;justify-content:space-between;align-items:center;padding:.5rem .6rem;border:1px solid var(--border-color);border-radius:6px;background:var(--bg-secondary);color:var(--text-primary);cursor:pointer;transition:all .2s;font-size:.8rem;}
+.accompagnement-btn:hover{background:var(--bg-tertiary);border-color:var(--accent-color);}
+.accompagnement-time{font-size:.75rem;color:var(--text-muted);background:var(--bg-primary);padding:.15rem .35rem;border-radius:3px;}
+/* Toast */
+.toast-container{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.5rem;}
+.toast{padding:.6rem 1rem;border-radius:6px;color:#fff;font-size:.85rem;box-shadow:var(--shadow-lg);animation:slideIn .3s ease-out;max-width:320px;}
+.toast.success{background:#2f855a;}
+.toast.warning{background:#c05621;}
+.toast.error{background:#c53030;}
+.toast.info{background:#2b6cb0;}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+:focus{outline:2px solid var(--accent-color);outline-offset:2px;}
+/* Print */
+@media print{
+  .toast-container{display:none!important;}
+  body[data-print="planning"] .recipes-panel,
+  body[data-print="planning"] .right-panel,
+  body[data-print="planning"] .app-header{display:none!important;}
+  body[data-print="planning"] .app-container{display:block;height:auto;padding:0;}
+  body[data-print="planning"] .planning-panel{box-shadow:none;border:none;height:auto;overflow:visible;padding:.3cm;width:100%;}
+  body[data-print="planning"] .panel-content{overflow:visible;}
+  body[data-print="planning"] .panel-header button,
+  body[data-print="planning"] .week-controls,
+  body[data-print="planning"] .week-nav,
+  body[data-print="planning"] .nutrition-score,
+  body[data-print="planning"] .people-input,
+  body[data-print="planning"] .add-accompagnement-btn,
+  body[data-print="planning"] .meal-accompagnements{display:none!important;}
+  body[data-print="planning"] .week-grid{grid-template-columns:repeat(7,1fr)!important;gap:3px;}
+  body[data-print="planning"] .day-column{gap:2px;}
+  body[data-print="planning"] .day-header{font-size:.65rem;padding:3px;}
+  body[data-print="planning"] .period-label{font-size:.55rem;padding:1px 3px;margin-top:2px;}
+  body[data-print="planning"] .meal-slot{min-height:28px;padding:3px 4px;border:1px solid #ccc;}
+  body[data-print="planning"] .meal-label{font-size:.55rem;}
+  body[data-print="planning"] .planned-recipe{font-size:.58rem;padding:2px 4px;background:#3182ce!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body[data-print="planning"] .planned-recipe .remove-btn{display:none!important;}
+  body[data-print="shopping"] .recipes-panel,
+  body[data-print="shopping"] .planning-panel,
+  body[data-print="shopping"] .app-header{display:none!important;}
+  body[data-print="shopping"] .app-container{display:block;height:auto;}
+  body[data-print="shopping"] .right-panel{box-shadow:none;border:1px solid #ccc;height:auto;overflow:visible;}
+  body[data-print="shopping"] .panel-content{overflow:visible;}
+  body[data-print="shopping"] .panel-tabs,
+  body[data-print="shopping"] #right-actions{display:none!important;}
+  body[data-print="shopping"] #shopping-content{display:block!important;}
+  body[data-print="shopping"] #inventory-content,
+  body[data-print="shopping"] #foodbank-content{display:none!important;}
+}
+@media(max-width:1100px){
+  .app-container{grid-template-columns:1fr;height:auto;}
+  .recipes-panel,.planning-panel,.right-panel{grid-column:1;grid-row:auto;}
+  .week-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="toast-container" id="toast-container"></div>
+
+<div class="app-container">
+  <header class="app-header">
+    <h1 class="app-title">🍽️ PlanRepas v0.7</h1>
+    <div class="header-controls">
+      <span class="save-indicator" id="save-indicator">✓ Sauvegardé</span>
+      <button class="btn btn-success btn-small" onclick="handleRandomGenerate()">🎲 Aléatoire</button>
+      <button class="btn btn-secondary btn-small" onclick="toggleTheme()">🌙</button>
+      <button class="btn btn-secondary btn-small" onclick="exportData()">💾 Export</button>
+      <button class="btn btn-secondary btn-small" onclick="importData()">📁 Import</button>
+    </div>
+  </header>
+
+  <!-- Recettes -->
+  <aside class="panel recipes-panel">
+    <div class="panel-header">
+      <span>📚 Recettes</span>
+      <button class="btn btn-secondary btn-small" onclick="showAddRecipeModal()">+ Ajouter</button>
+    </div>
+    <div class="panel-content">
+      <input type="text" class="search-box" id="recipe-search" placeholder="Rechercher… (touche /)" oninput="debouncedFilter()">
+      <div class="filters">
+        <div class="filter-group">
+          <label class="filter-label">Type</label>
+          <select class="filter-select" id="type-filter" onchange="filterRecipes()">
+            <option value="">Tous</option>
+            <option value="entrée">Entrées</option>
+            <option value="plat">Plats</option>
+            <option value="dessert">Desserts</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Cuisine</label>
+          <select class="filter-select" id="cuisine-filter" onchange="filterRecipes()">
+            <option value="">Toutes</option>
+            <option value="française">Française</option>
+            <option value="antillaise">Antillaise</option>
+            <option value="rapide">Rapide</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Temps</label>
+          <select class="filter-select" id="time-filter" onchange="filterRecipes()">
+            <option value="">Tous</option>
+            <option value="0-20">≤ 20 min</option>
+            <option value="20-40">20–40 min</option>
+            <option value="40-60">40–60 min</option>
+            <option value="60-9999">+ de 60 min</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Saison</label>
+          <select class="filter-select" id="seasonal-filter" onchange="filterRecipes()">
+            <option value="">Toutes saisons</option>
+            <option value="auto">Mois actuel</option>
+            <option value="1">Janvier</option><option value="2">Février</option>
+            <option value="3">Mars</option><option value="4">Avril</option>
+            <option value="5">Mai</option><option value="6">Juin</option>
+            <option value="7">Juillet</option><option value="8">Août</option>
+            <option value="9">Septembre</option><option value="10">Octobre</option>
+            <option value="11">Novembre</option><option value="12">Décembre</option>
+          </select>
+        </div>
+      </div>
+      <div class="tag-pills" id="tag-pills">
+        <button class="tag-pill active" data-tag="" onclick="setTagFilter(this,'')">Tous</button>
+        <button class="tag-pill vege" data-tag="vege" onclick="setTagFilter(this,'vege')">🌿 Végé</button>
+        <button class="tag-pill rapide" data-tag="rapide" onclick="setTagFilter(this,'rapide')">⚡ Rapide</button>
+        <button class="tag-pill healthy" data-tag="healthy" onclick="setTagFilter(this,'healthy')">💚 Healthy</button>
+        <button class="tag-pill épicé" data-tag="épicé" onclick="setTagFilter(this,'épicé')">🌶️ Épicé</button>
+      </div>
+      <div class="recipe-count" id="recipe-count"></div>
+      <div class="recipe-list" id="recipe-list"></div>
+    </div>
+  </aside>
+
+  <!-- Planning -->
+  <main class="panel planning-panel">
+    <div class="panel-header">
+      <div class="week-nav">
+        <button class="btn btn-secondary btn-small" onclick="prevWeek()" title="Semaine précédente (Ctrl+◀)">◀</button>
+        <span class="week-label" id="week-label" title="Cliquer pour renommer">Semaine 1</span>
+        <button class="btn btn-secondary btn-small" onclick="nextWeek()" title="Semaine suivante (Ctrl+▶)">▶</button>
+        <button class="btn btn-secondary btn-small" onclick="addWeek()" title="Nouvelle semaine">+</button>
+      </div>
+      <div class="week-controls">
+        <button class="btn btn-secondary btn-small" onclick="duplicateWeek()">Dupliquer</button>
+        <button class="btn btn-secondary btn-small" onclick="clearWeek()">Effacer</button>
+        <button class="btn btn-secondary btn-small" onclick="printPlanning()">🖨️</button>
+      </div>
+    </div>
+    <div class="panel-content">
+      <div class="week-grid" id="week-grid"></div>
+      <div class="nutrition-score">
+        <strong style="font-size:.85rem;">Score nutritionnel</strong>
+        <div class="score-bar"><div class="score-fill" id="nutrition-bar" style="width:0%"></div></div>
+        <div id="nutrition-text" style="font-size:.8rem;">Score: 0/100</div>
+        <div id="nutrition-advice" style="font-size:.78rem;color:var(--text-muted);"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Panneau droit -->
+  <aside class="panel right-panel">
+    <div class="panel-tabs">
+      <button class="tab-btn active" id="tab-shopping" onclick="switchTab('shopping')">🛒 Courses</button>
+      <button class="tab-btn" id="tab-inventory" onclick="switchTab('inventory')">🏠 Stock</button>
+      <button class="tab-btn" id="tab-foodbank" onclick="switchTab('foodbank')">🥦 Aliments</button>
+    </div>
+    <div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-shrink:0;" id="right-actions">
+      <button class="btn btn-secondary btn-small" id="action-generate" onclick="generateShoppingList()" title="Générer">🔄</button>
+      <button class="btn btn-secondary btn-small" id="action-uncheck" onclick="uncheckAll()" title="Tout décocher">☐ Tout</button>
+      <button class="btn btn-secondary btn-small" id="action-print" onclick="printShoppingList()" title="Imprimer">🖨️</button>
+      <button class="btn btn-secondary btn-small" id="action-add-stock" onclick="showAddInventoryModal()" style="display:none">+ Ajouter</button>
+    </div>
+    <div class="panel-content">
+      <div id="shopping-content" class="shopping-list"></div>
+      <div id="inventory-content" style="display:none;"></div>
+      <div id="foodbank-content" style="display:none;">
+        <form onsubmit="addFoodItem(event)" class="foodbank-add-form">
+          <input type="text" id="food-name" placeholder="Nom" required style="flex:2;min-width:90px;">
+          <select id="food-category">
+            <option value="Viande">🥩 Viande</option>
+            <option value="Poisson">🐟 Poisson</option>
+            <option value="Légume" selected>🥦 Légume</option>
+            <option value="Féculent">🍚 Féculent</option>
+            <option value="Fruit">🍎 Fruit</option>
+            <option value="Crudité">🥗 Crudité</option>
+            <option value="Conserve">🥫 Conserve</option>
+            <option value="Autre">🍽️ Autre</option>
+          </select>
+          <input type="number" id="food-qty" value="1" min="0.1" step="0.1" style="width:50px;flex:none;" title="Quantité par personne">
+          <select id="food-unit" style="width:60px;flex:none;">
+            <option value="g">g</option><option value="kg">kg</option>
+            <option value="ml">ml</option><option value="l">l</option>
+            <option value="pièce" selected>pce</option>
+          </select>
+          <button type="submit" class="btn btn-small">+</button>
+        </form>
+        <div id="foodbank-list"></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Modal Recette (ajout + édition) -->
+<div id="recipe-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="recipe-modal-title">Ajouter une recette</h2>
+      <button class="close-btn" onclick="closeModal('recipe-modal')">&times;</button>
+    </div>
+    <form id="recipe-form" onsubmit="saveRecipe(event)">
+      <input type="hidden" id="recipe-edit-id">
+      <div class="form-group"><label class="form-label">Titre *</label><input type="text" class="form-input" id="recipe-title" required></div>
+      <div class="form-group"><label class="form-label">Type *</label>
+        <select class="form-input" id="recipe-type" required>
+          <option value="">—</option><option value="entrée">Entrée</option><option value="plat">Plat</option><option value="dessert">Dessert</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Cuisine</label><input type="text" class="form-input" id="recipe-cuisine" placeholder="française, antillaise…"></div>
+      <div class="form-group"><label class="form-label">Portions</label><input type="number" class="form-input" id="recipe-servings" value="4" min="1"></div>
+      <div class="form-group"><label class="form-label">Préparation (min)</label><input type="number" class="form-input" id="recipe-prep" min="0" value="0"></div>
+      <div class="form-group"><label class="form-label">Cuisson (min)</label><input type="number" class="form-input" id="recipe-cook" min="0" value="0"></div>
+      <div class="form-group"><label class="form-label">Ingrédients * (un par ligne)</label><textarea class="form-input form-textarea" id="recipe-ingredients" required placeholder="200g de tomates&#10;1 oignon&#10;3 cuillères à soupe d'huile"></textarea></div>
+      <div class="form-group"><label class="form-label">Étapes</label><textarea class="form-input form-textarea" id="recipe-steps" placeholder="Étapes de préparation…"></textarea></div>
+      <div class="form-group"><label class="form-label">Tags</label>
+        <div class="tag-check-group">
+          <label class="tag-check"><input type="checkbox" name="recipe-tag" value="vege"> 🌿 Végé</label>
+          <label class="tag-check"><input type="checkbox" name="recipe-tag" value="healthy"> 💚 Healthy</label>
+          <label class="tag-check"><input type="checkbox" name="recipe-tag" value="épicé"> 🌶️ Épicé</label>
+          <label class="tag-check"><input type="checkbox" name="recipe-tag" value="street-food"> 🥙 Street food</label>
+          <label class="tag-check"><input type="checkbox" name="recipe-tag" value="flambé"> 🔥 Flambé</label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('recipe-modal')">Annuler</button>
+        <button type="submit" class="btn" id="recipe-submit-btn">Ajouter</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Inventaire -->
+<div id="inventory-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="inventory-modal-title">Ajouter au stock</h2>
+      <button class="close-btn" onclick="closeModal('inventory-modal')">&times;</button>
+    </div>
+    <form id="inventory-form" onsubmit="saveInventoryItem(event)">
+      <div class="form-group"><label class="form-label">Produit *</label><input type="text" class="form-input" id="inventory-name" required></div>
+      <div class="form-group"><label class="form-label">Quantité</label><input type="number" class="form-input" id="inventory-qty" min="0" step="0.1" value="1"></div>
+      <div class="form-group"><label class="form-label">Unité</label>
+        <select class="form-input" id="inventory-unit">
+          <option value="pièce">pièce</option><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="l">l</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Date de péremption</label><input type="date" class="form-input" id="inventory-expiry"></div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('inventory-modal')">Annuler</button>
+        <button type="submit" class="btn" id="inventory-submit-btn">Ajouter</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Accompagnements -->
+<div id="acc-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Choisir un accompagnement</h2>
+      <button class="close-btn" onclick="closeModal('acc-modal')">&times;</button>
+    </div>
+    <input type="text" id="acc-search" class="search-box" placeholder="Filtrer…" oninput="filterAccModal()" style="margin-bottom:.5rem;">
+    <div class="accompagnements-grid" id="acc-fixed">
+      <div class="accompagnements-category"><h3>🍚 Céréales</h3>
+        <div class="accompagnements-list">
+          <button class="accompagnement-btn" onclick="selectAcc('riz-blanc')"><span>Riz blanc</span><span class="accompagnement-time">20 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('riz-complet')"><span>Riz complet</span><span class="accompagnement-time">35 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('pates-spaghetti')"><span>Spaghetti</span><span class="accompagnement-time">12 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('pates-penne')"><span>Penne</span><span class="accompagnement-time">12 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('semoule')"><span>Semoule</span><span class="accompagnement-time">15 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('quinoa')"><span>Quinoa</span><span class="accompagnement-time">20 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('boulgour')"><span>Boulgour</span><span class="accompagnement-time">15 min</span></button>
+        </div>
+      </div>
+      <div class="accompagnements-category"><h3>🥔 Légumes</h3>
+        <div class="accompagnements-list">
+          <button class="accompagnement-btn" onclick="selectAcc('pommes-terre')"><span>Pommes de terre</span><span class="accompagnement-time">25 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('puree')"><span>Purée</span><span class="accompagnement-time">30 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('patate-douce')"><span>Patate douce</span><span class="accompagnement-time">25 min</span></button>
+        </div>
+      </div>
+      <div class="accompagnements-category"><h3>🫘 Légumineuses</h3>
+        <div class="accompagnements-list">
+          <button class="accompagnement-btn" onclick="selectAcc('lentilles')"><span>Lentilles</span><span class="accompagnement-time">25 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('haricots-rouges')"><span>Haricots rouges</span><span class="accompagnement-time">30 min</span></button>
+        </div>
+      </div>
+      <div class="accompagnements-category"><h3>🍞 Pain</h3>
+        <div class="accompagnements-list">
+          <button class="accompagnement-btn" onclick="selectAcc('pain')"><span>Pain</span><span class="accompagnement-time">0 min</span></button>
+          <button class="accompagnement-btn" onclick="selectAcc('galette')"><span>Galette</span><span class="accompagnement-time">5 min</span></button>
+        </div>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--border-color);margin:.75rem 0;">
+    <p style="font-size:.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:.5rem;">📦 Depuis la base alimentaire</p>
+    <div id="fooditems-acc" class="accompagnements-grid"></div>
+  </div>
+</div>
+
+<!-- Modal Détail Recette -->
+<div id="detail-modal" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width:560px;">
+    <div class="modal-header">
+      <h2 class="modal-title" id="detail-title"></h2>
+      <div style="display:flex;gap:.4rem;align-items:center;">
+        <button class="btn btn-secondary btn-small" id="detail-edit-btn">✏️ Modifier</button>
+        <button class="close-btn" onclick="closeModal('detail-modal')">&times;</button>
+      </div>
+    </div>
+    <div id="detail-body"></div>
+  </div>
+</div>
+
+<script>
+// ===== CONSTANTES =====
+const SECTIONS = {
+  'fruits-legumes':'Fruits & Légumes','frais':'Produits frais','epicerie-salee':'Épicerie salée',
+  'epicerie-sucree':'Épicerie sucrée','surgeles':'Surgelés','boulangerie':'Boulangerie',
+  'boucherie':'Boucherie/Poissonnerie','boissons':'Boissons','entretien':'Entretien'
+};
+const DAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const MEAL_PERIODS = [
+  {id:'midi',label:'☀️ Midi',moments:[{key:'midi_entree',label:'Entrée'},{key:'midi_plat',label:'Plat'},{key:'midi_dessert',label:'Dessert'}]},
+  {id:'soir',label:'🌙 Soir',moments:[{key:'soir_entree',label:'Entrée'},{key:'soir_plat',label:'Plat'},{key:'soir_dessert',label:'Dessert'}]}
+];
+const ALL_MEAL_KEYS = ['midi_entree','midi_plat','midi_dessert','soir_entree','soir_plat','soir_dessert'];
+const ACCOMPAGNEMENTS = [
+  {id:'riz-blanc',name:'Riz blanc',ingredients:[{name:'riz',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'riz-complet',name:'Riz complet',ingredients:[{name:'riz complet',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'pates-spaghetti',name:'Spaghetti',ingredients:[{name:'spaghetti',qty:100,unit:'g',section:'epicerie-salee'}]},
+  {id:'pates-penne',name:'Penne',ingredients:[{name:'penne',qty:100,unit:'g',section:'epicerie-salee'}]},
+  {id:'semoule',name:'Semoule',ingredients:[{name:'semoule',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'quinoa',name:'Quinoa',ingredients:[{name:'quinoa',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'boulgour',name:'Boulgour',ingredients:[{name:'boulgour',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'pommes-terre',name:'Pommes de terre',ingredients:[{name:'pomme de terre',qty:200,unit:'g',section:'fruits-legumes'}]},
+  {id:'puree',name:'Purée',ingredients:[{name:'pomme de terre',qty:300,unit:'g',section:'fruits-legumes'},{name:'beurre',qty:20,unit:'g',section:'frais'}]},
+  {id:'patate-douce',name:'Patate douce',ingredients:[{name:'patate douce',qty:200,unit:'g',section:'fruits-legumes'}]},
+  {id:'lentilles',name:'Lentilles',ingredients:[{name:'lentille',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'haricots-rouges',name:'Haricots rouges',ingredients:[{name:'haricot rouge',qty:80,unit:'g',section:'epicerie-salee'}]},
+  {id:'pain',name:'Pain',ingredients:[{name:'pain',qty:100,unit:'g',section:'boulangerie'}]},
+  {id:'galette',name:'Galette',ingredients:[{name:'galette',qty:1,unit:'pièce',section:'boulangerie'}]}
+];
+const INGREDIENT_SECTIONS = {
+  'tomate':'fruits-legumes','oignon':'fruits-legumes','ail':'fruits-legumes','carotte':'fruits-legumes',
+  'pomme de terre':'fruits-legumes','courgette':'fruits-legumes','aubergine':'fruits-legumes',
+  'poivron':'fruits-legumes','champignon':'fruits-legumes','salade':'fruits-legumes','épinard':'fruits-legumes',
+  'brocoli':'fruits-legumes','citron':'fruits-legumes','avocat':'fruits-legumes','pomme':'fruits-legumes',
+  'banane':'fruits-legumes','cerise':'fruits-legumes','christophine':'fruits-legumes','giraumon':'fruits-legumes',
+  'patate douce':'fruits-legumes','piment':'fruits-legumes','ananas':'fruits-legumes','mangue':'fruits-legumes',
+  'papaye':'fruits-legumes','persil':'fruits-legumes','citron vert':'fruits-legumes',
+  'lait':'frais','yaourt':'frais','fromage':'frais','beurre':'frais','crème':'frais','œuf':'frais',
+  'mascarpone':'frais','pâte brisée':'frais','pâte à pizza':'frais','mozzarella':'frais',
+  'poulet':'boucherie','bœuf':'boucherie','porc':'boucherie','veau':'boucherie','agneau':'boucherie',
+  'saumon':'boucherie','thon':'boucherie','cabillaud':'boucherie','lardons':'boucherie','morue':'boucherie',
+  'boudin antillais':'boucherie','saucisses créoles':'boucherie','steak haché':'boucherie','confit de canard':'boucherie',
+  'riz':'epicerie-salee','pâtes':'epicerie-salee','farine':'epicerie-salee','huile':'epicerie-salee',
+  'sel':'epicerie-salee','poivre':'epicerie-salee','bouillon':'epicerie-salee','colombo':'epicerie-salee',
+  'lait de coco':'epicerie-salee','épices créoles':'epicerie-salee','semoule':'epicerie-salee',
+  'quinoa':'epicerie-salee','boulgour':'epicerie-salee','lentille':'epicerie-salee','riz complet':'epicerie-salee',
+  'spaghetti':'epicerie-salee','penne':'epicerie-salee','haricot rouge':'epicerie-salee','haricots blancs':'epicerie-salee',
+  'sucre':'epicerie-sucree','chocolat':'epicerie-sucree','sucre de canne':'epicerie-sucree','noix de coco':'epicerie-sucree',
+  'cacao':'epicerie-sucree','sirop de canne':'epicerie-sucree',
+  'pain':'boulangerie','baguette':'boulangerie','pain burger':'boulangerie','pain bokit':'boulangerie','galette':'boulangerie',
+  'vin rouge':'boissons','vin blanc':'boissons','bière':'boissons','rhum':'boissons','café':'boissons',
+};
+const FOOD_CATEGORY_ICONS = {Viande:'🥩',Poisson:'🐟',Légume:'🥦',Féculent:'🍚',Fruit:'🍎',Crudité:'🥗',Conserve:'🥫',Autre:'🍽️'};
+const FOOD_CAT_COLORS = {Viande:'#e53e3e',Poisson:'#3182ce',Légume:'#38a169',Féculent:'#805ad5',Fruit:'#d69e2e',Crudité:'#319795',Conserve:'#718096',Autre:'#718096'};
+const SEASONAL_PRODUCTS = {
+  1:['poireau','carotte','chou','épinard','mâche','endive','pomme','poire','orange','citron','kiwi'],
+  2:['poireau','carotte','chou','épinard','mâche','endive','pomme','poire','orange','citron','kiwi'],
+  3:['poireau','carotte','épinard','mâche','radis','pomme','poire','orange','citron'],
+  4:['radis','épinard','laitue','petit pois','asperge','carotte','fraise'],
+  5:['radis','épinard','laitue','petit pois','asperge','carotte','courgette','fraise'],
+  6:['laitue','courgette','aubergine','tomate','poivron','fraise','cerise','abricot','ananas','mangue'],
+  7:['laitue','courgette','aubergine','tomate','poivron','concombre','fraise','cerise','pêche','melon','ananas','mangue','papaye'],
+  8:['courgette','aubergine','tomate','poivron','concombre','pêche','melon','ananas','mangue','papaye'],
+  9:['courgette','aubergine','tomate','poivron','potiron','raisin','figue','ananas','mangue'],
+  10:['potiron','champignon','poireau','carotte','pomme','poire','raisin'],
+  11:['potiron','champignon','poireau','carotte','chou','épinard','pomme','poire'],
+  12:['poireau','carotte','chou','épinard','mâche','endive','pomme','poire','orange','citron','kiwi','ananas','mangue','papaye']
+};
+
+// ===== ÉTAT =====
+let recipes = [];
+let foodItems = [];
+let inventory = [];
+let shoppingList = [];
+let currentTab = 'shopping';
+let editingInventoryId = null;
+let editingRecipeId = null;
+let weeks = [];
+let currentWeekIndex = 0;
+let accContext = null;
+let activeTagFilter = '';
+let planDragSource = null; // {di, mk, id} pour drag cross-slot
+
+function plan() { return weeks[currentWeekIndex]; }
+
+function makeFreshPlan(name) {
+  return {
+    name: name || 'Semaine',
+    days: Array(7).fill(null).map(() => ({
+      meals: Object.fromEntries(ALL_MEAL_KEYS.map(k => [k, []])),
+      people: Object.fromEntries(ALL_MEAL_KEYS.map(k => [k, 4])),
+      accompagnements: Object.fromEntries(ALL_MEAL_KEYS.map(k => [k, []]))
+    }))
+  };
+}
+
+// ===== UTILITAIRES =====
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function debounce(fn, ms) {
+  let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+const debouncedFilter = debounce(filterRecipes, 300);
+
+function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
+
+function getSection(name) {
+  const n = name.toLowerCase().trim();
+  for (const [k, s] of Object.entries(INGREDIENT_SECTIONS)) { if (n.includes(k)) return s; }
+  return 'epicerie-salee';
+}
+
+function normalizeUnit(u) {
+  const m = {'cuillères à soupe':'cuillère à soupe','cuillère à soupe':'cuillère à soupe','cuillères à café':'cuillère à café','cuillère à café':'cuillère à café','pièces':'pièce','pièce':'pièce','tranches':'tranche','tranche':'tranche'};
+  return m[u.toLowerCase()] || u.toLowerCase();
+}
+
+function parseIngLine(line) {
+  const t = line.trim(); let m;
+  m = t.match(/^(\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|cl|cuillères?\s*[àa]\s*soupe|cuillères?\s*[àa]\s*caf[eé]|pièces?|tranches?)\s*d[e']?\s*(.+)$/i);
+  if (m) { const name=m[3].trim().toLowerCase(); return {name,qty:parseFloat(m[1].replace(',','.')),unit:normalizeUnit(m[2]),section:getSection(name)}; }
+  m = t.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+  if (m) { const name=m[2].trim().toLowerCase(); return {name,qty:parseFloat(m[1].replace(',','.')),unit:'pièce',section:getSection(name)}; }
+  const name = t.toLowerCase(); return {name,qty:1,unit:'pièce',section:getSection(name)};
+}
+
+function isSeasonal(name, month) {
+  const n = name.toLowerCase();
+  return (SEASONAL_PRODUCTS[month]||[]).some(p => n.includes(p)||p.includes(n));
+}
+
+function getSeasonMonth() {
+  const v = document.getElementById('seasonal-filter').value;
+  if (!v) return null;
+  return v === 'auto' ? new Date().getMonth()+1 : parseInt(v);
+}
+
+function itemName(id) {
+  if (id==='reste') return '🥘 Reste';
+  const r = recipes.find(r=>r.id===id); if (r) return r.title;
+  const f = foodItems.find(f=>f.id===id); if (f) return (FOOD_CATEGORY_ICONS[f.category]||'🍽️')+' '+f.name;
+  return '?';
+}
+
+function getAcc(id) { return ACCOMPAGNEMENTS.find(a=>a.id===id)||foodItems.find(f=>f.id===id)||null; }
+
+function slotType(mk) {
+  if (mk.includes('entree')) return 'entrée';
+  if (mk.includes('dessert')) return 'dessert';
+  return 'plat';
+}
+
+// ===== TOAST =====
+function toast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`; el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),300); }, 3000);
+}
+
+// ===== SAUVEGARDE =====
+let _saveTimer = null;
+function saveData() { clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 500); }
+function saveNow() { clearTimeout(_saveTimer); _doSave(); }
+
+function flashSaveIndicator() {
+  const el=document.getElementById('save-indicator');
+  el.classList.add('visible');
+  setTimeout(()=>el.classList.remove('visible'),2000);
+}
+function _doSave() {
+  try {
+    const payload = JSON.stringify({recipes,weeks,currentWeekIndex,inventory,shoppingList,foodItems});
+    if (payload.length > 4*1024*1024) toast('⚠️ Données volumineuses (>4 Mo) — exportez régulièrement', 'warning');
+    localStorage.setItem('pr7_data', payload);
+    flashSaveIndicator();
+  } catch(e) {
+    if (e.name==='QuotaExceededError') toast('❌ Stockage plein — exportez vos données !', 'error');
+    else console.error('Sauvegarde échouée', e);
+  }
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem('pr7_data');
+    if (raw) {
+      const d = JSON.parse(raw);
+      if (d.recipes) recipes = d.recipes;
+      if (d.weeks?.length) { weeks = d.weeks; weeks.forEach(migratePlan); }
+      if (typeof d.currentWeekIndex==='number') currentWeekIndex = d.currentWeekIndex;
+      if (d.inventory) inventory = d.inventory;
+      if (d.shoppingList) shoppingList = d.shoppingList;
+      if (d.foodItems) foodItems = d.foodItems;
+    } else {
+      // Migration v0.6
+      const sr=localStorage.getItem('pr6_recipes'), sp=localStorage.getItem('pr6_plan'),
+            si=localStorage.getItem('pr6_inventory'), ss=localStorage.getItem('pr6_shopping'),
+            sf=localStorage.getItem('pr6_fooditems');
+      if (sr) recipes = JSON.parse(sr);
+      if (sp) { const old=JSON.parse(sp); migratePlan(old); const w=makeFreshPlan('Semaine 1'); w.days=old.days; weeks=[w]; }
+      if (si) inventory = JSON.parse(si);
+      if (ss) shoppingList = JSON.parse(ss);
+      if (sf) foodItems = JSON.parse(sf);
+    }
+  } catch(e) { console.error('Chargement échoué', e); }
+  if (!recipes.length) loadSeedRecipes();
+  if (!foodItems.length) loadSeedFoodItems();
+  if (!weeks.length) weeks = [makeFreshPlan('Semaine 1')];
+  currentWeekIndex = Math.min(currentWeekIndex, weeks.length-1);
+}
+
+function migratePlan(p) {
+  if (!p.days) return;
+  if (!p.name) p.name = 'Semaine';
+  p.days.forEach(day => {
+    if (day.meals?.lunch !== undefined) {
+      const old=day.meals; day.meals=Object.fromEntries(ALL_MEAL_KEYS.map(k=>[k,[]]));
+      day.meals.midi_plat=old.lunch||old.plat||[]; day.meals.soir_plat=old.dinner||[];
+      day.meals.midi_entree=old.entree||[]; day.meals.midi_dessert=old.dessert||[];
+    }
+    if (day.meals?.entree !== undefined && day.meals?.midi_plat === undefined) {
+      const old=day.meals, oldAcc=day.accompagnements||{};
+      day.meals=Object.fromEntries(ALL_MEAL_KEYS.map(k=>[k,[]]));
+      day.meals.midi_entree=old.entree||[]; day.meals.midi_plat=old.plat||[]; day.meals.midi_dessert=old.dessert||[];
+      day.accompagnements=Object.fromEntries(ALL_MEAL_KEYS.map(k=>[k,[]]));
+      day.accompagnements.midi_plat=oldAcc.plat||[];
+    }
+    ALL_MEAL_KEYS.forEach(k => {
+      if (!day.meals[k]) day.meals[k]=[];
+      if (day.people[k]===undefined) day.people[k]=4;
+      if (!day.accompagnements) day.accompagnements={};
+      if (!day.accompagnements[k]) day.accompagnements[k]=[];
+    });
+  });
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({recipes,weeks,currentWeekIndex,inventory,shoppingList,foodItems,exportDate:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`planrepas_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(a.href);
+  toast('Export téléchargé');
+}
+
+function importData() {
+  const input = document.createElement('input'); input.type='file'; input.accept='.json';
+  input.onchange = e => {
+    const file=e.target.files[0]; if (!file) return;
+    const reader=new FileReader();
+    reader.onload = ev => {
+      try {
+        const d = JSON.parse(ev.target.result);
+        if (d.recipes) recipes=d.recipes;
+        if (d.weeks?.length) { weeks=d.weeks; weeks.forEach(migratePlan); currentWeekIndex=d.currentWeekIndex??0; }
+        else if (d.currentPlan) { migratePlan(d.currentPlan); const w=makeFreshPlan('Semaine 1'); w.days=d.currentPlan.days; weeks=[w]; currentWeekIndex=0; }
+        if (d.inventory) inventory=d.inventory;
+        if (d.shoppingList) shoppingList=d.shoppingList;
+        if (d.foodItems) foodItems=d.foodItems;
+        saveNow(); renderApp(); toast('Données importées avec succès');
+      } catch { toast('Fichier invalide', 'error'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ===== NUTRITION =====
+function calcScore() {
+  const kw = {
+    vegetables:['tomate','carotte','courgette','épinard','brocoli','haricot','champignon'],
+    starches:['riz','pâtes','pomme de terre','pain','farine','semoule'],
+    proteins:['poulet','bœuf','poisson','œuf','veau','morue'],
+    fruits:['pomme','banane','orange','fraise','cerise','mangue','ananas'],
+    dairy:['lait','yaourt','fromage','crème']
+  };
+  let total = 0;
+  plan().days.forEach(day => {
+    const groups={vegetables:false,starches:false,proteins:false,fruits:false,dairy:false};
+    let ds = 0;
+    ALL_MEAL_KEYS.forEach(k => day.meals[k].forEach(id => {
+      const r=recipes.find(r=>r.id===id); if (!r) return;
+      r.ingredients.forEach(ing => { const n=ing.name.toLowerCase(); Object.entries(kw).forEach(([g,ws])=>{ if(ws.some(w=>n.includes(w))) groups[g]=true; }); });
+      if (r.tags.includes('vege')) ds+=3;
+      if (r.tags.includes('healthy')) ds+=3;
+    }));
+    ds += Object.values(groups).filter(Boolean).length * 12;
+    total += ds;
+  });
+  const allIds = plan().days.flatMap(d=>ALL_MEAL_KEYS.flatMap(k=>d.meals[k]));
+  return Math.min(100, Math.max(0, total/7 + Math.min(20, new Set(allIds).size*2)));
+}
+
+function scoreAdvice(s) {
+  if (s>=80) return '🌟 Excellent équilibre nutritionnel !';
+  if (s>=60) return '👍 Bon équilibre. Diversifiez encore un peu.';
+  if (s>=40) return '⚠️ Équilibre moyen. Ajoutez des légumes et fruits.';
+  return '❌ Planifiez plus de repas variés.';
+}
+
+// ===== MULTI-SEMAINES =====
+function updateWeekLabel() {
+  const el=document.getElementById('week-label');
+  el.textContent = `${plan().name} (${currentWeekIndex+1}/${weeks.length})`;
+}
+
+function startWeekRename() {
+  const el=document.getElementById('week-label');
+  el.contentEditable='true';
+  el.textContent=plan().name;
+  el.focus();
+  const range=document.createRange(); range.selectNodeContents(el); const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+}
+function commitWeekRename() {
+  const el=document.getElementById('week-label');
+  const name=(el.textContent||'').trim()||'Semaine';
+  el.contentEditable='false';
+  plan().name=name;
+  saveData(); updateWeekLabel();
+}
+function prevWeek() {
+  if (currentWeekIndex<=0) { toast('Première semaine','info'); return; }
+  currentWeekIndex--; saveData(); renderWeekPlan();
+}
+function nextWeek() {
+  if (currentWeekIndex>=weeks.length-1) { toast('Dernière semaine','info'); return; }
+  currentWeekIndex++; saveData(); renderWeekPlan();
+}
+function addWeek() {
+  const name=`Semaine ${weeks.length+1}`; weeks.push(makeFreshPlan(name)); currentWeekIndex=weeks.length-1;
+  saveData(); renderWeekPlan(); toast(`"${name}" créée`);
+}
+function duplicateWeek() {
+  const copy=JSON.parse(JSON.stringify(plan())); copy.name+=' (copie)';
+  weeks.splice(currentWeekIndex+1,0,copy); currentWeekIndex++;
+  saveData(); renderWeekPlan(); toast('Semaine dupliquée');
+}
+
+// ===== GÉNÉRATION ALÉATOIRE =====
+function handleRandomGenerate() {
+  if (!confirm('Générer un planning aléatoire ? Le planning actuel sera remplacé.')) return;
+  const platPool=[...recipes.filter(r=>r.type==='plat'),...foodItems.filter(f=>f.category==='Viande'||f.category==='Poisson').map(f=>({id:f.id,type:'plat',servings:4,ingredients:[]}))];
+  const entreePool=[...recipes.filter(r=>r.type==='entrée'),...foodItems.filter(f=>f.category==='Crudité').map(f=>({id:f.id,type:'entrée',servings:4,ingredients:[]}))];
+  const dessertPool=[...recipes.filter(r=>r.type==='dessert'),...foodItems.filter(f=>f.category==='Fruit').map(f=>({id:f.id,type:'dessert',servings:4,ingredients:[]}))];
+  const legumePool=foodItems.filter(f=>f.category==='Légume');
+  const fecPool=foodItems.filter(f=>f.category==='Féculent');
+  if (!platPool.length) { toast('Ajoutez des recettes Plat ou des viandes','warning'); return; }
+  const shuffle=arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  const cycle=(pool,n)=>{if(!pool.length)return[];const r=[],bag=shuffle([...pool]);while(r.length<n){if(!bag.length)bag.push(...shuffle(pool));const nx=bag.shift();if(r.length&&r[r.length-1]?.id===nx.id&&bag.length>0)bag.push(nx);else r.push(nx);}return r;};
+  const mP=cycle(platPool,7), sP=[], en=cycle(entreePool,14), de=cycle(dessertPool,14), lg=cycle(legumePool,7), fc=cycle(fecPool,7);
+  for(let i=0;i<7;i++){const mp=mP[i],cands=shuffle(platPool.filter(p=>p.id!==mp.id)),prev=sP[i-1]?.id;sP.push(cands.find(c=>c.id!==prev)??cands[0]??mp);}
+  plan().days.forEach((day,i)=>{
+    ALL_MEAL_KEYS.forEach(k=>{day.meals[k]=[];day.accompagnements[k]=[];});
+    if(en[i*2]) day.meals.midi_entree.push(en[i*2].id);
+    if(en[i*2+1]) day.meals.soir_entree.push(en[i*2+1].id);
+    day.meals.midi_plat.push(mP[i].id); day.meals.soir_plat.push(sP[i].id);
+    const ev=i%2===0, ma=(ev?lg:fc)[i], sa=(ev?fc:lg)[i];
+    if(ma) day.accompagnements.midi_plat.push(ma.id);
+    if(sa) day.accompagnements.soir_plat.push(sa.id);
+    if(de[i*2]) day.meals.midi_dessert.push(de[i*2].id);
+    if(de[i*2+1]) day.meals.soir_dessert.push(de[i*2+1].id);
+  });
+  saveData(); renderWeekPlan(); toast(`Planning généré — ${platPool.length} plats disponibles`);
+}
+
+// ===== RECETTES =====
+function setTagFilter(btn, tag) {
+  activeTagFilter = tag;
+  document.querySelectorAll('.tag-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  filterRecipes();
+}
+
+function filterRecipes() {
+  const search=document.getElementById('recipe-search').value.toLowerCase();
+  const typeF=document.getElementById('type-filter').value;
+  const cuisineF=document.getElementById('cuisine-filter').value;
+  const timeF=document.getElementById('time-filter').value;
+  const sm=getSeasonMonth();
+  const filtered=recipes.filter(r=>{
+    if (search && !r.title.toLowerCase().includes(search)) return false;
+    if (typeF && r.type!==typeF) return false;
+    if (cuisineF && r.cuisine!==cuisineF) return false;
+    if (timeF) { const [mn,mx]=timeF.split('-').map(Number); if(r.time.total<mn||r.time.total>=mx) return false; }
+    if (sm && !r.ingredients.some(i=>isSeasonal(i.name,sm))) return false;
+    if (activeTagFilter && !r.tags.includes(activeTagFilter)) return false;
+    return true;
+  });
+  const countEl=document.getElementById('recipe-count');
+  if(countEl) countEl.textContent=`${filtered.length} recette${filtered.length!==1?'s':''}${recipes.length!==filtered.length?` sur ${recipes.length}`:''}`;
+
+  const list=document.getElementById('recipe-list');
+  list.innerHTML=filtered.map(r=>`
+    <div class="recipe-item" draggable="true" data-recipe-id="${esc(r.id)}">
+      <div class="recipe-actions">
+        <button class="btn btn-secondary btn-small" onclick="showEditRecipe('${esc(r.id)}')" title="Modifier">✏️</button>
+        <button class="btn btn-danger btn-small" onclick="deleteRecipe('${esc(r.id)}')" title="Supprimer">🗑️</button>
+      </div>
+      <div class="recipe-title" onclick="showRecipeDetail('${esc(r.id)}')" style="cursor:pointer;" title="Voir les détails">${esc(r.title)}</div>
+      <div class="recipe-meta">${esc(r.cuisine)} · ${r.time.total} min · ${r.servings} pers.</div>
+      <div class="recipe-tags">${r.tags.map(t=>`<span class="tag ${esc(t)}">${esc(t)}</span>`).join('')}</div>
+    </div>`).join('');
+  list.querySelectorAll('.recipe-item').forEach(el=>{
+    el.addEventListener('dragstart',onDragStart);
+    el.addEventListener('dragend',onDragEnd);
+    initTouch(el);
+  });
+}
+
+function showRecipeDetail(id) {
+  const r=recipes.find(r=>r.id===id); if(!r) return;
+  document.getElementById('detail-title').textContent=r.title;
+  document.getElementById('detail-edit-btn').onclick=()=>{closeModal('detail-modal');showEditRecipe(id);};
+  const typeLabel={entrée:'Entrée',plat:'Plat principal',dessert:'Dessert'};
+  document.getElementById('detail-body').innerHTML=`
+    <div class="detail-tags">${r.tags.map(t=>`<span class="tag ${esc(t)}">${esc(t)}</span>`).join('')||'<span style="color:var(--text-muted);font-size:.8rem;">Aucun tag</span>'}</div>
+    <div class="detail-meta-grid">
+      <div class="detail-meta-item"><div class="detail-meta-value">${r.time.prep+r.time.cook} min</div><div class="detail-meta-label">Durée totale</div></div>
+      <div class="detail-meta-item"><div class="detail-meta-value">${r.servings}</div><div class="detail-meta-label">Portions</div></div>
+      <div class="detail-meta-item"><div class="detail-meta-value">${esc(typeLabel[r.type]||r.type)}</div><div class="detail-meta-label">${esc(r.cuisine)}</div></div>
+    </div>
+    ${r.time.prep||r.time.cook?`<p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.75rem;">⏱ Préparation : ${r.time.prep} min · Cuisson : ${r.time.cook} min</p>`:''}
+    <div class="detail-section">
+      <div class="detail-section-title">Ingrédients</div>
+      <ul class="detail-ing-list">${r.ingredients.map(i=>`<li>${i.qty} ${esc(i.unit)} de ${esc(i.name)}</li>`).join('')}</ul>
+    </div>
+    ${r.steps?.length?`<div class="detail-section"><div class="detail-section-title">Préparation</div><ol class="detail-steps">${r.steps.map(s=>`<li><span>${esc(s)}</span></li>`).join('')}</ol></div>`:''}
+  `;
+  document.getElementById('detail-modal').style.display='flex';
+}
+
+function showAddRecipeModal() {
+  editingRecipeId=null;
+  document.getElementById('recipe-modal-title').textContent='Ajouter une recette';
+  document.getElementById('recipe-submit-btn').textContent='Ajouter';
+  document.getElementById('recipe-edit-id').value='';
+  document.getElementById('recipe-form').reset();
+  document.querySelectorAll('input[name="recipe-tag"]').forEach(cb=>cb.checked=false);
+  document.getElementById('recipe-modal').style.display='flex';
+  document.getElementById('recipe-title').focus();
+}
+
+function showEditRecipe(id) {
+  const r=recipes.find(r=>r.id===id); if (!r) return;
+  editingRecipeId=id;
+  document.getElementById('recipe-modal-title').textContent='Modifier la recette';
+  document.getElementById('recipe-submit-btn').textContent='Enregistrer';
+  document.getElementById('recipe-edit-id').value=id;
+  document.getElementById('recipe-title').value=r.title;
+  document.getElementById('recipe-type').value=r.type;
+  document.getElementById('recipe-cuisine').value=r.cuisine||'';
+  document.getElementById('recipe-servings').value=r.servings||4;
+  document.getElementById('recipe-prep').value=r.time?.prep||0;
+  document.getElementById('recipe-cook').value=r.time?.cook||0;
+  document.getElementById('recipe-ingredients').value=r.ingredients.map(i=>`${i.qty} ${i.unit} de ${i.name}`).join('\n');
+  document.getElementById('recipe-steps').value=(r.steps||[]).join('\n');
+  document.querySelectorAll('input[name="recipe-tag"]').forEach(cb=>{ cb.checked=(r.tags||[]).includes(cb.value); });
+  document.getElementById('recipe-modal').style.display='flex';
+  document.getElementById('recipe-title').focus();
+}
+
+function saveRecipe(e) {
+  e.preventDefault();
+  const title=document.getElementById('recipe-title').value.trim();
+  const type=document.getElementById('recipe-type').value;
+  const cuisine=document.getElementById('recipe-cuisine').value.trim()||'autre';
+  const servings=parseInt(document.getElementById('recipe-servings').value)||4;
+  const prep=parseInt(document.getElementById('recipe-prep').value)||0;
+  const cook=parseInt(document.getElementById('recipe-cook').value)||0;
+  const ingsText=document.getElementById('recipe-ingredients').value.trim();
+  const stepsText=document.getElementById('recipe-steps').value.trim();
+  if (!title||!type||!ingsText) return;
+  const ingredients=ingsText.split('\n').filter(l=>l.trim()).map(parseIngLine);
+  const steps=stepsText?stepsText.split('\n').filter(s=>s.trim()):[];
+  const tags=[...document.querySelectorAll('input[name="recipe-tag"]:checked')].map(c=>c.value);
+  if((prep+cook)<=20 && !tags.includes('rapide')) tags.push('rapide');
+
+  if (editingRecipeId) {
+    const idx=recipes.findIndex(r=>r.id===editingRecipeId);
+    if (idx>-1) { recipes[idx]={...recipes[idx],title,type,cuisine,tags,servings,time:{prep,cook,total:prep+cook},ingredients,steps}; }
+    toast(`"${title}" mise à jour`);
+  } else {
+    recipes.push({id:generateId(),title,type,cuisine,tags,season:[1,2,3,4,5,6,7,8,9,10,11,12],servings,time:{prep,cook,total:prep+cook},ingredients,steps});
+    toast(`"${title}" ajoutée`);
+  }
+  saveData(); filterRecipes(); closeModal('recipe-modal'); editingRecipeId=null;
+}
+
+function deleteRecipe(id) {
+  const r=recipes.find(r=>r.id===id); if (!r) return;
+  if (!confirm(`Supprimer la recette "${r.title}" ?`)) return;
+  weeks.forEach(w=>w.days.forEach(day=>ALL_MEAL_KEYS.forEach(k=>{ day.meals[k]=day.meals[k].filter(mid=>mid!==id); })));
+  recipes=recipes.filter(r=>r.id!==id);
+  saveData(); filterRecipes(); renderWeekPlan(); toast(`"${r.title}" supprimée`,'info');
+}
+
+// ===== PLANNING =====
+function renderWeekPlan() {
+  const p=plan(), container=document.getElementById('week-grid');
+  container.innerHTML=DAYS.map((day,di)=>{
+    const dd=p.days[di];
+    return `<div class="day-column">
+      <div class="day-header">${day.substring(0,3)}</div>
+      ${MEAL_PERIODS.map(period=>`
+        <div class="period-label">${period.label}</div>
+        ${period.moments.map(m=>{
+          const meals=dd.meals[m.key]||[], accs=dd.accompagnements[m.key]||[], people=dd.people[m.key]||4;
+          return `<div class="meal-slot" data-day="${di}" data-meal="${esc(m.key)}">
+            <div class="meal-label">${m.label}</div>
+            <input type="number" class="people-input" value="${people}" min="1" max="20"
+              onchange="updatePeople(${di},'${esc(m.key)}',this.value)" title="Personnes">
+            ${meals.map(id=>`<div class="planned-recipe" draggable="true"
+              data-plan-id="${esc(id)}" data-plan-day="${di}" data-plan-meal="${esc(m.key)}"
+              ondragstart="onPlanDragStart(event)" ondragend="onPlanDragEnd(event)">${esc(itemName(id))}
+              <button class="remove-btn" onclick="removeFromPlan(${di},'${esc(m.key)}','${esc(id)}')">×</button>
+            </div>`).join('')}
+            <div class="meal-accompagnements">
+              ${accs.map(aid=>{const a=getAcc(aid);if(!a)return'';const c=a.category?(FOOD_CAT_COLORS[a.category]||'#805ad5'):'#805ad5';
+                return `<div class="accompagnement-tag" style="background:${c};">${esc(a.name)}
+                  <button class="remove-btn" onclick="removeAcc(${di},'${esc(m.key)}','${esc(aid)}')">×</button>
+                </div>`;}).join('')}
+              <button class="add-accompagnement-btn" onclick="showAccModal(${di},'${esc(m.key)}')">+ acc.</button>
+            </div>
+          </div>`;
+        }).join('')}
+      `).join('')}
+    </div>`;
+  }).join('');
+
+  container.querySelectorAll('.meal-slot').forEach(slot=>{
+    slot.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move';});
+    slot.addEventListener('drop',onDrop);
+    slot.addEventListener('dragenter',e=>{e.preventDefault();e.currentTarget.classList.add('drag-over');});
+    slot.addEventListener('dragleave',e=>{if(!e.currentTarget.contains(e.relatedTarget))e.currentTarget.classList.remove('drag-over');});
+  });
+
+  const score=calcScore();
+  document.getElementById('nutrition-bar').style.width=score+'%';
+  document.getElementById('nutrition-text').textContent=`Score: ${Math.round(score)}/100`;
+  document.getElementById('nutrition-advice').textContent=scoreAdvice(score);
+  updateWeekLabel();
+}
+
+// ===== DRAG & DROP SOURIS (depuis liste recettes) =====
+let draggedId=null;
+function onDragStart(e) { draggedId=e.currentTarget.dataset.recipeId; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function onDragEnd(e) { e.currentTarget.classList.remove('dragging'); draggedId=null; }
+
+// ===== DRAG CROSS-SLOT (déplacer repas planifié entre créneaux) =====
+function onPlanDragStart(e) {
+  const el=e.currentTarget;
+  planDragSource={di:parseInt(el.dataset.planDay), mk:el.dataset.planMeal, id:el.dataset.planId};
+  e.dataTransfer.effectAllowed='move';
+  setTimeout(()=>el.style.opacity='.4',0);
+}
+function onPlanDragEnd(e) { e.currentTarget.style.opacity=''; planDragSource=null; }
+
+function onDrop(e) {
+  e.preventDefault(); const slot=e.currentTarget; slot.classList.remove('drag-over');
+  const di=parseInt(slot.dataset.day), mk=slot.dataset.meal;
+  if (isNaN(di)||!mk) return;
+
+  if (planDragSource) {
+    // Déplacer depuis un créneau vers un autre
+    const {di:sdi, mk:smk, id} = planDragSource;
+    if (sdi===di && smk===mk) return; // même créneau
+    // Validation type (optionnel — on demande si discordant)
+    const recipe=recipes.find(r=>r.id===id);
+    if (recipe) {
+      const st=slotType(mk);
+      if (recipe.type!==st && !confirm(`Déplacer "${recipe.title}" (${recipe.type}) vers un créneau "${st}" ?`)) return;
+    }
+    removeFromPlan(sdi,smk,id,true);
+    addToPlanSilent(di,mk,id);
+    saveData(); renderWeekPlan();
+    return;
+  }
+  if (draggedId) addToPlan(di,mk,draggedId);
+}
+
+// ===== DRAG & DROP TACTILE =====
+let touchId=null, touchGhost=null;
+function initTouch(el) {
+  el.addEventListener('touchstart',e=>{
+    touchId=el.dataset.recipeId;
+    const t=e.touches[0];
+    touchGhost=document.createElement('div'); touchGhost.className='touch-drag-ghost';
+    touchGhost.textContent=el.querySelector('.recipe-title')?.textContent||'?';
+    document.body.appendChild(touchGhost);
+    touchGhost.style.left=t.clientX+'px'; touchGhost.style.top=t.clientY+'px';
+    el.classList.add('dragging');
+  },{passive:true});
+  el.addEventListener('touchmove',e=>{
+    e.preventDefault(); const t=e.touches[0];
+    if(touchGhost){touchGhost.style.left=t.clientX+'px';touchGhost.style.top=t.clientY+'px';}
+    document.querySelectorAll('.meal-slot.drag-over').forEach(s=>s.classList.remove('drag-over'));
+    const under=document.elementFromPoint(t.clientX,t.clientY)?.closest('.meal-slot');
+    if(under) under.classList.add('drag-over');
+  },{passive:false});
+  el.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0];
+    if(touchGhost){touchGhost.remove();touchGhost=null;}
+    el.classList.remove('dragging');
+    document.querySelectorAll('.meal-slot.drag-over').forEach(s=>s.classList.remove('drag-over'));
+    if(!touchId) return;
+    const under=document.elementFromPoint(t.clientX,t.clientY)?.closest('.meal-slot');
+    if(under){const di=parseInt(under.dataset.day),mk=under.dataset.meal;if(!isNaN(di)&&mk)addToPlan(di,mk,touchId);}
+    touchId=null;
+  },{passive:true});
+}
+
+// ===== ACTIONS PLANNING =====
+function addToPlanSilent(di,mk,id) {
+  const arr=plan().days[di].meals[mk];
+  if(!arr.includes(id)) arr.push(id);
+}
+
+function addToPlan(di,mk,id) {
+  const recipe=recipes.find(r=>r.id===id);
+  if (recipe) {
+    const st=slotType(mk);
+    if (recipe.type!==st && !confirm(`Cette recette est de type "${recipe.type}" mais le créneau attend un(e) "${st}". Ajouter quand même ?`)) return;
+  }
+  const arr=plan().days[di].meals[mk];
+  if (!arr.includes(id)) { arr.push(id); saveData(); renderWeekPlan(); }
+}
+function removeFromPlan(di,mk,id,silent=false) {
+  const arr=plan().days[di].meals[mk], i=arr.indexOf(id);
+  if(i>-1){arr.splice(i,1); if(!silent){saveData();renderWeekPlan();}}
+}
+function removeAcc(di,mk,id) {
+  const arr=plan().days[di].accompagnements[mk], i=arr.indexOf(id);
+  if(i>-1){arr.splice(i,1);saveData();renderWeekPlan();}
+}
+function updatePeople(di,mk,v) {
+  plan().days[di].people[mk]=parseInt(v)||4; saveData();
+}
+function clearWeek() {
+  if(!confirm('Effacer tout le planning de cette semaine ?')) return;
+  plan().days.forEach(day=>ALL_MEAL_KEYS.forEach(k=>{day.meals[k]=[];day.accompagnements[k]=[];}));
+  saveData(); renderWeekPlan(); toast('Planning effacé');
+}
+
+// ===== COURSES =====
+function renderShoppingList() {
+  const c=document.getElementById('shopping-content');
+  if (!shoppingList.length) { c.innerHTML='<p style="text-align:center;color:var(--text-muted);padding:2rem;">Liste vide — cliquez sur 🔄 pour générer depuis le planning.</p>'; return; }
+  const grouped={};
+  shoppingList.forEach(item=>{const s=item.section||'epicerie-salee';if(!grouped[s])grouped[s]=[];grouped[s].push(item);});
+  c.innerHTML=Object.entries(grouped).map(([s,items])=>`
+    <div class="shopping-section">
+      <div class="section-title">${esc(SECTIONS[s]||s)}</div>
+      ${items.map(item=>`<div class="ingredient-item">
+        <input type="checkbox" id="si-${esc(item.id)}" ${item.checked?'checked':''} onchange="toggleShoppingItem('${esc(item.id)}')">
+        <label for="si-${esc(item.id)}" class="ingredient-text ${item.checked?'checked':''}">${item.qty} ${esc(item.unit)} ${esc(item.name)}</label>
+      </div>`).join('')}
+    </div>`).join('');
+}
+
+function generateShoppingList() {
+  const agg={};
+  plan().days.forEach(day=>{
+    ALL_MEAL_KEYS.forEach(mk=>{
+      const people=day.people[mk]||4;
+      day.meals[mk].forEach(id=>{
+        const r=recipes.find(r=>r.id===id);
+        if (r) {
+          const f=people/(r.servings||4);
+          r.ingredients.forEach(ing=>{const k=`${ing.name}__${ing.unit}`;if(agg[k])agg[k].qty+=ing.qty*f;else agg[k]={id:generateId(),name:ing.name,qty:ing.qty*f,unit:ing.unit,section:ing.section||getSection(ing.name),checked:false};});
+        } else {
+          const food=foodItems.find(f=>f.id===id);
+          if(food){const u=food.unit||'pièce',qpp=food.qty||1,k=`food__${food.name}__${u}`;if(agg[k])agg[k].qty+=qpp*(people/4);else agg[k]={id:generateId(),name:food.name,qty:qpp*(people/4),unit:u,section:getSection(food.name.toLowerCase()),checked:false};}
+        }
+      });
+      day.accompagnements[mk].forEach(aid=>{
+        const a=getAcc(aid); if(!a) return;
+        if (a.ingredients) {
+          a.ingredients.forEach(ing=>{const k=`${ing.name}__${ing.unit}`,f=people/4;if(agg[k])agg[k].qty+=ing.qty*f;else agg[k]={id:generateId(),name:ing.name,qty:ing.qty*f,unit:ing.unit,section:ing.section,checked:false};});
+        } else {
+          const u=a.unit||'pièce',q=a.qty||1,k=`food_acc__${a.name.toLowerCase()}__${u}`;
+          if(agg[k])agg[k].qty+=q*(people/4);else agg[k]={id:generateId(),name:a.name,qty:q*(people/4),unit:u,section:getSection(a.name.toLowerCase()),checked:false};
+        }
+      });
+    });
+  });
+  shoppingList=Object.values(agg).map(i=>({...i,qty:Math.ceil(i.qty*10)/10}));
+  saveData(); renderShoppingList(); toast(`Liste générée : ${shoppingList.length} articles`);
+}
+
+function toggleShoppingItem(id) {
+  const i=shoppingList.find(i=>i.id===id); if(i){i.checked=!i.checked;saveData();renderShoppingList();}
+}
+function uncheckAll() {
+  shoppingList.forEach(i=>i.checked=false); saveData(); renderShoppingList(); toast('Tout décoché','info');
+}
+
+// ===== STOCK =====
+function renderInventory() {
+  const c=document.getElementById('inventory-content');
+  if(!inventory.length){c.innerHTML='<p style="text-align:center;color:var(--text-muted)">Stock vide</p>';return;}
+  const today=new Date();
+  const sorted=[...inventory].sort((a,b)=>{
+    const da=a.expDate?new Date(a.expDate):new Date('9999-12-31');
+    const db=b.expDate?new Date(b.expDate):new Date('9999-12-31');
+    return da-db;
+  });
+  c.innerHTML=`<div class="inventory-list">${sorted.map(item=>{
+    let cls='',meta='';
+    if(item.expDate){const days=Math.ceil((new Date(item.expDate)-today)/86400000);cls=days<0?'expired':days<=3?'expiring':'';meta=new Date(item.expDate).toLocaleDateString('fr-FR')+(days<0?' (PÉRIMÉ)':days<=3?` (${days}j)`:'')}
+    else meta='Sans date';
+    return `<div class="inventory-item ${cls}">
+      <div><div class="inventory-name">${esc(item.name)}</div><div class="inventory-meta">${item.qty} ${esc(item.unit)} · ${meta}</div></div>
+      <div class="inventory-actions">
+        <button class="btn btn-secondary btn-small" onclick="editInventoryItem('${esc(item.id)}')">✏️</button>
+        <button class="btn btn-danger btn-small" onclick="removeInventoryItem('${esc(item.id)}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function showAddInventoryModal() {
+  editingInventoryId=null;
+  document.getElementById('inventory-modal-title').textContent='Ajouter au stock';
+  document.getElementById('inventory-submit-btn').textContent='Ajouter';
+  document.getElementById('inventory-form').reset();
+  document.getElementById('inventory-modal').style.display='flex';
+}
+function editInventoryItem(id) {
+  const item=inventory.find(i=>i.id===id); if(!item) return;
+  editingInventoryId=id;
+  document.getElementById('inventory-modal-title').textContent='Modifier le produit';
+  document.getElementById('inventory-submit-btn').textContent='Enregistrer';
+  document.getElementById('inventory-name').value=item.name;
+  document.getElementById('inventory-qty').value=item.qty;
+  document.getElementById('inventory-unit').value=item.unit;
+  document.getElementById('inventory-expiry').value=item.expDate||'';
+  document.getElementById('inventory-modal').style.display='flex';
+}
+function saveInventoryItem(e) {
+  e.preventDefault();
+  const name=document.getElementById('inventory-name').value.trim();
+  const qty=parseFloat(document.getElementById('inventory-qty').value);
+  const unit=document.getElementById('inventory-unit').value;
+  const expDate=document.getElementById('inventory-expiry').value||'';
+  if(!name) return;
+  if(editingInventoryId){const item=inventory.find(i=>i.id===editingInventoryId);if(item){item.name=name;item.qty=qty;item.unit=unit;item.expDate=expDate;}toast('Produit mis à jour');}
+  else{inventory.push({id:generateId(),name,qty,unit,expDate,section:'frais'});toast('Produit ajouté au stock');}
+  saveData(); renderInventory(); closeModal('inventory-modal'); editingInventoryId=null;
+}
+function removeInventoryItem(id) {
+  if(!confirm('Supprimer cet article du stock ?')) return;
+  inventory=inventory.filter(i=>i.id!==id); saveData(); renderInventory(); toast('Article supprimé','info');
+}
+
+// ===== BASE ALIMENTAIRE =====
+function renderFoodBank() {
+  const grouped={};
+  foodItems.forEach(f=>{if(!grouped[f.category])grouped[f.category]=[];grouped[f.category].push(f);});
+  const order=['Viande','Poisson','Légume','Féculent','Fruit','Crudité','Conserve','Autre'];
+  const c=document.getElementById('foodbank-list');
+  if(!foodItems.length){c.innerHTML='<p style="color:var(--text-muted);font-size:.8rem;">Aucun aliment.</p>';return;}
+  c.innerHTML=order.filter(cat=>grouped[cat]?.length).map(cat=>`
+    <div class="food-category">
+      <div class="food-category-header">${FOOD_CATEGORY_ICONS[cat]} ${esc(cat)}s (${grouped[cat].length})</div>
+      ${grouped[cat].map(f=>`<div class="food-item">
+        <span>${esc(f.name)}${f.qty&&f.unit?` <small style="color:var(--text-muted)">${f.qty} ${esc(f.unit)}</small>`:''}</span>
+        <button class="btn btn-danger btn-small" onclick="removeFoodItem('${esc(f.id)}')">×</button>
+      </div>`).join('')}
+    </div>`).join('');
+}
+function addFoodItem(e) {
+  e.preventDefault();
+  const name=document.getElementById('food-name').value.trim();
+  const category=document.getElementById('food-category').value;
+  const qty=parseFloat(document.getElementById('food-qty').value)||1;
+  const unit=document.getElementById('food-unit').value;
+  if(!name) return;
+  if(foodItems.find(f=>f.name.toLowerCase()===name.toLowerCase())){toast('Aliment déjà présent','warning');return;}
+  foodItems.push({id:generateId(),name,category,qty,unit});
+  document.getElementById('food-name').value='';
+  saveData(); renderFoodBank(); toast(`"${name}" ajouté`);
+}
+function removeFoodItem(id) {
+  const f=foodItems.find(f=>f.id===id); if(!f) return;
+  if(!confirm(`Supprimer "${f.name}" de la base alimentaire ?`)) return;
+  foodItems=foodItems.filter(f=>f.id!==id); saveData(); renderFoodBank(); toast('Aliment supprimé','info');
+}
+
+// ===== ACCOMPAGNEMENTS =====
+function showAccModal(di,mk) {
+  accContext={di,mk}; document.getElementById('acc-search').value='';
+  renderFoodAccSection();
+  document.querySelectorAll('#acc-fixed .accompagnement-btn,#fooditems-acc .accompagnement-btn').forEach(b=>b.style.display='');
+  document.querySelectorAll('#acc-fixed .accompagnements-category,#fooditems-acc .accompagnements-category').forEach(c=>c.style.display='');
+  document.getElementById('acc-modal').style.display='flex';
+}
+function renderFoodAccSection() {
+  const order=['Légume','Féculent','Viande','Poisson','Fruit','Crudité','Conserve','Autre'], grouped={};
+  foodItems.forEach(f=>{if(!grouped[f.category])grouped[f.category]=[];grouped[f.category].push(f);});
+  const c=document.getElementById('fooditems-acc');
+  if(!foodItems.length){c.innerHTML='<p style="font-size:.8rem;color:var(--text-muted);">Aucun aliment. Ajoutez-en via 🥦 Aliments.</p>';return;}
+  c.innerHTML=order.filter(cat=>grouped[cat]?.length).map(cat=>`
+    <div class="accompagnements-category" data-cat="${esc(cat)}"><h3>${FOOD_CATEGORY_ICONS[cat]} ${esc(cat)}s</h3>
+      <div class="accompagnements-list">
+        ${grouped[cat].map(f=>`<button class="accompagnement-btn" onclick="selectAcc('${esc(f.id)}')" style="border-left:3px solid ${FOOD_CAT_COLORS[cat]||'#718096'};"><span>${esc(f.name)}</span></button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function filterAccModal() {
+  const q=document.getElementById('acc-search').value.toLowerCase();
+  document.querySelectorAll('#acc-fixed .accompagnement-btn,#fooditems-acc .accompagnement-btn').forEach(btn=>{btn.style.display=btn.querySelector('span')?.textContent.toLowerCase().includes(q)?'':'none';});
+  document.querySelectorAll('#acc-fixed .accompagnements-category,#fooditems-acc .accompagnements-category').forEach(cat=>{cat.style.display=[...cat.querySelectorAll('.accompagnement-btn')].some(b=>b.style.display!=='none')?'':'none';});
+}
+function selectAcc(id) {
+  if(!accContext) return;
+  const {di,mk}=accContext;
+  if(!plan().days[di].accompagnements[mk].includes(id)){plan().days[di].accompagnements[mk].push(id);saveData();renderWeekPlan();}
+  closeModal('acc-modal'); accContext=null;
+}
+
+// ===== UI =====
+function switchTab(tab) {
+  currentTab=tab;
+  ['shopping','inventory','foodbank'].forEach(t=>{
+    document.getElementById(`tab-${t}`).classList.toggle('active',t===tab);
+    document.getElementById(`${t}-content`).style.display=t===tab?'block':'none';
+  });
+  const s=tab==='shopping', inv=tab==='inventory';
+  document.getElementById('action-generate').style.display=s?'':'none';
+  document.getElementById('action-uncheck').style.display=s?'':'none';
+  document.getElementById('action-print').style.display=s?'':'none';
+  document.getElementById('action-add-stock').style.display=inv?'':'none';
+  if(s) renderShoppingList(); else if(inv) renderInventory(); else renderFoodBank();
+}
+
+function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+function printPlanning() {
+  const s=document.createElement('style'); s.id='__ps'; s.textContent='@page{size:A4 landscape;margin:.4cm;}';
+  document.head.appendChild(s); document.body.dataset.print='planning'; window.print();
+  setTimeout(()=>{delete document.body.dataset.print;document.getElementById('__ps')?.remove();},500);
+}
+function printShoppingList() {
+  const s=document.createElement('style'); s.id='__ps'; s.textContent='@page{size:A4 portrait;margin:1cm;}';
+  document.head.appendChild(s); document.body.dataset.print='shopping'; window.print();
+  setTimeout(()=>{delete document.body.dataset.print;document.getElementById('__ps')?.remove();},500);
+}
+function toggleTheme() {
+  const t=document.body.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.body.setAttribute('data-theme',t); localStorage.setItem('pr7_theme',t);
+}
+function renderApp() { filterRecipes(); renderWeekPlan(); switchTab(currentTab); }
+
+// ===== RACCOURCIS CLAVIER =====
+document.addEventListener('keydown',e=>{
+  const tag=document.activeElement.tagName;
+  if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&tag!=='INPUT'&&tag!=='TEXTAREA'){e.preventDefault();document.getElementById('recipe-search').focus();}
+  if((e.ctrlKey||e.metaKey)&&e.key==='p'){e.preventDefault();printPlanning();}
+  if(e.key==='Escape') document.querySelectorAll('.modal').forEach(m=>m.style.display='none');
+  if(e.key==='i'&&!e.ctrlKey&&!e.metaKey&&currentTab==='inventory'&&tag!=='INPUT') showAddInventoryModal();
+  if((e.ctrlKey||e.metaKey)&&e.key==='ArrowLeft'){e.preventDefault();prevWeek();}
+  if((e.ctrlKey||e.metaKey)&&e.key==='ArrowRight'){e.preventDefault();nextWeek();}
+});
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.style.display='none';}));
+
+// Renommage de semaine au clic sur le label
+document.getElementById('week-label').addEventListener('click', startWeekRename);
+document.getElementById('week-label').addEventListener('blur', commitWeekRename);
+document.getElementById('week-label').addEventListener('keydown', e=>{
+  if(e.key==='Enter'){e.preventDefault();commitWeekRename();}
+  if(e.key==='Escape'){e.currentTarget.contentEditable='false';updateWeekLabel();}
+});
+
+// ===== SEED =====
+function loadSeedRecipes() {
+  const g=()=>generateId();
+  recipes=[
+    {id:g(),title:'Salade de tomates au basilic',type:'entrée',cuisine:'française',tags:['vege','rapide'],season:[6,7,8],servings:4,time:{prep:10,cook:0,total:10},ingredients:[{name:'tomate',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'basilic',qty:10,unit:'feuille',section:'fruits-legumes'},{name:"huile d'olive",qty:3,unit:'cuillère à soupe',section:'epicerie-salee'}],steps:['Couper les tomates','Ciseler le basilic','Assaisonner']},
+    {id:g(),title:'Velouté de potiron',type:'entrée',cuisine:'française',tags:['vege','healthy'],season:[10,11,12],servings:4,time:{prep:15,cook:30,total:45},ingredients:[{name:'potiron',qty:1,unit:'kg',section:'fruits-legumes'},{name:'oignon',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'bouillon',qty:1,unit:'l',section:'epicerie-salee'},{name:'crème',qty:10,unit:'cl',section:'frais'}],steps:['Éplucher le potiron','Faire revenir oignon','Cuire 30 min','Mixer avec crème']},
+    {id:g(),title:"Soupe à l'oignon",type:'entrée',cuisine:'française',tags:['vege'],season:[10,11,12,1,2],servings:4,time:{prep:15,cook:45,total:60},ingredients:[{name:'oignon',qty:6,unit:'pièce',section:'fruits-legumes'},{name:'bouillon',qty:1,unit:'l',section:'epicerie-salee'},{name:'fromage',qty:100,unit:'g',section:'frais'},{name:'pain',qty:4,unit:'tranche',section:'boulangerie'},{name:'beurre',qty:30,unit:'g',section:'frais'}],steps:['Caraméliser les oignons','Ajouter le bouillon','Mijoter 30 min','Gratiner avec fromage']},
+    {id:g(),title:'Salade César',type:'entrée',cuisine:'rapide',tags:['rapide'],season:[4,5,6,7,8,9],servings:4,time:{prep:15,cook:0,total:15},ingredients:[{name:'salade romaine',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'poulet',qty:300,unit:'g',section:'boucherie'},{name:'parmesan',qty:50,unit:'g',section:'frais'},{name:'croutons',qty:100,unit:'g',section:'boulangerie'}],steps:['Laver la salade','Griller le poulet','Assembler et assaisonner']},
+    {id:g(),title:'Accras de morue',type:'entrée',cuisine:'antillaise',tags:['rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:15,cook:10,total:25},ingredients:[{name:'morue',qty:300,unit:'g',section:'boucherie'},{name:'farine',qty:200,unit:'g',section:'epicerie-salee'},{name:'œuf',qty:2,unit:'pièce',section:'frais'},{name:'oignon',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'piment',qty:1,unit:'pièce',section:'fruits-legumes'}],steps:["Dessaler la morue","Préparer pâte à beignet","Incorporer morue et aromates","Frire"]},
+    {id:g(),title:"Féroce d'avocat",type:'entrée',cuisine:'antillaise',tags:['vege','rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:15,cook:0,total:15},ingredients:[{name:'avocat',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'morue',qty:200,unit:'g',section:'boucherie'},{name:'oignon',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'citron vert',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'piment',qty:1,unit:'pièce',section:'fruits-legumes'}],steps:['Écraser les avocats','Émietter la morue dessalée','Ajouter oignon et piment','Assaisonner']},
+    {id:g(),title:'Soupe de giraumon',type:'entrée',cuisine:'antillaise',tags:['vege','healthy'],season:[10,11,12,1,2],servings:6,time:{prep:20,cook:30,total:50},ingredients:[{name:'giraumon',qty:1,unit:'kg',section:'fruits-legumes'},{name:'lait de coco',qty:40,unit:'cl',section:'epicerie-salee'},{name:'oignon',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'bouillon',qty:1,unit:'l',section:'epicerie-salee'}],steps:['Éplucher le giraumon','Faire revenir oignon','Cuire 25 min','Mixer avec lait de coco']},
+    {id:g(),title:'Accras de légumes',type:'entrée',cuisine:'antillaise',tags:['vege','rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:20,cook:15,total:35},ingredients:[{name:'carotte',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'courgette',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'farine',qty:150,unit:'g',section:'epicerie-salee'},{name:'œuf',qty:2,unit:'pièce',section:'frais'},{name:'piment',qty:1,unit:'pièce',section:'fruits-legumes'}],steps:['Râper les légumes','Préparer pâte','Frire']},
+    {id:g(),title:'Bœuf bourguignon',type:'plat',cuisine:'française',tags:[],season:[10,11,12,1,2],servings:6,time:{prep:30,cook:180,total:210},ingredients:[{name:'bœuf',qty:1.5,unit:'kg',section:'boucherie'},{name:'vin rouge',qty:75,unit:'cl',section:'boissons'},{name:'carotte',qty:3,unit:'pièce',section:'fruits-legumes'},{name:'oignon',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'champignon',qty:300,unit:'g',section:'fruits-legumes'},{name:'lardons',qty:200,unit:'g',section:'boucherie'}],steps:['Mariner la viande','Faire revenir lardons','Saisir la viande','Mijoter 3h']},
+    {id:g(),title:'Ratatouille niçoise',type:'plat',cuisine:'française',tags:['vege','healthy'],season:[6,7,8,9],servings:4,time:{prep:20,cook:45,total:65},ingredients:[{name:'aubergine',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'courgette',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'tomate',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'poivron',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'oignon',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'ail',qty:3,unit:'gousse',section:'fruits-legumes'}],steps:['Couper tous les légumes','Faire revenir oignon et ail','Mijoter 45 min']},
+    {id:g(),title:'Coq au vin',type:'plat',cuisine:'française',tags:[],season:[1,2,3,10,11,12],servings:4,time:{prep:25,cook:90,total:115},ingredients:[{name:'poulet',qty:1,unit:'pièce',section:'boucherie'},{name:'vin blanc',qty:50,unit:'cl',section:'boissons'},{name:'champignon',qty:250,unit:'g',section:'fruits-legumes'},{name:'oignon',qty:12,unit:'pièce',section:'fruits-legumes'},{name:'lardons',qty:150,unit:'g',section:'boucherie'}],steps:['Découper le poulet','Faire revenir lardons','Flamber au vin','Mijoter 1h30']},
+    {id:g(),title:'Quiche lorraine',type:'plat',cuisine:'française',tags:[],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:6,time:{prep:20,cook:35,total:55},ingredients:[{name:'pâte brisée',qty:1,unit:'pièce',section:'frais'},{name:'lardons',qty:200,unit:'g',section:'boucherie'},{name:'œuf',qty:3,unit:'pièce',section:'frais'},{name:'crème',qty:20,unit:'cl',section:'frais'},{name:'fromage',qty:100,unit:'g',section:'frais'}],steps:['Étaler la pâte','Faire revenir lardons','Battre œufs et crème','Cuire 35 min']},
+    {id:g(),title:'Pot-au-feu',type:'plat',cuisine:'française',tags:[],season:[10,11,12,1,2,3],servings:8,time:{prep:30,cook:180,total:210},ingredients:[{name:'bœuf',qty:1.5,unit:'kg',section:'boucherie'},{name:'carotte',qty:6,unit:'pièce',section:'fruits-legumes'},{name:'poireau',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'navet',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'pomme de terre',qty:8,unit:'pièce',section:'fruits-legumes'}],steps:['Mettre viande dans eau froide','Écumer','Ajouter légumes','Cuire 3h']},
+    {id:g(),title:'Blanquette de veau',type:'plat',cuisine:'française',tags:[],season:[1,2,3,10,11,12],servings:6,time:{prep:30,cook:120,total:150},ingredients:[{name:'veau',qty:1.2,unit:'kg',section:'boucherie'},{name:'carotte',qty:3,unit:'pièce',section:'fruits-legumes'},{name:'champignon',qty:250,unit:'g',section:'fruits-legumes'},{name:'crème',qty:20,unit:'cl',section:'frais'},{name:'œuf',qty:2,unit:'pièce',section:'frais'}],steps:['Blanchir la viande','Cuire avec légumes','Lier avec œufs-crème']},
+    {id:g(),title:'Risotto aux champignons',type:'plat',cuisine:'française',tags:['vege'],season:[9,10,11,12],servings:4,time:{prep:15,cook:25,total:40},ingredients:[{name:'riz arborio',qty:300,unit:'g',section:'epicerie-salee'},{name:'champignon',qty:400,unit:'g',section:'fruits-legumes'},{name:'bouillon',qty:1,unit:'l',section:'epicerie-salee'},{name:'parmesan',qty:80,unit:'g',section:'frais'},{name:'beurre',qty:40,unit:'g',section:'frais'}],steps:['Faire revenir champignons','Toaster le riz','Ajouter bouillon','Terminer avec parmesan']},
+    {id:g(),title:'Omelette aux fines herbes',type:'plat',cuisine:'française',tags:['vege','rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:2,time:{prep:5,cook:10,total:15},ingredients:[{name:'œuf',qty:6,unit:'pièce',section:'frais'},{name:'beurre',qty:20,unit:'g',section:'frais'},{name:'ciboulette',qty:2,unit:'cuillère à soupe',section:'fruits-legumes'},{name:'persil',qty:2,unit:'cuillère à soupe',section:'fruits-legumes'}],steps:['Battre œufs avec herbes','Cuire dans beurre chaud','Plier']},
+    {id:g(),title:'Pâtes carbonara',type:'plat',cuisine:'rapide',tags:['rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:5,cook:15,total:20},ingredients:[{name:'pâtes',qty:400,unit:'g',section:'epicerie-salee'},{name:'lardons',qty:200,unit:'g',section:'boucherie'},{name:'œuf',qty:2,unit:'pièce',section:'frais'},{name:'parmesan',qty:50,unit:'g',section:'frais'}],steps:['Cuire les pâtes','Faire revenir lardons','Battre œufs et parmesan','Mélanger hors du feu']},
+    {id:g(),title:'Burger maison',type:'plat',cuisine:'rapide',tags:['rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:15,cook:10,total:25},ingredients:[{name:'pain burger',qty:4,unit:'pièce',section:'boulangerie'},{name:'steak haché',qty:4,unit:'pièce',section:'boucherie'},{name:'fromage',qty:4,unit:'tranche',section:'frais'},{name:'salade',qty:4,unit:'feuille',section:'fruits-legumes'},{name:'tomate',qty:2,unit:'pièce',section:'fruits-legumes'}],steps:['Griller les pains','Cuire les steaks','Assembler']},
+    {id:g(),title:'Pizza margherita',type:'plat',cuisine:'rapide',tags:['vege'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:20,cook:15,total:35},ingredients:[{name:'pâte à pizza',qty:1,unit:'pièce',section:'frais'},{name:'sauce tomate',qty:20,unit:'cl',section:'epicerie-salee'},{name:'mozzarella',qty:200,unit:'g',section:'frais'},{name:'basilic',qty:10,unit:'feuille',section:'fruits-legumes'}],steps:['Étaler la pâte','Tartiner de sauce','Ajouter fromage','Cuire 15 min à 220°C']},
+    {id:g(),title:'Fish and chips',type:'plat',cuisine:'rapide',tags:[],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:20,cook:15,total:35},ingredients:[{name:'cabillaud',qty:600,unit:'g',section:'boucherie'},{name:'pomme de terre',qty:8,unit:'pièce',section:'fruits-legumes'},{name:'farine',qty:150,unit:'g',section:'epicerie-salee'},{name:'bière',qty:20,unit:'cl',section:'boissons'}],steps:['Couper frites','Préparer pâte à beignet','Frire frites et poisson']},
+    {id:g(),title:'Cassoulet',type:'plat',cuisine:'française',tags:[],season:[10,11,12,1,2],servings:8,time:{prep:45,cook:240,total:285},ingredients:[{name:'haricots blancs',qty:500,unit:'g',section:'epicerie-salee'},{name:'confit de canard',qty:4,unit:'cuisse',section:'boucherie'},{name:'lardons',qty:200,unit:'g',section:'boucherie'},{name:'tomate',qty:400,unit:'g',section:'epicerie-salee'},{name:'oignon',qty:2,unit:'pièce',section:'fruits-legumes'}],steps:['Tremper haricots','Cuire viandes','Assembler en couches','Cuire 4h']},
+    {id:g(),title:'Tarte aux légumes du soleil',type:'plat',cuisine:'française',tags:['vege'],season:[6,7,8,9],servings:6,time:{prep:30,cook:45,total:75},ingredients:[{name:'pâte brisée',qty:1,unit:'pièce',section:'frais'},{name:'aubergine',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'courgette',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'tomate',qty:3,unit:'pièce',section:'fruits-legumes'},{name:'fromage de chèvre',qty:150,unit:'g',section:'frais'}],steps:['Couper légumes en rondelles','Disposer sur pâte','Cuire 45 min']},
+    {id:g(),title:'Colombo de poulet',type:'plat',cuisine:'antillaise',tags:['épicé'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:6,time:{prep:30,cook:60,total:90},ingredients:[{name:'poulet',qty:1.2,unit:'kg',section:'boucherie'},{name:'colombo',qty:3,unit:'cuillère à soupe',section:'epicerie-salee'},{name:'aubergine',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'pomme de terre',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'lait de coco',qty:40,unit:'cl',section:'epicerie-salee'}],steps:['Mariner le poulet','Faire revenir','Ajouter légumes et lait de coco','Mijoter 1h']},
+    {id:g(),title:'Boudin créole',type:'plat',cuisine:'antillaise',tags:['épicé'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:20,cook:25,total:45},ingredients:[{name:'boudin antillais',qty:800,unit:'g',section:'boucherie'},{name:'oignon',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'tomate',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'piment',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'thym',qty:2,unit:'branche',section:'epicerie-salee'}],steps:['Piquer le boudin','Faire revenir oignons et tomates','Cuire 20 min']},
+    {id:g(),title:'Gratin de christophine',type:'plat',cuisine:'antillaise',tags:['vege'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:6,time:{prep:25,cook:40,total:65},ingredients:[{name:'christophine',qty:3,unit:'pièce',section:'fruits-legumes'},{name:'fromage',qty:200,unit:'g',section:'frais'},{name:'crème',qty:20,unit:'cl',section:'frais'},{name:'muscade',qty:1,unit:'pincée',section:'epicerie-salee'},{name:'beurre',qty:30,unit:'g',section:'frais'}],steps:['Cuire christophines','Disposer en couches avec fromage','Gratiner 40 min']},
+    {id:g(),title:'Colombo de légumes',type:'plat',cuisine:'antillaise',tags:['vege','rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:20,cook:30,total:50},ingredients:[{name:'aubergine',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'courgette',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'pomme de terre',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'colombo',qty:2,unit:'cuillère à soupe',section:'epicerie-salee'},{name:'lait de coco',qty:40,unit:'cl',section:'epicerie-salee'}],steps:['Couper légumes','Faire revenir oignon','Ajouter colombo et lait de coco','Mijoter 25 min']},
+    {id:g(),title:'Bokit poulet',type:'plat',cuisine:'antillaise',tags:['rapide','street-food'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:15,cook:10,total:25},ingredients:[{name:'pain bokit',qty:4,unit:'pièce',section:'boulangerie'},{name:'poulet',qty:400,unit:'g',section:'boucherie'},{name:'oignon',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'épices créoles',qty:2,unit:'cuillère à café',section:'epicerie-salee'}],steps:['Faire revenir poulet avec épices','Frire les pains bokit','Garnir et servir']},
+    {id:g(),title:'Rougail saucisses',type:'plat',cuisine:'antillaise',tags:['rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:15,cook:25,total:40},ingredients:[{name:'saucisses créoles',qty:6,unit:'pièce',section:'boucherie'},{name:'tomate',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'oignon',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'piment',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'thym',qty:2,unit:'branche',section:'epicerie-salee'}],steps:['Faire revenir saucisses','Ajouter oignons et tomates','Mijoter 20 min']},
+    {id:g(),title:'Dombré de morue',type:'plat',cuisine:'antillaise',tags:['rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:20,cook:25,total:45},ingredients:[{name:'morue',qty:400,unit:'g',section:'boucherie'},{name:'farine',qty:200,unit:'g',section:'epicerie-salee'},{name:'oignon',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'tomate',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'piment',qty:1,unit:'pièce',section:'fruits-legumes'}],steps:['Dessaler la morue','Préparer dombrés','Faire revenir oignons','Cuire ensemble 20 min']},
+    {id:g(),title:'Poulet boucané',type:'plat',cuisine:'antillaise',tags:['épicé'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:30,cook:45,total:75},ingredients:[{name:'poulet',qty:1,unit:'pièce',section:'boucherie'},{name:'oignon',qty:3,unit:'pièce',section:'fruits-legumes'},{name:'piment',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'thym',qty:3,unit:'branche',section:'epicerie-salee'},{name:'vinaigre',qty:5,unit:'cuillère à soupe',section:'epicerie-salee'}],steps:['Mariner le poulet','Faire revenir','Mijoter 40 min']},
+    {id:g(),title:'Tarte aux pommes',type:'dessert',cuisine:'française',tags:[],season:[9,10,11,12,1],servings:8,time:{prep:30,cook:45,total:75},ingredients:[{name:'pâte brisée',qty:1,unit:'pièce',section:'frais'},{name:'pomme',qty:6,unit:'pièce',section:'fruits-legumes'},{name:'sucre',qty:80,unit:'g',section:'epicerie-sucree'},{name:'beurre',qty:30,unit:'g',section:'frais'},{name:'cannelle',qty:1,unit:'cuillère à café',section:'epicerie-salee'}],steps:['Étaler la pâte','Disposer pommes tranchées','Saupoudrer','Cuire 45 min']},
+    {id:g(),title:'Mousse au chocolat',type:'dessert',cuisine:'française',tags:['rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:6,time:{prep:15,cook:0,total:15},ingredients:[{name:'chocolat noir',qty:200,unit:'g',section:'epicerie-sucree'},{name:'œuf',qty:6,unit:'pièce',section:'frais'},{name:'sucre',qty:50,unit:'g',section:'epicerie-sucree'}],steps:['Fondre le chocolat','Séparer blancs et jaunes','Monter blancs','Incorporer']},
+    {id:g(),title:'Tiramisu',type:'dessert',cuisine:'française',tags:[],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:8,time:{prep:30,cook:0,total:30},ingredients:[{name:'mascarpone',qty:500,unit:'g',section:'frais'},{name:'œuf',qty:4,unit:'pièce',section:'frais'},{name:'sucre',qty:100,unit:'g',section:'epicerie-sucree'},{name:'café',qty:30,unit:'cl',section:'boissons'},{name:'biscuits',qty:200,unit:'g',section:'epicerie-sucree'},{name:'cacao',qty:20,unit:'g',section:'epicerie-sucree'}],steps:['Préparer crème mascarpone','Tremper biscuits','Alterner couches','Réfrigérer']},
+    {id:g(),title:'Crème brûlée',type:'dessert',cuisine:'française',tags:[],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:6,time:{prep:20,cook:45,total:65},ingredients:[{name:'crème',qty:50,unit:'cl',section:'frais'},{name:'œuf',qty:4,unit:'pièce',section:'frais'},{name:'sucre',qty:80,unit:'g',section:'epicerie-sucree'},{name:'vanille',qty:1,unit:'gousse',section:'epicerie-salee'}],steps:['Infuser vanille dans crème','Battre jaunes et sucre','Cuire au bain-marie','Caraméliser']},
+    {id:g(),title:'Clafoutis aux cerises',type:'dessert',cuisine:'française',tags:[],season:[6,7],servings:6,time:{prep:15,cook:45,total:60},ingredients:[{name:'cerise',qty:500,unit:'g',section:'fruits-legumes'},{name:'lait',qty:25,unit:'cl',section:'frais'},{name:'œuf',qty:3,unit:'pièce',section:'frais'},{name:'sucre',qty:80,unit:'g',section:'epicerie-sucree'},{name:'farine',qty:60,unit:'g',section:'epicerie-salee'}],steps:['Laver cerises','Battre pâte','Verser sur cerises','Cuire 45 min']},
+    {id:g(),title:'Flan coco',type:'dessert',cuisine:'antillaise',tags:[],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:8,time:{prep:20,cook:60,total:80},ingredients:[{name:'lait de coco',qty:40,unit:'cl',section:'epicerie-salee'},{name:'lait',qty:25,unit:'cl',section:'frais'},{name:'œuf',qty:4,unit:'pièce',section:'frais'},{name:'sucre',qty:150,unit:'g',section:'epicerie-sucree'},{name:'vanille',qty:1,unit:'cuillère à café',section:'epicerie-salee'}],steps:['Faire un caramel','Battre œufs et sucre','Ajouter laits','Cuire au bain-marie 1h']},
+    {id:g(),title:'Banane flambée',type:'dessert',cuisine:'antillaise',tags:['rapide','flambé'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:5,cook:10,total:15},ingredients:[{name:'banane',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'rhum',qty:4,unit:'cuillère à soupe',section:'boissons'},{name:'beurre',qty:30,unit:'g',section:'frais'},{name:'sucre',qty:50,unit:'g',section:'epicerie-sucree'},{name:'cannelle',qty:1,unit:'pincée',section:'epicerie-salee'}],steps:['Couper les bananes','Caraméliser avec beurre et sucre','Ajouter rhum et flamber']},
+    {id:g(),title:'Gâteau patate',type:'dessert',cuisine:'antillaise',tags:['vege'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:8,time:{prep:30,cook:45,total:75},ingredients:[{name:'patate douce',qty:1,unit:'kg',section:'fruits-legumes'},{name:'noix de coco',qty:200,unit:'g',section:'epicerie-sucree'},{name:'sucre',qty:150,unit:'g',section:'epicerie-sucree'},{name:'œuf',qty:3,unit:'pièce',section:'frais'},{name:'vanille',qty:1,unit:'cuillère à café',section:'epicerie-salee'}],steps:['Cuire et écraser patates','Mélanger avec coco et sucre','Cuire 45 min']},
+    {id:g(),title:'Salade de fruits tropicaux',type:'dessert',cuisine:'antillaise',tags:['vege','rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:4,time:{prep:15,cook:0,total:15},ingredients:[{name:'ananas',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'mangue',qty:2,unit:'pièce',section:'fruits-legumes'},{name:'papaye',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'citron vert',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'sucre de canne',qty:2,unit:'cuillère à soupe',section:'epicerie-sucree'}],steps:['Couper les fruits','Mélanger avec jus de citron et sucre','Réfrigérer']},
+    {id:g(),title:'Sorbet coco-papaye',type:'dessert',cuisine:'antillaise',tags:['vege','rapide'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:6,time:{prep:15,cook:0,total:15},ingredients:[{name:'lait de coco',qty:40,unit:'cl',section:'epicerie-salee'},{name:'papaye',qty:1,unit:'pièce',section:'fruits-legumes'},{name:'sucre',qty:100,unit:'g',section:'epicerie-sucree'},{name:'citron vert',qty:1,unit:'pièce',section:'fruits-legumes'}],steps:['Mixer papaye','Mélanger avec lait de coco et sucre','Congeler 4h']},
+    {id:g(),title:'Gâteau banane-coco',type:'dessert',cuisine:'antillaise',tags:['vege'],season:[1,2,3,4,5,6,7,8,9,10,11,12],servings:8,time:{prep:20,cook:40,total:60},ingredients:[{name:'banane',qty:4,unit:'pièce',section:'fruits-legumes'},{name:'noix de coco',qty:150,unit:'g',section:'epicerie-sucree'},{name:'farine',qty:200,unit:'g',section:'epicerie-salee'},{name:'œuf',qty:3,unit:'pièce',section:'frais'},{name:'sucre',qty:120,unit:'g',section:'epicerie-sucree'},{name:'beurre',qty:80,unit:'g',section:'frais'}],steps:['Écraser les bananes','Mélanger tous les ingrédients','Cuire 40 min']},
+  ];
+  if(!weeks.length) weeks=[makeFreshPlan('Semaine 1')];
+  inventory=[
+    {id:g(),name:'lait',qty:1,unit:'l',expDate:'2026-07-05',section:'frais'},
+    {id:g(),name:'œuf',qty:6,unit:'pièce',expDate:'2026-07-10',section:'frais'},
+    {id:g(),name:'riz',qty:1,unit:'kg',expDate:'2027-06-30',section:'epicerie-salee'},
+    {id:g(),name:"huile d'olive",qty:0.5,unit:'l',expDate:'2027-01-01',section:'epicerie-salee'},
+  ];
+  weeks[0].days[0].meals.midi_entree.push(recipes[0].id);
+  weeks[0].days[1].meals.midi_plat.push(recipes[8].id);
+  weeks[0].days[2].meals.midi_plat.push(recipes[9].id);
+  weeks[0].days[2].accompagnements.midi_plat.push('riz-blanc');
+}
+
+function loadSeedFoodItems() {
+  const g=()=>generateId();
+  foodItems=[
+    {id:g(),name:'Cuisses de poulet',category:'Viande',qty:1,unit:'pièce'},{id:g(),name:'Blancs de poulet',category:'Viande',qty:1,unit:'pièce'},
+    {id:g(),name:'Bœuf haché',category:'Viande',qty:200,unit:'g'},{id:g(),name:'Côtes de porc',category:'Viande',qty:1,unit:'pièce'},
+    {id:g(),name:'Veau',category:'Viande',qty:200,unit:'g'},{id:g(),name:'Lardons',category:'Viande',qty:100,unit:'g'},
+    {id:g(),name:'Saucisses',category:'Viande',qty:1,unit:'pièce'},{id:g(),name:'Jambon',category:'Viande',qty:2,unit:'pièce'},
+    {id:g(),name:'Boudin créole',category:'Viande',qty:1,unit:'pièce'},{id:g(),name:'Cabri',category:'Viande',qty:200,unit:'g'},
+    {id:g(),name:'Morue',category:'Poisson',qty:150,unit:'g'},{id:g(),name:'Thon albacore',category:'Poisson',qty:150,unit:'g'},
+    {id:g(),name:'Saumon',category:'Poisson',qty:150,unit:'g'},{id:g(),name:'Cabillaud',category:'Poisson',qty:150,unit:'g'},
+    {id:g(),name:'Vivaneau',category:'Poisson',qty:150,unit:'g'},{id:g(),name:'Maquereau',category:'Poisson',qty:150,unit:'g'},
+    {id:g(),name:'Sardines fraîches',category:'Poisson',qty:150,unit:'g'},{id:g(),name:'Bar',category:'Poisson',qty:150,unit:'g'},
+    {id:g(),name:'Christophine',category:'Légume',qty:1,unit:'pièce'},{id:g(),name:'Giraumon',category:'Légume',qty:200,unit:'g'},
+    {id:g(),name:'Tomate',category:'Légume',qty:1,unit:'pièce'},{id:g(),name:'Carotte',category:'Légume',qty:1,unit:'pièce'},
+    {id:g(),name:'Courgette',category:'Légume',qty:1,unit:'pièce'},{id:g(),name:'Aubergine',category:'Légume',qty:1,unit:'pièce'},
+    {id:g(),name:'Champignons',category:'Légume',qty:100,unit:'g'},{id:g(),name:'Haricots verts',category:'Légume',qty:100,unit:'g'},
+    {id:g(),name:'Brocoli',category:'Légume',qty:200,unit:'g'},{id:g(),name:'Épinards',category:'Légume',qty:100,unit:'g'},
+    {id:g(),name:'Poivron rouge',category:'Légume',qty:1,unit:'pièce'},{id:g(),name:'Oignon',category:'Légume',qty:1,unit:'pièce'},
+    {id:g(),name:'Riz blanc',category:'Féculent',qty:80,unit:'g'},{id:g(),name:'Riz complet',category:'Féculent',qty:80,unit:'g'},
+    {id:g(),name:'Pâtes spaghetti',category:'Féculent',qty:100,unit:'g'},{id:g(),name:'Pâtes penne',category:'Féculent',qty:100,unit:'g'},
+    {id:g(),name:'Pomme de terre',category:'Féculent',qty:200,unit:'g'},{id:g(),name:'Patate douce',category:'Féculent',qty:200,unit:'g'},
+    {id:g(),name:'Lentilles vertes',category:'Féculent',qty:80,unit:'g'},{id:g(),name:'Quinoa',category:'Féculent',qty:80,unit:'g'},
+    {id:g(),name:'Boulgour',category:'Féculent',qty:80,unit:'g'},{id:g(),name:'Pain',category:'Féculent',qty:1,unit:'pièce'},
+    {id:g(),name:'Banane ti-nain',category:'Féculent',qty:1,unit:'pièce'},{id:g(),name:'Fruit à pain',category:'Féculent',qty:1,unit:'pièce'},
+    {id:g(),name:'Ananas Victoria',category:'Fruit',qty:1,unit:'pièce'},{id:g(),name:'Mangue',category:'Fruit',qty:1,unit:'pièce'},
+    {id:g(),name:'Papaye',category:'Fruit',qty:1,unit:'pièce'},{id:g(),name:'Banane dessert',category:'Fruit',qty:1,unit:'pièce'},
+    {id:g(),name:'Pomme',category:'Fruit',qty:1,unit:'pièce'},{id:g(),name:'Poire',category:'Fruit',qty:1,unit:'pièce'},
+    {id:g(),name:'Fraises',category:'Fruit',qty:100,unit:'g'},{id:g(),name:'Orange',category:'Fruit',qty:1,unit:'pièce'},
+    {id:g(),name:'Goyave',category:'Fruit',qty:1,unit:'pièce'},{id:g(),name:'Maracuja',category:'Fruit',qty:1,unit:'pièce'},
+    {id:g(),name:'Salade verte',category:'Crudité',qty:1,unit:'pièce'},{id:g(),name:'Carotte râpée',category:'Crudité',qty:100,unit:'g'},
+    {id:g(),name:'Avocat',category:'Crudité',qty:1,unit:'pièce'},{id:g(),name:'Concombre',category:'Crudité',qty:1,unit:'pièce'},
+    {id:g(),name:'Tomates cerise',category:'Crudité',qty:100,unit:'g'},{id:g(),name:'Radis',category:'Crudité',qty:5,unit:'pièce'},
+    {id:g(),name:'Mangue verte',category:'Crudité',qty:1,unit:'pièce'},{id:g(),name:'Christophine crue',category:'Crudité',qty:1,unit:'pièce'},
+    {id:g(),name:'Tomates pelées',category:'Conserve',qty:400,unit:'g'},{id:g(),name:"Thon à l'huile",category:'Conserve',qty:1,unit:'pièce'},
+    {id:g(),name:'Compote de pommes',category:'Conserve',qty:1,unit:'pièce'},{id:g(),name:'Salade de fruits',category:'Conserve',qty:1,unit:'pièce'},
+    {id:g(),name:'Lentilles (boîte)',category:'Conserve',qty:400,unit:'g'},{id:g(),name:'Ananas au sirop',category:'Conserve',qty:1,unit:'pièce'},
+    {id:g(),name:'Mangue au sirop',category:'Conserve',qty:1,unit:'pièce'},{id:g(),name:'Lait de coco (boîte)',category:'Conserve',qty:400,unit:'ml'},
+  ];
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',()=>{
+  const theme=localStorage.getItem('pr7_theme')||localStorage.getItem('pr6_theme')||'light';
+  document.body.setAttribute('data-theme',theme);
+  loadData(); renderApp();
+});
+</script>
+</body>
+</html>

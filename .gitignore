@@ -1,0 +1,8 @@
+# Configuration locale Claude Code (hooks, permissions, skills)
+.claude/
+CLAUDE.md
+
+# Système
+Thumbs.db
+desktop.ini
+.DS_Store

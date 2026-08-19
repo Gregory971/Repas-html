@@ -1,0 +1,14 @@
+# Fins de ligne normalisées en LF, dans le dépôt ET dans les copies de travail.
+#
+# Ce n'est pas une préférence de style : la CSP de index.html autorise ses
+# scripts par empreinte SHA-256, calculée à la construction sur le contenu
+# exact. Un checkout Windows en core.autocrlf=true réécrit le fichier en CRLF,
+# les empreintes ne correspondent plus et le navigateur bloque tout le
+# JavaScript de la page — l'application ne démarre pas du tout.
+* text=auto eol=lf
+
+# Ressources binaires : jamais réécrites.
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

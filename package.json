@@ -1,0 +1,16 @@
+{
+  "name": "planrepas",
+  "version": "0.23.0",
+  "private": true,
+  "type": "module",
+  "description": "Application web de planification de repas, livree comme un index.html autonome.",
+  "scripts": {
+    "build": "node tools/build.js",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "check": "node tools/build.js && node --test \"tests/*.test.mjs\""
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0",
+    "tailwindcss": "^3.4.0"
+  }
+}

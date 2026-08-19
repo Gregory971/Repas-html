@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    <!--@CSP@-->
+    <meta name="description" content="Planification de repas : planning hebdomadaire, recettes, liste de courses et inventaire du frigo. Fonctionne hors ligne, données stockées sur votre appareil.">
+    <meta name="theme-color" content="#0b1326" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#eef2f9" media="(prefers-color-scheme: light)">
+    <title>PlanRepas v@VERSION@</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="PlanRepas">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Thème appliqué avant le premier rendu (évite le flash) -->
+    <script>
+        (function () {
+            try {
+                var s = JSON.parse(localStorage.getItem('planrepas_v21') || 'null');
+                var t = (s && s.settings && s.settings.theme) || 'dark';
+                document.documentElement.classList.toggle('dark', t === 'dark');
+                document.documentElement.classList.toggle('light', t !== 'dark');
+            } catch (e) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
+    <!-- Polices de texte : chargées en display=swap, donc jamais bloquantes.
+         Les icônes, elles, sont locales (sprite SVG) : l'application est
+         entièrement lisible au premier chargement même sans réseau. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS pré-compilé (aucun script CDN).
+         Bloc régénéré par tools/build-css.js — ne pas éditer à la main. -->
+    <style id="tw"></style>
+
+    <style>
+        :root {
+            --bg-canvas: #0b1326;
+            --fg-body: #dae2fd;
+            --glass-bg: rgba(23, 31, 51, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --field-bg: #121c33;
+            --field-bg-focus: #182542;
+            --field-fg: #ffffff;
+            --field-border: rgba(255, 255, 255, 0.2);
+        }
+
+        html.light {
+            --bg-canvas: #eef2f9;
+            --fg-body: #1e293b;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(15, 23, 42, 0.10);
+            --glass-shadow: 0 8px 28px 0 rgba(15, 23, 42, 0.10);
+            --field-bg: #ffffff;
+            --field-bg-focus: #ffffff;
+            --field-fg: #0f172a;
+            --field-border: rgba(15, 23, 42, 0.20);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--fg-body);
+            min-height: 100vh;
+        }
+
+        /* Icônes locales : elles suivent la taille et la couleur du texte,
+           comme le faisait la police Material Symbols qu'elles remplacent. */
+        .ico {
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
+            display: inline-block;
+            vertical-align: -0.125em;
+            flex-shrink: 0;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .glass-card-hover { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .glass-card-hover:hover {
+            background: rgba(34, 42, 61, 0.75);
+            border-color: rgba(16, 185, 129, 0.35);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        html.light .glass-card-hover:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+        }
+
+        .inset-glass {
+            background: rgba(18, 28, 51, 0.85);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        html.light .inset-glass {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.06);
+            border-color: rgba(15, 23, 42, 0.15);
+        }
+
+        /* Champs de saisie haute lisibilité (thème-aware) */
+        input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+            background-color: var(--field-bg) !important;
+            color: var(--field-fg) !important;
+            border: 1px solid var(--field-border) !important;
+            caret-color: #10b981 !important;
+        }
+
+        input[type="checkbox"], input[type="radio"] { accent-color: #10b981; }
+
+        input:not([type="checkbox"]):not([type="radio"]):focus, textarea:focus, select:focus {
+            background-color: var(--field-bg-focus) !important;
+            color: var(--field-fg) !important;
+            border-color: #10b981 !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3) !important;
+        }
+
+        ::placeholder { color: #94a3b8 !important; opacity: 0.9 !important; }
+        html.light ::placeholder { color: #64748b !important; }
+
+        select option { background-color: var(--field-bg) !important; color: var(--field-fg) !important; }
+
+        /* Autofill Chrome / Edge */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        select:-webkit-autofill {
+            -webkit-text-fill-color: var(--field-fg) !important;
+            -webkit-box-shadow: 0 0 0px 1000px var(--field-bg) inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Anneau de focus visible au clavier, sur toute cible interactive */
+        :focus-visible {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+
+        /* Surcharges thème clair pour les utilitaires Tailwind employés dans le markup */
+        html.light .text-white { color: #0f172a !important; }
+        html.light .text-slate-200, html.light .text-slate-300 { color: #334155 !important; }
+        html.light .text-slate-400, html.light .text-slate-500 { color: #64748b !important; }
+        html.light .text-primary { color: #047857 !important; }
+        html.light .text-secondary { color: #1d4ed8 !important; }
+        html.light .text-tertiary, html.light .text-tertiary-glow { color: #7e22ce !important; }
+        html.light .text-canvas { color: #ffffff !important; }
+        html.light .bg-white\/5 { background-color: rgba(15, 23, 42, 0.05) !important; }
+        html.light .bg-white\/10 { background-color: rgba(15, 23, 42, 0.08) !important; }
+        html.light .hover\:bg-white\/5:hover { background-color: rgba(15, 23, 42, 0.06) !important; }
+        html.light .hover\:bg-white\/10:hover { background-color: rgba(15, 23, 42, 0.10) !important; }
+        html.light .border-white\/5 { border-color: rgba(15, 23, 42, 0.08) !important; }
+        html.light .border-white\/10 { border-color: rgba(15, 23, 42, 0.12) !important; }
+        html.light .bg-canvas, html.light .bg-surface, html.light .bg-surface-lowest { background-color: #e2e8f0 !important; }
+        html.light .bg-surface\/60 { background-color: rgba(226, 232, 240, 0.6) !important; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(127, 141, 175, 0.35); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
+
+        .drag-over {
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.15) !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Mode « placement » (tactile / clavier) */
+        body.placing [data-slot] {
+            border-color: rgba(16, 185, 129, 0.55) !important;
+            animation: pulseSlot 1.4s ease-in-out infinite;
+            cursor: copy;
+        }
+        @keyframes pulseSlot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            50% { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25); }
+        }
+
+        .toast { animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        [hidden] { display: none !important; }
+
+        /* Halo du score nutritionnel (remplace une classe utilitaire arbitraire) */
+        .glow-primary { box-shadow: 0 0 12px rgba(16, 185, 129, 0.3); }
+
+        /* ---------- Affichage mobile : une vue à la fois + un jour à la fois ---------- */
+        @media (max-width: 1023px) {
+            body { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom)); }
+
+            main { padding: 0.75rem; gap: 0; }
+
+            main > section {
+                width: 100%;
+                max-height: none;
+                min-height: calc(100vh - 5.5rem - 4.25rem);
+            }
+
+            /* La barre du bas pilote la section affichée */
+            body[data-view="recipes"] #center-column,
+            body[data-view="recipes"] #right-column,
+            body[data-view="planning"] #left-column,
+            body[data-view="planning"] #right-column,
+            body[data-view="lists"] #left-column,
+            body[data-view="lists"] #center-column { display: none; }
+
+            /* Le planning affiche le jour sélectionné, en pleine largeur */
+            #planning-grid > div:not(.day-active) { display: none; }
+
+            /* Cibles tactiles plus confortables */
+            #planning-grid button,
+            #recipe-list button,
+            #right-column button { min-height: 32px; }
+
+            /* Les actions au survol sont toujours visibles au doigt */
+            .group-hover\:opacity-100 { opacity: 1; }
+        }
+
+        #mobile-nav { padding-bottom: env(safe-area-inset-bottom); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        /* ---------- Impression ----------
+           Une zone dédiée est remplie juste avant l'appel à window.print(),
+           ce qui permet d'imprimer aussi bien le planning que la liste de
+           courses sans réécrire la mise en page de l'écran. */
+        #print-area { display: none; }
+
+        @media print {
+            body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+            body > *:not(#print-area) { display: none !important; }
+
+            #print-area {
+                display: block !important;
+                font-family: system-ui, sans-serif;
+                color: #000;
+                font-size: 11pt;
+            }
+            #print-area h1 { font-size: 16pt; margin: 0 0 12pt; }
+            #print-area h2 {
+                font-size: 12pt; margin: 12pt 0 4pt;
+                border-bottom: 1px solid #999; padding-bottom: 2pt;
+            }
+            #print-area table { width: 100%; border-collapse: collapse; }
+            #print-area th, #print-area td {
+                border: 1px solid #999; padding: 5pt 7pt;
+                text-align: left; vertical-align: top;
+            }
+            #print-area thead th { background: #eee; }
+            #print-area tbody th { width: 15%; white-space: nowrap; }
+            #print-area ul { list-style: none; padding: 0; margin: 0; columns: 2; }
+            #print-area li { padding: 2pt 0; break-inside: avoid; }
+            #print-area em { color: #555; font-style: normal; font-size: 9pt; }
+            #print-area .muted { color: #999; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden">
+
+    <!--@ICONS@-->
+
+    <!-- Indicateur hors-ligne : l'application reste pleinement utilisable -->
+    <div id="offline-badge" class="fixed bottom-20 lg:bottom-4 left-4 z-50 flex items-center gap-1.5 rounded-full glass-panel px-3 py-1.5 text-[11px] font-semibold text-slate-200 shadow-lg" hidden>
+        <svg class="ico text-sm text-warning" aria-hidden="true"><use href="#i-cloud_off"/></svg>
+        Hors ligne — vos données restent accessibles
+    </div>
+
+    <!-- Nouvelle version déployée : proposition de rechargement -->
+    <div id="update-badge" class="fixed bottom-20 lg:bottom-4 right-4 z-50 flex items-center gap-2 rounded-full glass-panel px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg" hidden>
+        <svg class="ico text-sm text-primary" aria-hidden="true"><use href="#i-system_update_alt"/></svg>
+        Mise à jour disponible
+        <button type="button" data-act="apply-update" class="px-2 py-0.5 rounded-full bg-primary text-canvas font-bold">Recharger</button>
+    </div>
+
+    <!-- TOASTS -->
+    <div id="toast-container" class="fixed top-20 right-4 z-[60] flex flex-col gap-2 pointer-events-none" role="status" aria-live="polite"></div>
+
+    <!-- BANDEAU MODE PLACEMENT -->
+    <div id="placing-bar" class="fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-50 glass-panel rounded-full px-4 py-2 flex items-center gap-3 text-xs font-semibold text-white shadow-lg" hidden>
+        <svg class="ico text-primary text-base" aria-hidden="true"><use href="#i-touch_app"/></svg>
+        <span id="placing-label">Choisissez un créneau</span>
+        <button type="button" data-act="cancel-place" class="px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 transition-all">Annuler</button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="h-16 glass-panel fixed top-0 w-full z-40 flex justify-between items-center px-3 sm:px-6 border-b border-white/10">
+        <div class="flex items-center gap-3 shrink-0">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-primary via-secondary to-tertiary p-0.5 shadow-lg shadow-primary/20">
+                <div class="w-full h-full bg-canvas rounded-[10px] flex items-center justify-center">
+                    <svg class="ico text-primary text-2xl" aria-hidden="true"><use href="#i-restaurant_menu"/></svg>
+                </div>
+            </div>
+            <h1 class="font-h1 font-bold text-xl tracking-tight text-white items-center gap-2 hidden sm:flex">
+                PlanRepas <span class="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-semibold">v@VERSION@</span>
+            </h1>
+        </div>
+
+        <div class="flex items-center gap-4 flex-1 max-w-xl mx-2 sm:mx-8">
+            <div class="relative w-full">
+                <svg class="ico absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg" aria-hidden="true"><use href="#i-search"/></svg>
+                <label class="sr-only" for="global-search">Rechercher une recette</label>
+                <input id="global-search" type="search" placeholder="Rechercher une recette, ingrédient..."
+                       class="w-full inset-glass rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all" />
+            </div>
+            <div class="hidden xl:flex items-center gap-2 glass-panel px-4 py-1.5 rounded-full text-xs font-semibold text-slate-200 whitespace-nowrap">
+                <svg class="ico text-primary text-base" aria-hidden="true"><use href="#i-calendar_month"/></svg>
+                <span id="current-week-label">Cette semaine</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+            <button type="button" data-act="modal" data-target="ai-modal" class="hidden md:flex items-center gap-2 bg-gradient-to-r from-primary to-emerald-600 hover:from-primary-glow hover:to-primary text-canvas px-3.5 py-2 rounded-full font-h2 font-bold text-xs shadow-md shadow-primary/20 active:scale-95 transition-all">
+                <svg class="ico text-base" aria-hidden="true"><use href="#i-auto_awesome"/></svg>
+                <span>Générateur</span>
+            </button>
+
+            <button type="button" data-act="today" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white text-xs font-semibold border border-white/5 transition-all" title="Cuisine du jour">
+                <svg class="ico text-primary text-base" aria-hidden="true"><use href="#i-skillet"/></svg>
+                <span>Aujourd'hui</span>
+            </button>
+
+            <button type="button" data-act="save" class="hidden sm:block p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-white/5 transition-all" title="Enregistrer" aria-label="Enregistrer">
+                <svg class="ico" aria-hidden="true"><use href="#i-save"/></svg>
+            </button>
+
+            <button type="button" data-act="modal" data-target="settings-modal" class="p-2 rounded-lg text-slate-400 hover:text-secondary hover:bg-white/5 transition-all" title="Réglages &amp; exclusions" aria-label="Réglages">
+                <svg class="ico" aria-hidden="true"><use href="#i-settings"/></svg>
+            </button>
+
+            <button type="button" data-act="export" class="p-2 rounded-lg text-slate-400 hover:text-tertiary hover:bg-white/5 transition-all" title="Exporter en JSON" aria-label="Exporter">
+                <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg>
+            </button>
+
+            <button type="button" data-act="import" class="p-2 rounded-lg text-slate-400 hover:text-tertiary hover:bg-white/5 transition-all" title="Importer un JSON" aria-label="Importer">
+                <svg class="ico" aria-hidden="true"><use href="#i-upload"/></svg>
+            </button>
+            <input type="file" id="import-file" accept="application/json,.json" class="hidden">
+
+            <button type="button" data-act="theme" class="p-2 rounded-lg text-slate-400 hover:text-warning hover:bg-white/5 transition-all" title="Changer de thème" aria-label="Changer de thème">
+                <svg class="ico" id="theme-icon" aria-hidden="true"><use href="#i-dark_mode"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENU -->
+    <main class="flex-1 mt-16 flex flex-col lg:flex-row gap-4 p-4 lg:overflow-hidden">
+
+        <!-- COLONNE 1 : RECETTES -->
+        <section id="left-column" class="w-full lg:w-80 flex flex-col gap-3 glass-panel rounded-2xl p-4 lg:overflow-hidden shrink-0 max-h-[70vh] lg:max-h-none">
+            <div class="flex items-center justify-between">
+                <h2 class="font-h2 text-base font-bold text-white flex items-center gap-2">
+                    <svg class="ico text-secondary" aria-hidden="true"><use href="#i-menu_book"/></svg>
+                    Recettes
+                    <span id="recipe-count-badge" class="text-xs font-normal text-slate-400">(0)</span>
+                </h2>
+                <button type="button" data-act="new-recipe" class="p-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all flex items-center gap-1 text-xs font-semibold">
+                    <svg class="ico text-sm" aria-hidden="true"><use href="#i-add"/></svg> Ajouter
+                </button>
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 py-1" id="category-chips">
+                <button type="button" data-filter="all" class="chip-btn px-3 py-1 rounded-full text-xs font-bold transition-all">Tous</button>
+                <button type="button" data-filter="entrée" class="chip-btn px-3 py-1 rounded-full text-xs font-medium transition-all">Entrée</button>
+                <button type="button" data-filter="plat" class="chip-btn px-3 py-1 rounded-full text-xs font-medium transition-all">Plat</button>
+                <button type="button" data-filter="dessert" class="chip-btn px-3 py-1 rounded-full text-xs font-medium transition-all">Dessert</button>
+                <button type="button" data-filter="healthy" class="chip-btn px-3 py-1 rounded-full text-xs font-medium transition-all">Healthy</button>
+            </div>
+
+            <div id="recipe-list" class="flex-1 overflow-y-auto flex flex-col gap-2.5 pr-1"></div>
+        </section>
+
+        <!-- COLONNE 2 : PLANNING -->
+        <section id="center-column" class="flex-1 flex flex-col gap-3 glass-panel rounded-2xl p-4 lg:overflow-hidden min-h-[60vh]">
+            <div class="flex items-center justify-between gap-2 pb-2 border-b border-white/5 flex-wrap">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <div class="flex items-center gap-1 bg-surface-lowest p-1 rounded-xl border border-white/5">
+                        <button type="button" data-act="week" data-delta="-1" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all" title="Semaine précédente" aria-label="Semaine précédente">
+                            <svg class="ico text-sm" aria-hidden="true"><use href="#i-chevron_left"/></svg>
+                        </button>
+                        <span id="week-display-title" class="text-xs font-bold text-white px-2 whitespace-nowrap">Semaine</span>
+                        <button type="button" data-act="week" data-delta="1" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all" title="Semaine suivante" aria-label="Semaine suivante">
+                            <svg class="ico text-sm" aria-hidden="true"><use href="#i-chevron_right"/></svg>
+                        </button>
+                        <button type="button" data-act="week-today" class="p-1 rounded-lg text-slate-400 hover:text-primary hover:bg-white/5 transition-all" title="Revenir à la semaine courante" aria-label="Semaine courante">
+                            <svg class="ico text-sm" aria-hidden="true"><use href="#i-today"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="flex bg-surface-lowest p-1 rounded-xl border border-white/5 text-xs" role="group" aria-label="Période affichée">
+                        <button type="button" data-act="period" data-period="all" id="period-btn-all" class="px-2.5 py-1 rounded-lg font-bold">Midi &amp; Soir</button>
+                        <button type="button" data-act="period" data-period="midi" id="period-btn-midi" class="px-2.5 py-1 rounded-lg font-bold">☀️ Midi</button>
+                        <button type="button" data-act="period" data-period="soir" id="period-btn-soir" class="px-2.5 py-1 rounded-lg font-bold">🌙 Soir</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="button" data-act="autofill" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-semibold flex items-center gap-1 border border-white/5 transition-all">
+                        <svg class="ico text-sm text-primary" aria-hidden="true"><use href="#i-auto_mode"/></svg> Auto-Remplir
+                    </button>
+                    <button type="button" data-act="print" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-xs border border-white/5 transition-all" title="Imprimer le planning" aria-label="Imprimer le planning">
+                        <svg class="ico text-sm" aria-hidden="true"><use href="#i-print"/></svg>
+                    </button>
+                    <button type="button" data-act="clear" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-danger/20 text-slate-300 hover:text-danger text-xs font-semibold border border-white/5 transition-all">
+                        Effacer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sélecteur de jour (mobile uniquement : la grille 7 colonnes est illisible sur téléphone) -->
+            <div id="day-chips" class="lg:hidden flex gap-1 overflow-x-auto pb-1 shrink-0" role="tablist" aria-label="Jour affiché"></div>
+
+            <div class="flex-1 overflow-x-auto overflow-y-auto pr-1">
+                <div class="grid grid-cols-1 lg:grid-cols-7 gap-2.5 min-w-0 lg:min-w-[950px] h-full" id="planning-grid"></div>
+            </div>
+
+            <div class="glass-panel p-3 rounded-xl flex items-center justify-between gap-4 shrink-0 border border-primary/20 bg-surface/60 flex-wrap">
+                <div class="flex items-center gap-3">
+                    <div id="nutri-score-ring" role="img" class="h-10 w-10 rounded-full border-2 border-primary flex items-center justify-center font-macro font-bold text-xs text-primary glow-primary shrink-0">
+                        <span id="nutri-score-pct">0</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-bold text-white">Score d'équilibre</span>
+                        <span class="block text-[11px] text-slate-400" id="nutri-score-desc">0 repas planifiés cette semaine</span>
+                        <span class="block text-[11px] text-primary" id="nutri-score-advice"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-400 font-bold mb-1">ENTRÉES <span id="count-entree">0/14</span></span>
+                        <div class="h-1.5 w-24 bg-surface-lowest rounded-full overflow-hidden">
+                            <div id="bar-entree" class="h-full bg-primary transition-all" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-400 font-bold mb-1">PLATS <span id="count-plat">0/14</span></span>
+                        <div class="h-1.5 w-24 bg-surface-lowest rounded-full overflow-hidden">
+                            <div id="bar-plat" class="h-full bg-secondary transition-all" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-400 font-bold mb-1">DESSERTS <span id="count-dessert">0/14</span></span>
+                        <div class="h-1.5 w-24 bg-surface-lowest rounded-full overflow-hidden">
+                            <div id="bar-dessert" class="h-full bg-tertiary transition-all" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLONNE 3 : COURSES / FRIGO / ALIMENTS -->
+        <section id="right-column" class="w-full lg:w-80 flex flex-col gap-3 glass-panel rounded-2xl p-4 lg:overflow-hidden shrink-0 max-h-[70vh] lg:max-h-none">
+            <div class="flex bg-surface-lowest p-1 rounded-xl border border-white/5" role="tablist" aria-label="Listes">
+                <button type="button" role="tab" data-act="tab" data-tab="shopping" id="tab-shopping-btn" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all">🛒 Courses</button>
+                <button type="button" role="tab" data-act="tab" data-tab="fridge" id="tab-fridge-btn" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all">🏠 Frigo</button>
+                <button type="button" role="tab" data-act="tab" data-tab="foodbank" id="tab-foodbank-btn" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all">🥦 Aliments</button>
+            </div>
+
+            <div id="tab-shopping-content" class="flex-1 overflow-y-auto flex flex-col gap-3 pr-1">
+                <div class="flex items-center justify-between gap-1 pb-1 flex-wrap">
+                    <button type="button" data-act="gen-shopping" class="text-[11px] px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold flex items-center gap-1 transition-all">
+                        <svg class="ico text-xs" aria-hidden="true"><use href="#i-sync"/></svg> Auto-Générer
+                    </button>
+                    <span class="flex items-center gap-1">
+                        <button type="button" data-act="share-shopping" class="p-1 rounded text-slate-400 hover:text-primary transition-all" title="Partager la liste" aria-label="Partager la liste de courses">
+                            <svg class="ico text-sm" aria-hidden="true"><use href="#i-share"/></svg>
+                        </button>
+                        <button type="button" data-act="print-shopping" class="p-1 rounded text-slate-400 hover:text-primary transition-all" title="Imprimer la liste" aria-label="Imprimer la liste de courses">
+                            <svg class="ico text-sm" aria-hidden="true"><use href="#i-print"/></svg>
+                        </button>
+                        <button type="button" data-act="uncheck-all" class="text-[11px] text-slate-400 hover:text-white transition-all ml-1">Tout décocher</button>
+                    </span>
+                </div>
+                <div id="shopping-list-categories" class="flex flex-col gap-3"></div>
+            </div>
+
+            <div id="tab-fridge-content" class="flex-1 overflow-y-auto flex flex-col gap-2.5 pr-1" hidden>
+                <div id="fridge-inventory-list" class="flex flex-col gap-2"></div>
+            </div>
+
+            <div id="tab-foodbank-content" class="flex-1 overflow-y-auto flex flex-col gap-2.5 pr-1" hidden>
+                <label class="sr-only" for="foodbank-search">Rechercher un aliment</label>
+                <input type="search" id="foodbank-search" placeholder="Rechercher un aliment..." class="w-full inset-glass rounded-lg py-1.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                <div id="foodbank-list" class="flex flex-col gap-2"></div>
+            </div>
+
+            <button type="button" data-act="right-add" class="mt-auto py-2.5 rounded-xl border border-primary/30 text-primary font-bold text-xs hover:bg-primary/10 flex items-center justify-center gap-1.5 transition-all">
+                <svg class="ico text-base" aria-hidden="true"><use href="#i-add_circle"/></svg>
+                <span id="right-btn-label">Ajouter un ingrédient</span>
+            </button>
+        </section>
+    </main>
+
+    <!-- BARRE DE NAVIGATION MOBILE -->
+    <nav id="mobile-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-40 glass-panel border-t border-white/10 flex" aria-label="Sections">
+        <button type="button" data-act="view" data-view="recipes" class="flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px] font-bold transition-all">
+            <svg class="ico text-xl" aria-hidden="true"><use href="#i-menu_book"/></svg>
+            Recettes
+        </button>
+        <button type="button" data-act="view" data-view="planning" class="flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px] font-bold transition-all">
+            <svg class="ico text-xl" aria-hidden="true"><use href="#i-calendar_month"/></svg>
+            Planning
+        </button>
+        <button type="button" data-act="view" data-view="lists" class="flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px] font-bold transition-all">
+            <svg class="ico text-xl" aria-hidden="true"><use href="#i-shopping_cart"/></svg>
+            Courses
+        </button>
+    </nav>
+
+    <!-- MODAL : AJOUT / ÉDITION RECETTE -->
+    <div id="add-recipe-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="recipe-modal-title" hidden>
+        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 flex flex-col gap-4 border border-white/10 max-h-[90vh] overflow-y-auto m-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-h1 text-lg font-bold text-white" id="recipe-modal-title">Nouvelle Recette</h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <form id="recipe-form" class="flex flex-col gap-3">
+                <input type="hidden" id="edit-recipe-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-name">Nom de la recette *</label>
+                    <input type="text" id="recipe-name" required maxlength="120" class="w-full inset-glass rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary" placeholder="ex : Colombo de Poulet">
+                </div>
+                <div class="grid grid-cols-4 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-type">Type *</label>
+                        <select id="recipe-type" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                            <option value="entrée">Entrée</option>
+                            <option value="plat" selected>Plat</option>
+                            <option value="dessert">Dessert</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-time">Temps (min)</label>
+                        <input type="number" id="recipe-time" value="25" min="0" max="600" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-calories">Calories (kcal)</label>
+                        <input type="number" id="recipe-calories" value="450" min="0" max="5000" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-servings">Portions</label>
+                        <input type="number" id="recipe-servings" value="4" min="1" max="50" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-ingredients">Ingrédients (un par ligne)</label>
+                    <textarea id="recipe-ingredients" rows="3" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="500 g de poulet&#10;2 cuillères à soupe de colombo&#10;½ citron"></textarea>
+                    <p class="text-[11px] text-slate-400 mt-1">Format reconnu : <em>quantité + unité + ingrédient</em>. Les fractions (<em>½</em>, <em>1/2</em>, <em>1 1/2</em>) sont acceptées. Les quantités servent à la liste de courses.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-steps">Étapes de préparation</label>
+                    <textarea id="recipe-steps" rows="2" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1. Faire revenir l'oignon..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-tags">Tags (séparés par des virgules)</label>
+                    <input type="text" id="recipe-tags" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Healthy, Épicé, Antillaise">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="recipe-image">Image (URL, optionnel)</label>
+                    <input type="url" id="recipe-image" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="https://...">
+                </div>
+                <div class="flex justify-end gap-2 mt-2">
+                    <button type="button" data-act="close-modal" class="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-xs font-semibold">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-canvas font-bold text-xs shadow-md shadow-primary/20">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL : DÉTAIL RECETTE -->
+    <div id="recipe-detail-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" hidden>
+        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 flex flex-col gap-4 border border-white/10 max-h-[90vh] overflow-y-auto m-4" id="recipe-detail-content"></div>
+    </div>
+
+    <!-- MODAL : CHOIX D'UNE RECETTE POUR UN CRÉNEAU -->
+    <div id="slot-picker-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="slot-picker-title" hidden>
+        <div class="glass-panel w-full max-w-md rounded-2xl p-6 flex flex-col gap-4 border border-white/10 max-h-[85vh] overflow-y-auto m-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-h1 text-lg font-bold text-white flex items-center gap-2" id="slot-picker-title">Choisir une recette</h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="flex flex-col gap-2" id="slot-picker-list"></div>
+        </div>
+    </div>
+
+    <!-- MODAL : ACCOMPAGNEMENTS -->
+    <div id="acc-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="acc-modal-title" hidden>
+        <div class="glass-panel w-full max-w-md rounded-2xl p-6 flex flex-col gap-4 border border-white/10 max-h-[85vh] overflow-y-auto m-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-h1 text-lg font-bold text-white flex items-center gap-2" id="acc-modal-title">
+                    <svg class="ico text-tertiary" aria-hidden="true"><use href="#i-rice_bowl"/></svg> Choisir un accompagnement
+                </h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="grid grid-cols-2 gap-2" id="acc-picker-list"></div>
+        </div>
+    </div>
+
+    <!-- MODAL : AUJOURD'HUI -->
+    <div id="today-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="today-modal-title" hidden>
+        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 flex flex-col gap-4 border border-white/10 max-h-[85vh] overflow-y-auto m-4">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 class="font-h1 text-lg font-bold text-white flex items-center gap-2" id="today-modal-title">
+                    <svg class="ico text-primary" aria-hidden="true"><use href="#i-skillet"/></svg> Cuisine du jour
+                </h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div id="today-modal-body" class="flex flex-col gap-4"></div>
+        </div>
+    </div>
+
+    <!-- MODAL : GÉNÉRATEUR -->
+    <div id="ai-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title" hidden>
+        <div class="glass-panel w-full max-w-md rounded-2xl p-6 flex flex-col gap-4 border border-white/10 m-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-h1 text-lg font-bold text-white flex items-center gap-2" id="ai-modal-title">
+                    <svg class="ico text-primary" aria-hidden="true"><use href="#i-auto_awesome"/></svg> Assistant Repas
+                </h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Génère un menu varié pour la semaine affichée à partir de vos recettes, en évitant les répétitions et les
+                ingrédients exclus. Les recettes qui consomment un produit proche de la péremption passent en tête.
+                Aucun appel réseau : la génération est locale.
+            </p>
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-slate-300" for="ai-preference">Objectif du menu</label>
+                <select id="ai-preference" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                    <option value="balanced">Équilibré &amp; gourmand</option>
+                    <option value="vege">100 % végétarien</option>
+                    <option value="express">Recettes express (≤ 20 min)</option>
+                    <option value="antillaise">Spécialités antillaises &amp; créoles</option>
+                </select>
+            </div>
+            <label class="flex items-center gap-2 text-xs text-slate-300">
+                <input type="checkbox" id="ai-keep" class="w-3.5 h-3.5 accent-emerald-500"> Conserver les repas déjà planifiés
+            </label>
+            <div class="flex justify-end gap-2 mt-2">
+                <button type="button" data-act="close-modal" class="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-xs font-semibold">Annuler</button>
+                <button type="button" data-act="run-ai" class="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-emerald-600 text-canvas font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-1">
+                    <svg class="ico text-sm" aria-hidden="true"><use href="#i-bolt"/></svg> Générer le planning
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL : RÉGLAGES -->
+    <div id="settings-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title" hidden>
+        <div class="glass-panel w-full max-w-md rounded-2xl p-6 flex flex-col gap-4 border border-white/10 max-h-[90vh] overflow-y-auto m-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-h1 text-lg font-bold text-white flex items-center gap-2" id="settings-modal-title">
+                    <svg class="ico text-secondary" aria-hidden="true"><use href="#i-settings"/></svg> Réglages &amp; exclusions
+                </h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="flex flex-col gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="household-size">Nombre de personnes (portions par défaut)</label>
+                    <input type="number" id="household-size" value="4" min="1" max="20" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <label class="flex items-start gap-2 text-xs text-slate-300">
+                    <input type="checkbox" id="deduct-fridge" class="w-3.5 h-3.5 mt-0.5 accent-emerald-500">
+                    <span>
+                        Déduire le contenu du frigo de la liste de courses
+                        <span class="block text-[11px] text-slate-400">Les produits périmés ne sont jamais déduits.</span>
+                    </span>
+                </label>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="banned-ingredients">Ingrédients à exclure (un par ligne)</label>
+                    <textarea id="banned-ingredients" rows="4" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="crevette&#10;arachide&#10;porc"></textarea>
+                    <p class="text-[11px] text-slate-400 mt-1">Les recettes concernées seront signalées par un badge 🚫 et évitées par le générateur.</p>
+                </div>
+                <div class="border-t border-white/10 pt-3 flex flex-col gap-2">
+                    <button type="button" data-act="import-legacy" class="w-full px-4 py-2 rounded-lg bg-secondary/10 text-secondary text-xs font-semibold hover:bg-secondary/20 transition-all flex items-center justify-center gap-1.5">
+                        <svg class="ico text-sm" aria-hidden="true"><use href="#i-restore"/></svg>
+                        Récupérer mes données des versions v0.7 à v0.15
+                    </button>
+                    <p id="legacy-status" class="text-[11px] text-slate-400"></p>
+                    <button type="button" data-act="reset-all" class="w-full px-4 py-2 rounded-lg bg-danger/10 text-danger text-xs font-semibold hover:bg-danger/20 transition-all">
+                        Réinitialiser toutes les données
+                    </button>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-2">
+                <button type="button" data-act="close-modal" class="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-xs font-semibold">Annuler</button>
+                <button type="button" data-act="save-settings" class="px-4 py-2 rounded-lg bg-primary text-canvas font-bold text-xs shadow-md shadow-primary/20">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL : AJOUT D'ÉLÉMENT (courses / frigo / aliments) -->
+    <div id="item-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="item-modal-title" hidden>
+        <div class="glass-panel w-full max-w-sm rounded-2xl p-6 flex flex-col gap-4 border border-white/10 m-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-h1 text-base font-bold text-white" id="item-modal-title">Ajouter</h3>
+                <button type="button" data-act="close-modal" class="text-slate-400 hover:text-white" aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <form id="item-form" class="flex flex-col gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="item-name">Nom *</label>
+                    <input type="text" id="item-name" required maxlength="80" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <div id="item-cat-wrap">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="item-cat">Catégorie</label>
+                    <input type="text" id="item-cat" list="cat-suggestions" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Fruits &amp; Légumes, Boucherie...">
+                    <datalist id="cat-suggestions">
+                        <option value="Fruits &amp; Légumes"></option><option value="Produits frais"></option><option value="Boucherie / Poissonnerie"></option>
+                        <option value="Boulangerie"></option><option value="Épicerie salée"></option><option value="Épicerie sucrée"></option>
+                        <option value="Surgelés"></option><option value="Boissons"></option>
+                    </datalist>
+                </div>
+                <div id="item-qty-wrap">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="item-qty">Quantité</label>
+                    <input type="text" id="item-qty" maxlength="30" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary" placeholder="500 g, 2 pièces, 1 botte...">
+                </div>
+                <div id="item-expiry-wrap">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" for="item-expiry">Date de péremption</label>
+                    <input type="date" id="item-expiry" class="w-full inset-glass rounded-lg py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <div class="flex justify-end gap-2 mt-1">
+                    <button type="button" data-act="close-modal" class="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-xs font-semibold">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-canvas font-bold text-xs shadow-md shadow-primary/20">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL : CONFIRMATION (remplace confirm() natif) -->
+    <div id="confirm-modal" class="modal fixed inset-0 bg-black/75 backdrop-blur-sm z-[70] flex items-center justify-center" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message" hidden>
+        <div class="glass-panel w-full max-w-sm rounded-2xl p-6 flex flex-col gap-4 border border-white/10 m-4">
+            <h3 class="font-h1 text-base font-bold text-white flex items-center gap-2" id="confirm-title">
+                <svg class="ico text-warning" aria-hidden="true"><use href="#i-warning"/></svg> Confirmation
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed" id="confirm-message"></p>
+            <div class="flex justify-end gap-2">
+                <button type="button" data-act="confirm-cancel" class="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-xs font-semibold">Annuler</button>
+                <button type="button" data-act="confirm-accept" id="confirm-accept" class="px-4 py-2 rounded-lg bg-danger text-white font-bold text-xs shadow-md shadow-danger/20">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZONE D'IMPRESSION : remplie à la demande, invisible à l'écran -->
+    <div id="print-area" aria-hidden="true"></div>
+
+    <script>
+    'use strict';
+    (function () {
+<!--@SCRIPT@-->
+    })();
+    </script>
+</body>
+</html>

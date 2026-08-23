@@ -48,8 +48,10 @@ qui ouvre l'application pour la première fois les charge automatiquement : inut
 réimporter un JSON sur chaque appareil.
 
 Sur un appareil déjà utilisé, rien n'est écrasé. Pour compléter une collection existante :
-**Réglages → Ajouter les recettes du catalogue publié**. Seules les recettes absentes sont
-ajoutées ; le planning, les courses et les réglages ne bougent pas.
+**Réglages → Ajouter les recettes du catalogue publié**. Sont ajoutées les recettes et les
+aliments absents, ainsi que les photos des recettes qui n'en ont pas encore. Une photo
+déjà présente n'est jamais remplacée, et le planning, les courses et les réglages ne
+bougent pas.
 
 Le catalogue ne contient **que** des recettes et des aliments — aucun réglage, aucun
 planning, aucune liste de courses, aucune liste d'exclusions. Un test le vérifie à chaque

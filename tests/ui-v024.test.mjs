@@ -164,19 +164,26 @@ test('retirer la photo vide le champ et l aperçu', async () => {
    Photos du catalogue
    ========================================================== */
 
-test('chaque photo référencée par le catalogue existe sur le disque', () => {
+test('chaque photo du catalogue est soit hébergée ici, soit liée à sa source', () => {
     const illustrees = SEED.recipes.filter((r) => r.image);
     assert.ok(illustrees.length >= 30, `${illustrees.length} recettes illustrées`);
     for (const r of illustrees) {
-        assert.match(r.image, /^data\/photos\/[a-z0-9-]+\.jpg$/, `chemin inattendu : ${r.image}`);
-        assert.ok(fs.existsSync(path.join(ROOT, r.image)), `fichier manquant : ${r.image}`);
+        if (r.image.startsWith('data/photos/')) {
+            // Photo sous licence libre, recopiée dans le dépôt.
+            assert.match(r.image, /^data\/photos\/[a-z0-9-]+\.jpg$/, `chemin inattendu : ${r.image}`);
+            assert.ok(fs.existsSync(path.join(ROOT, r.image)), `fichier manquant : ${r.image}`);
+        } else {
+            // Photo d'un site tiers : référencée, jamais recopiée.
+            assert.match(r.image, /^https:\/\//, `adresse inattendue : ${r.image}`);
+            assert.ok(r.source, `${r.title} affiche une photo distante sans lien de source`);
+        }
     }
 });
 
-test('chaque photo publiée est créditée', () => {
+test('chaque photo hébergée dans le dépôt est créditée', () => {
     const credits = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'photo-credits.json'), 'utf8'));
     const credites = new Set(credits.photos.map((p) => p.plat));
-    for (const r of SEED.recipes.filter((x) => x.image)) {
+    for (const r of SEED.recipes.filter((x) => (x.image || '').startsWith('data/photos/'))) {
         assert.ok(credites.has(r.title), `crédit manquant pour ${r.title}`);
     }
     for (const p of credits.photos) {

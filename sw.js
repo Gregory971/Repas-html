@@ -4,7 +4,7 @@
  */
 'use strict';
 
-const VERSION = 'v0.25.1';
+const VERSION = 'v0.26';
 const SHELL = `planrepas-shell-${VERSION}`;   // fichiers de l'application
 const ASSETS = `planrepas-assets-${VERSION}`; // polices distantes
 

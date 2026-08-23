@@ -27,9 +27,23 @@ test('le catalogue ne publie aucune donnée personnelle', () => {
         assert.equal(SEED[cle], undefined, `« ${cle} » ne doit pas être publié`);
     }
     // La liste d'exclusions révélerait une allergie : elle reste sur l'appareil.
-    const brut = JSON.stringify(SEED).toLowerCase();
-    for (const mot of ['banned', 'crevette', 'langouste', 'ouassous']) {
-        assert.ok(!brut.includes(mot), `« ${mot} » ne doit pas apparaître`);
+    // Le contrôle porte sur la clé, pas sur les mots : « crevette » et
+    // « langouste » sont des ingrédients légitimes de recettes créoles.
+    assert.ok(!JSON.stringify(SEED).includes('"banned"'), '« banned » ne doit pas être publié');
+});
+
+test('les recettes reprises d un site tiers ne publient pas leurs étapes', () => {
+    // Une liste d'ingrédients relève de l'information ; le texte des étapes est
+    // de l'expression protégée, et ce dépôt est public. Le lien « source » y mène.
+    for (const r of SEED.recipes.filter((x) => x.source)) {
+        assert.equal(r.steps.length, 0, `${r.title} publierait ses étapes`);
+        assert.ok(r.ingredients.length > 0, `${r.title} n a plus d ingrédients`);
+    }
+});
+
+test('toute recette sans étape renvoie vers sa source', () => {
+    for (const r of SEED.recipes.filter((x) => !x.steps.length)) {
+        assert.match(String(r.source || ''), /^https?:\/\//, `${r.title} n a ni étapes ni source`);
     }
 });
 

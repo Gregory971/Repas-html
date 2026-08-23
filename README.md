@@ -44,7 +44,19 @@ sont lues sans jamais être modifiées. En cas de besoin :
 
 ## Catalogue de recettes
 
-`data/seed.json` contient les recettes et les aliments livrés avec le site. Un navigateur
+`data/seed.json` contient les recettes et les aliments livrés avec le site. Il est
+construit par `tools/build-catalog.mjs` à partir des recettes importées.
+
+Les recettes reprises d'un site tiers y figurent avec leur titre, leur type, leur durée,
+leurs portions, leur **liste d'ingrédients**, l'adresse de leur photo et un lien vers la
+page d'origine — mais **sans le texte rédigé de leurs étapes**. Une liste d'ingrédients
+relève de l'information ; le texte des étapes est de l'expression protégée, et ce dépôt
+est public. La fiche affiche alors un bouton « Lire les étapes sur … » qui renvoie à
+l'auteur. Les photos sont référencées à leur adresse d'origine, jamais recopiées.
+
+Trois tests verrouillent cette règle : aucune recette portant un `source` ne publie
+d'étapes, toute recette sans étapes porte un lien de source, et toute photo distante
+appartient à une recette qui affiche son crédit. Un navigateur
 qui ouvre l'application pour la première fois les charge automatiquement : inutile de
 réimporter un JSON sur chaque appareil.
 

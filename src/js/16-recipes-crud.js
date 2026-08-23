@@ -41,13 +41,19 @@ function showRecipeDetail(id) {
         </div>
         <div>
             <h4 class="text-xs font-bold text-white mb-1">Préparation :</h4>
+            ${recipe.steps.length ? `
             <ol class="list-decimal list-inside text-xs text-slate-300 flex flex-col gap-1">
-                ${(recipe.steps.length ? recipe.steps : ['Non renseignée']).map((s) => `<li>${esc(s)}</li>`).join('')}
-            </ol>
+                ${recipe.steps.map((s) => `<li>${esc(s)}</li>`).join('')}
+            </ol>` : (recipe.source ? `
+            <a href="${esc(recipe.source)}" target="_blank" rel="noopener noreferrer nofollow"
+               class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold hover:bg-primary/20 transition-all">
+                ${icon('open_in_new', 'text-sm')}
+                Lire les étapes sur ${esc(sourceLabel(recipe.source))}
+            </a>` : '<p class="text-xs text-slate-400">Non renseignée</p>')}
         </div>
         ${recipe.source ? `
         <p class="text-[11px] text-slate-400 border-t border-white/10 pt-3">
-            Recette importée depuis
+            ${recipe.steps.length ? 'Recette importée depuis' : 'Recette de'}
             <a href="${esc(recipe.source)}" target="_blank" rel="noopener noreferrer nofollow"
                class="text-primary hover:underline">${esc(sourceLabel(recipe.source))}</a>
         </p>` : ''}`;

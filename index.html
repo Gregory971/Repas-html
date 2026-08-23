@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="dark light">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ss5t5uIVy1CVOG6AuFFrViD57kJMr5yNnowXZVAmK8I=' 'sha256-hNcmib1Mhnshax4FPYyeq5sOD2uHd2TTvVscEfE4lME='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ss5t5uIVy1CVOG6AuFFrViD57kJMr5yNnowXZVAmK8I=' 'sha256-nJ9rpidPZojZ0wNBti7kq04+3WYJu9xF8Ok4PG+caeo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
     <meta name="description" content="Planification de repas : planning hebdomadaire, recettes, liste de courses et inventaire du frigo. Fonctionne hors ligne, données stockées sur votre appareil.">
     <meta name="theme-color" content="#0b1326" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#eef2f9" media="(prefers-color-scheme: light)">
@@ -4115,18 +4115,25 @@ video {
         /**
          * Ajoute les recettes et aliments absents, sans jamais toucher au planning,
          * aux courses, au frigo ni aux réglages.
-         * @returns {{recipes: number, foodBank: number}} nombre d'éléments ajoutés
+         * @returns {{recipes: number, foodBank: number, photos: number}} éléments ajoutés
          */
         function mergeCatalog(catalog) {
-            const knownRecipes = new Set(state.recipes.map((r) => catalogKey(r.title)));
+            const knownRecipes = new Map(state.recipes.map((r) => [catalogKey(r.title), r]));
             const knownFoods = new Set(state.foodBank.map((f) => catalogKey(f.name)));
             let recipes = 0;
             let foodBank = 0;
+            let photos = 0;
 
             catalog.recipes.forEach((r) => {
                 const key = catalogKey(r.title);
-                if (knownRecipes.has(key)) return;
-                knownRecipes.add(key);
+                const existante = knownRecipes.get(key);
+                if (existante) {
+                    // Recette déjà présente : on ne touche à rien, sauf pour lui donner
+                    // la photo du catalogue si elle n'en a aucune.
+                    if (r.image && !existante.image) { existante.image = r.image; photos++; }
+                    return;
+                }
+                knownRecipes.set(key, r);
                 state.recipes.push(Object.assign({}, r, { id: generateId() }));
                 recipes++;
             });
@@ -4139,7 +4146,7 @@ video {
                 foodBank++;
             });
 
-            return { recipes, foodBank };
+            return { recipes, foodBank, photos };
         }
 
         /**
@@ -5704,17 +5711,22 @@ video {
             }
 
             const added = mergeCatalog(catalog);
-            if (!added.recipes && !added.foodBank) {
-                showToast('Toutes les recettes du catalogue sont déjà présentes');
+            if (!added.recipes && !added.foodBank && !added.photos) {
+                showToast('Le catalogue n’apporte rien de nouveau');
                 return;
             }
+
+            const bilan = [];
+            if (added.recipes) bilan.push(`${added.recipes} recette${added.recipes > 1 ? 's' : ''}`);
+            if (added.foodBank) bilan.push(`${added.foodBank} aliment${added.foodBank > 1 ? 's' : ''}`);
+            if (added.photos) bilan.push(`${added.photos} photo${added.photos > 1 ? 's' : ''}`);
 
             saveNow();
             renderRecipes();
             renderFoodBank();
             renderPlanning();
             closeModal('settings-modal');
-            showToast(`${added.recipes} recettes et ${added.foodBank} aliments ajoutés`);
+            showToast(`${bilan.join(', ')} ajouté${added.recipes + added.foodBank + added.photos > 1 ? 's' : ''}`);
         }
 
         /* ===== 18-events.js ===== */

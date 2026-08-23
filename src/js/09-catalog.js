@@ -28,18 +28,25 @@ async function fetchCatalog() {
 /**
  * Ajoute les recettes et aliments absents, sans jamais toucher au planning,
  * aux courses, au frigo ni aux réglages.
- * @returns {{recipes: number, foodBank: number}} nombre d'éléments ajoutés
+ * @returns {{recipes: number, foodBank: number, photos: number}} éléments ajoutés
  */
 function mergeCatalog(catalog) {
-    const knownRecipes = new Set(state.recipes.map((r) => catalogKey(r.title)));
+    const knownRecipes = new Map(state.recipes.map((r) => [catalogKey(r.title), r]));
     const knownFoods = new Set(state.foodBank.map((f) => catalogKey(f.name)));
     let recipes = 0;
     let foodBank = 0;
+    let photos = 0;
 
     catalog.recipes.forEach((r) => {
         const key = catalogKey(r.title);
-        if (knownRecipes.has(key)) return;
-        knownRecipes.add(key);
+        const existante = knownRecipes.get(key);
+        if (existante) {
+            // Recette déjà présente : on ne touche à rien, sauf pour lui donner
+            // la photo du catalogue si elle n'en a aucune.
+            if (r.image && !existante.image) { existante.image = r.image; photos++; }
+            return;
+        }
+        knownRecipes.set(key, r);
         state.recipes.push(Object.assign({}, r, { id: generateId() }));
         recipes++;
     });
@@ -52,7 +59,7 @@ function mergeCatalog(catalog) {
         foodBank++;
     });
 
-    return { recipes, foodBank };
+    return { recipes, foodBank, photos };
 }
 
 /**

@@ -305,15 +305,20 @@ async function loadCatalogManually() {
     }
 
     const added = mergeCatalog(catalog);
-    if (!added.recipes && !added.foodBank) {
-        showToast('Toutes les recettes du catalogue sont déjà présentes');
+    if (!added.recipes && !added.foodBank && !added.photos) {
+        showToast('Le catalogue n’apporte rien de nouveau');
         return;
     }
+
+    const bilan = [];
+    if (added.recipes) bilan.push(`${added.recipes} recette${added.recipes > 1 ? 's' : ''}`);
+    if (added.foodBank) bilan.push(`${added.foodBank} aliment${added.foodBank > 1 ? 's' : ''}`);
+    if (added.photos) bilan.push(`${added.photos} photo${added.photos > 1 ? 's' : ''}`);
 
     saveNow();
     renderRecipes();
     renderFoodBank();
     renderPlanning();
     closeModal('settings-modal');
-    showToast(`${added.recipes} recettes et ${added.foodBank} aliments ajoutés`);
+    showToast(`${bilan.join(', ')} ajouté${added.recipes + added.foodBank + added.photos > 1 ? 's' : ''}`);
 }

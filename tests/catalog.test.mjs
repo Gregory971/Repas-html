@@ -63,13 +63,13 @@ const CATALOGUE_TEST = {
     version: 21,
     recipes: [
         {
-            id: 900, title: 'Colombo de cabri', type: 'plat', time: 80, calories: 400, servings: 6,
+            id: 900, title: 'Colombo de cabri', type: 'plat', time: 80, servings: 6,
             tags: [], steps: ['Mijoter'],
             ingredients: [{ name: 'cabri', qty: 1, unit: 'kg', section: 'boucherie' }]
         },
         {
-            id: 901, title: 'Flan coco', type: 'dessert', time: 40, calories: 400, servings: 4,
-            tags: [], steps: ['Cuire'],
+            id: 901, title: 'Flan coco', type: 'dessert', time: 40, servings: 4,
+            tags: [], steps: ['Cuire'], image: 'data/photos/flan-coco.jpg',
             ingredients: [{ name: 'lait de coco', qty: 40, unit: 'cl', section: 'epicerie-salee' }]
         }
     ],
@@ -166,4 +166,45 @@ test('le bouton des réglages complète la collection sans créer de doublon', a
     assert.deepEqual(titres().sort(), ['Colombo de cabri', 'Flan coco'], 'une seule « Flan coco »');
     assert.equal(stored().foodBank.length, 1, 'les aliments manquants sont ajoutés');
     assert.equal($('settings-modal').hidden, true, 'la modale se referme');
+});
+
+test('la fusion donne sa photo à une recette déjà présente qui n en a pas', async () => {
+    const perso = {
+        version: 21, weeks: {}, shoppingList: [], fridge: [], foodBank: [],
+        settings: { household: 4, banned: [], theme: 'dark' },
+        recipes: [{
+            id: 555, title: 'Flan coco', type: 'dessert', time: 40,
+            servings: 4, tags: [], steps: [], image: '',
+            ingredients: [{ name: 'lait de coco', qty: 40, unit: 'cl', section: 'epicerie-salee' }]
+        }]
+    };
+    const { document, click, stored } = await boot({ storage: perso });
+
+    click(document.querySelector('[data-act="modal"][data-target="settings-modal"]'));
+    click(document.querySelector('[data-act="load-catalog"]'));
+    await new Promise((r) => setTimeout(r, 150));
+
+    const flan = stored().recipes.find((r) => r.title === 'Flan coco');
+    assert.equal(flan.id, 555, 'la recette locale est conservée, pas remplacée');
+    assert.equal(flan.image, 'data/photos/flan-coco.jpg', 'elle reçoit la photo du catalogue');
+});
+
+test('la fusion ne remplace jamais une photo existante', async () => {
+    const perso = {
+        version: 21, weeks: {}, shoppingList: [], fridge: [], foodBank: [],
+        settings: { household: 4, banned: [], theme: 'dark' },
+        recipes: [{
+            id: 555, title: 'Flan coco', type: 'dessert', time: 40,
+            servings: 4, tags: [], steps: [], image: 'https://exemple.org/ma-photo.jpg',
+            ingredients: [{ name: 'lait de coco', qty: 40, unit: 'cl', section: 'epicerie-salee' }]
+        }]
+    };
+    const { document, click, stored } = await boot({ storage: perso });
+
+    click(document.querySelector('[data-act="modal"][data-target="settings-modal"]'));
+    click(document.querySelector('[data-act="load-catalog"]'));
+    await new Promise((r) => setTimeout(r, 150));
+
+    const flan = stored().recipes.find((r) => r.title === 'Flan coco');
+    assert.equal(flan.image, 'https://exemple.org/ma-photo.jpg', 'la photo personnelle est préservée');
 });

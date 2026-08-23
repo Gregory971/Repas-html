@@ -13,7 +13,7 @@ import assert from 'node:assert/strict';
 import {
     parseIngLine, parseNumber, parseQty, formatQty, toBase,
     prepDe, pluralUnit, normalizeUnit, guessSection, ingLabel, qtyLabel,
-    formatNumber, formatCount
+    formatNumber, formatCount, roundForShopping
 } from '../src/js/03-ingredients.js';
 import { nameKey, namesMatch, generateId, daysUntil, esc, safeImg, clampInt } from '../src/js/02-utils.js';
 import {
@@ -463,4 +463,84 @@ test('le score reste dans 0..100', () => {
     DAYS.forEach((d) => { full[d] = {}; SLOT_KEYS.forEach((k) => { full[d][k] = 10; }); });
     const r = nutritionScore(weekWith(full), byId);
     assert.ok(r.score >= 0 && r.score <= 100, `score hors bornes : ${r.score}`);
+});
+
+/* ==========================================================
+   Arrondi des quantités de la liste de courses
+   ========================================================== */
+
+test('les dénombrables sont arrondis à l entier supérieur', () => {
+    // Une recette pour 6 servie à 4 donne des tiers : 30,67 oignons ne veut rien dire.
+    assert.equal(roundForShopping(30.67, 'pièce'), 31);
+    assert.equal(roundForShopping(8.67, 'gousse'), 9);
+    assert.equal(roundForShopping(0.33, 'pièce'), 1, 'un tiers d oignon reste un oignon');
+    assert.equal(roundForShopping(1.001, 'botte'), 2);
+    assert.equal(roundForShopping(4, 'pièce'), 4, 'un entier ne bouge pas');
+    assert.equal(roundForShopping(2.5, ''), 3, 'sans unité, on compte aussi');
+});
+
+test('les poids montent au palier supérieur', () => {
+    assert.equal(roundForShopping(47, 'g'), 50);
+    assert.equal(roundForShopping(233, 'g'), 240);
+    assert.equal(roundForShopping(1233, 'g'), 1250);
+    assert.equal(roundForShopping(3, 'g'), 5, 'jamais sous le palier le plus fin');
+});
+
+test('les volumes montent au palier supérieur', () => {
+    assert.equal(roundForShopping(666.7, 'ml'), 700);
+    assert.equal(roundForShopping(1010, 'ml'), 1100);
+    assert.equal(roundForShopping(120, 'ml'), 120);
+});
+
+test('les valeurs déjà rondes ne sont pas gonflées', () => {
+    for (const [q, u] of [[250, 'g'], [1000, 'g'], [500, 'ml'], [3, 'pièce'], [10, 'feuille']]) {
+        assert.equal(roundForShopping(q, u), q, `${q} ${u} devait rester inchangé`);
+    }
+});
+
+test('les cuillères gardent le demi', () => {
+    assert.equal(roundForShopping(8.67, 'cuillère à soupe'), 9);
+    assert.equal(roundForShopping(2.1, 'cuillère à café'), 2.5);
+    assert.equal(roundForShopping(0.1, 'cuillère à soupe'), 0.5);
+});
+
+test('l arrondi ne fait jamais acheter moins que nécessaire', () => {
+    const cas = [[30.67, 'pièce'], [47, 'g'], [233, 'g'], [666.7, 'ml'], [8.67, 'cuillère à soupe'], [0.33, 'gousse']];
+    for (const [q, u] of cas) {
+        assert.ok(roundForShopping(q, u) >= q, `${q} ${u} : ${roundForShopping(q, u)} est insuffisant`);
+    }
+});
+
+test('une quantité inconnue ou nulle traverse sans être inventée', () => {
+    assert.equal(roundForShopping(null, 'pièce'), null);
+    assert.equal(roundForShopping(0, 'g'), 0);
+});
+
+test('la liste de courses construite ne contient plus de quantité à rallonge', () => {
+    const recettes = [
+        { id: 1, title: 'Colombo', type: 'plat', servings: 6, tags: [], steps: [],
+          ingredients: [
+              { name: 'oignon', qty: 4, unit: 'pièce', section: 'fruits-legumes' },
+              { name: 'poulet', qty: 800, unit: 'g', section: 'boucherie' }
+          ] }
+    ];
+    const week = {};
+    for (const jour of ['Lundi', 'Mardi', 'Mercredi']) {
+        week[jour] = { midi_plat: 1, portions: { midi_plat: 4 }, acc: {} };
+    }
+
+    const { list } = buildShoppingList(week, (id) => recettes.find((r) => r.id === Number(id)), {
+        household: 4, existing: [], fridge: [], deduct: false, today: new Date('2026-08-17')
+    });
+
+    const oignon = list.find((i) => i.name === 'oignon');
+    const poulet = list.find((i) => i.name === 'poulet');
+    // 4 oignons pour 6 parts, servis 4, trois fois : 8 exactement
+    assert.equal(oignon.qty, 8);
+    assert.ok(Number.isInteger(oignon.qty), `quantité fractionnaire : ${oignon.qty}`);
+    assert.equal(poulet.qty, 1600);
+    for (const item of list) {
+        if (item.qty == null) continue;
+        assert.ok(String(item.qty).length <= 6, `quantité à rallonge : ${item.qty} ${item.unit}`);
+    }
 });

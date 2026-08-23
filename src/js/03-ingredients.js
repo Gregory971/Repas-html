@@ -70,6 +70,55 @@ export function formatCount(n) {
     return formatNumber(r);
 }
 
+/* ---------- Arrondi pour la liste de courses ---------- */
+
+/**
+ * Mesures de recette, qu'on ne convertit pas en quantité d'achat : une demie
+ * cuillère se lit très bien, on garde donc le pas de 0,5.
+ */
+const SPOON_UNITS = /^cuillère à (soupe|café)$/i;
+
+/**
+ * Paliers d'arrondi des poids et volumes, du plus fin au plus grossier.
+ * On n'achète pas 1 233 g de viande : on en achète 1,25 kg.
+ */
+const STEPS = {
+    g: [[50, 5], [250, 10], [1000, 25], [Infinity, 50]],
+    ml: [[250, 10], [1000, 50], [Infinity, 100]]
+};
+
+const stepFor = (qty, unit) => (STEPS[unit] || []).find(([limite]) => qty < limite)?.[1] || 0;
+
+/**
+ * Ramène une quantité agrégée à ce qu'on peut réellement acheter.
+ *
+ * Les mises à l'échelle (recette pour 6 servie à 4) et les cumuls sur la
+ * semaine produisent des valeurs comme 30,67 pièces d'oignon : illisible sur
+ * une liste de courses. On arrondit donc :
+ *
+ * - dénombrable (pièce, gousse, botte, sans unité) : à l'entier supérieur,
+ *   parce qu'un tiers d'oignon ne s'achète pas ;
+ * - poids et volumes : au palier supérieur (47 g -> 50 g, 1 233 g -> 1,25 kg) ;
+ * - cuillères : au demi supérieur.
+ *
+ * Toujours vers le haut : une liste qui fait acheter moins que nécessaire
+ * envoie faire une seconde course.
+ *
+ * Fonction pure, testable hors navigateur.
+ */
+export function roundForShopping(qty, unit) {
+    if (qty == null || !Number.isFinite(qty) || qty <= 0) return qty;
+    const u = String(unit || '');
+
+    const step = stepFor(qty, u);
+    if (step) return Math.max(step, Math.ceil(qty / step) * step);
+
+    if (SPOON_UNITS.test(u)) return Math.max(0.5, Math.ceil(qty * 2) / 2);
+
+    // Tout le reste se compte à l'unité.
+    return Math.ceil(qty);
+}
+
 /** Formate une quantité en remontant automatiquement g -> kg et ml -> l. */
 export function formatQty(qty, unit) {
     if (unit === 'g' && qty >= 1000) return `${formatNumber(qty / 1000)} kg`;

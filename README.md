@@ -16,8 +16,9 @@ Fonctionne **hors ligne** et s'**installe** comme une application (menu du navig
 - Glisser-déposer des recettes (souris), mode « placement » en deux touches (tactile),
   et choix d'une recette directement depuis un créneau libre
 - Portions ajustables par repas et accompagnements
-- Liste de courses générée depuis le planning : quantités agrégées, rangées par rayon
-  dans l'ordre du magasin, et **déduction de ce qui est déjà au frigo**
+- Liste de courses générée depuis le planning : quantités agrégées et arrondies à ce qui
+  s'achète, rangées par rayon dans l'ordre du magasin, et **déduction de ce qui est déjà
+  au frigo**
 - Inventaire du frigo avec quantités et dates de péremption
 - Générateur de menu local (équilibré, végétarien, express, antillais) qui **met en avant
   les recettes consommant les produits proches de la péremption**

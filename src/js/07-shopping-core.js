@@ -9,7 +9,7 @@
 
 import { DAYS, SLOT_KEYS, SECTION_LABELS, SECTION_ORDER } from './01-constants.js';
 import { generateId, nameKey, namesMatch, daysUntil } from './02-utils.js';
-import { toBase, guessSection } from './03-ingredients.js';
+import { toBase, guessSection, roundForShopping } from './03-ingredients.js';
 
 /**
  * Agrège les besoins de la semaine, en unités de base (g, ml ou unité brute).
@@ -148,7 +148,7 @@ export function buildShoppingList(week, recipeById, options) {
             category: SECTION_LABELS[section] || 'Divers',
             section,
             name: item.name,
-            qty: item.qty == null ? null : Math.round(item.qty * 100) / 100,
+            qty: roundForShopping(item.qty, item.unit),
             unit: item.unit,
             count: item.count,
             checked: previouslyChecked.has(key),

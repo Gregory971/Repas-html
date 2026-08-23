@@ -23,7 +23,7 @@ import {
 import { convertV15 } from '../src/js/06-legacy.js';
 import { aggregatePlanning, deductFridge, buildShoppingList, sectionRank } from '../src/js/07-shopping-core.js';
 import { urgentFridgeNames, urgencyScore, createPicker, pickMenu } from '../src/js/08-generator-core.js';
-import { nutritionScore, nutritionSummary } from '../src/js/04-nutrition.js';
+import { nutritionScore, nutritionSummary, nutritionAdvice } from '../src/js/04-nutrition.js';
 import { DAYS, SLOT_KEYS } from '../src/js/01-constants.js';
 
 /* ---------- Aides ---------- */
@@ -543,4 +543,17 @@ test('la liste de courses construite ne contient plus de quantité à rallonge',
         if (item.qty == null) continue;
         assert.ok(String(item.qty).length <= 6, `quantité à rallonge : ${item.qty} ${item.unit}`);
     }
+});
+
+test('une semaine parfaite ne reclame plus de plats a planifier', () => {
+    const parfait = { meals: 42, parts: { coverage: 1, variety: 1, vegetal: 1 } };
+    const conseil = nutritionAdvice(parfait);
+    assert.ok(!/reste des plats/.test(conseil), `conseil incoherent : ${conseil}`);
+    assert.match(conseil, /complète/);
+});
+
+test('un point faible reel est toujours signale', () => {
+    assert.match(nutritionAdvice({ meals: 10, parts: { coverage: 0.3, variety: 1, vegetal: 1 } }), /plats principaux/);
+    assert.match(nutritionAdvice({ meals: 10, parts: { coverage: 1, variety: 0.2, vegetal: 1 } }), /répètent/);
+    assert.match(nutritionAdvice({ meals: 10, parts: { coverage: 1, variety: 1, vegetal: 0.1 } }), /végétariennes/);
 });

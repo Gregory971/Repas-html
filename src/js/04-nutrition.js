@@ -85,6 +85,9 @@ export function nutritionAdvice(result) {
     if (!result.meals) return 'Planifiez des repas pour obtenir un score.';
     const { coverage, variety, vegetal } = result.parts;
     const worst = Math.min(coverage, variety, vegetal);
+    // Toutes les dimensions au maximum : conseiller quoi que ce soit serait faux.
+    // Sans ce test, une semaine parfaite affichait « il reste des plats à planifier ».
+    if (worst >= 0.999) return 'Semaine complète, variée et équilibrée.';
     if (worst === coverage) return 'Il reste des plats principaux à planifier.';
     if (worst === variety) return 'Les recettes se répètent : variez davantage.';
     return 'Ajoutez des recettes végétariennes ou légères.';

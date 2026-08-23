@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="dark light">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ss5t5uIVy1CVOG6AuFFrViD57kJMr5yNnowXZVAmK8I=' 'sha256-U7s2n0jImqcVGlQiuN3AAwt0ZYQQltGURQlhNUUhuwA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ss5t5uIVy1CVOG6AuFFrViD57kJMr5yNnowXZVAmK8I=' 'sha256-3h9ZNGtn3km6ifnCAQHdcdOOmm0aaW/CYzuJCTcPGAo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
     <meta name="description" content="Planification de repas : planning hebdomadaire, recettes, liste de courses et inventaire du frigo. Fonctionne hors ligne, données stockées sur votre appareil.">
     <meta name="theme-color" content="#0b1326" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#eef2f9" media="(prefers-color-scheme: light)">
@@ -3404,6 +3404,9 @@ video {
             if (!result.meals) return 'Planifiez des repas pour obtenir un score.';
             const { coverage, variety, vegetal } = result.parts;
             const worst = Math.min(coverage, variety, vegetal);
+            // Toutes les dimensions au maximum : conseiller quoi que ce soit serait faux.
+            // Sans ce test, une semaine parfaite affichait « il reste des plats à planifier ».
+            if (worst >= 0.999) return 'Semaine complète, variée et équilibrée.';
             if (worst === coverage) return 'Il reste des plats principaux à planifier.';
             if (worst === variety) return 'Les recettes se répètent : variez davantage.';
             return 'Ajoutez des recettes végétariennes ou légères.';

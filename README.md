@@ -114,6 +114,18 @@ d'une seconde. Titres nettoyés de leurs appendices de référencement, mentions
 préparation retirées des noms d'ingrédients, « sel et poivre » séparé en deux articles,
 durées ISO converties en minutes.
 
+Deux outils accompagnent l'import :
+
+```bash
+node tools/audit-recipes.mjs --detail          # photos manquantes, fiches douteuses, doublons
+node tools/clean-recipes.mjs --photos --ecrire # retire boissons et sauces, cherche les photos
+```
+
+`clean-recipes.mjs` écarte boissons, alcools, cocktails, sauces et condiments, assainit les
+noms d'ingrédients (« ou bâton de cacao râpé », « coupé en dés »…) et découpe les
+énumérations du type « sel, poivre, thym » en articles distincts. Sans `--ecrire`, il se
+contente de simuler.
+
 > **`data/imported.json` est exclu du dépôt, et le catalogue publié n'est jamais modifié
 > par ce script.** Une liste d'ingrédients ne se protège pas, mais le texte des étapes et
 > les photos appartiennent à leurs auteurs : les charger dans votre application relève de

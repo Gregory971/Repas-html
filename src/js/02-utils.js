@@ -77,9 +77,15 @@ export function namesMatch(a, b) {
 export function recipeArt(recipe) {
     const accent = TYPE_ART[recipe.type] || TYPE_ART.plat;
     const hue = hashString(recipe.title || '') % 360;
-    const initials = String(recipe.title || '?')
-        .split(/[\s'’-]+/).filter(Boolean).slice(0, 2)
-        .map((w) => w[0].toUpperCase()).join('');
+    // Le découpage se fait par point de code, pas par unité UTF-16 : un titre
+    // commençant par un emoji donnait sinon un demi-caractère, et
+    // encodeURIComponent levait une URIError qui cassait tout le rendu.
+    // Seules lettres et chiffres sont retenus, un emoji ne fait pas une initiale.
+    const initials = String(recipe.title || '')
+        .split(/[\s'’\-]+/)
+        .map((mot) => [...mot][0] || '')
+        .filter((c) => /[\p{L}\p{N}]/u.test(c))
+        .slice(0, 2).join('').toUpperCase() || '?';
     const svg =
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">' +
         '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +

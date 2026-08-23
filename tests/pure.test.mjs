@@ -15,7 +15,7 @@ import {
     prepDe, pluralUnit, normalizeUnit, guessSection, ingLabel, qtyLabel,
     formatNumber, formatCount, roundForShopping
 } from '../src/js/03-ingredients.js';
-import { nameKey, namesMatch, generateId, daysUntil, esc, safeImg, clampInt } from '../src/js/02-utils.js';
+import { nameKey, namesMatch, generateId, daysUntil, esc, safeImg, clampInt, recipeArt } from '../src/js/02-utils.js';
 import {
     normalize, normalizeFridgeItem, normalizeShoppingItem,
     pruneEmptyWeeks, isEmptyWeek, defaultState, emptyWeek
@@ -556,4 +556,22 @@ test('un point faible reel est toujours signale', () => {
     assert.match(nutritionAdvice({ meals: 10, parts: { coverage: 0.3, variety: 1, vegetal: 1 } }), /plats principaux/);
     assert.match(nutritionAdvice({ meals: 10, parts: { coverage: 1, variety: 0.2, vegetal: 1 } }), /répètent/);
     assert.match(nutritionAdvice({ meals: 10, parts: { coverage: 1, variety: 1, vegetal: 0.1 } }), /végétariennes/);
+});
+
+test('la vignette resiste aux emoji et aux titres exotiques', () => {
+    // Un titre commencant par un emoji donnait un demi-caractere UTF-16 :
+    // encodeURIComponent levait alors une URIError qui cassait tout le rendu.
+    for (const titre of ['Accras de sardines 🐟', '🐟', '🥘 Colombo', '', '   ', '123 riz', 'Œufs à la créole']) {
+        const url = recipeArt({ title: titre, type: 'plat' });
+        assert.match(url, /^data:image\/svg\+xml/, `echec pour ${JSON.stringify(titre)}`);
+        assert.ok(decodeURIComponent(url.slice(url.indexOf(',') + 1)).includes('<svg'));
+    }
+});
+
+test('les initiales ignorent les emoji et retombent sur un caractere sur', () => {
+    const lire = (titre) => decodeURIComponent(recipeArt({ title: titre, type: 'plat' }))
+        .match(/>([^<]*)<\/text>/)[1];
+    assert.equal(lire('Colombo de porc'), 'CD');
+    assert.equal(lire('🐟 Accras'), 'A');
+    assert.equal(lire('🐟'), '?');
 });

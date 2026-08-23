@@ -86,7 +86,14 @@ structurées `schema.org/Recipe`, et les met au format de l'application :
 ```bash
 node tools/import-recipes.mjs "https://exemple.org/ma-recette/"
 node tools/import-recipes.mjs --liste "https://exemple.org/categorie/" --max 10
+node tools/import-recipes.mjs --depuis mes-urls.txt      # une URL par ligne
 ```
+
+Deux lectures sont tentées, dans cet ordre : les données structurées
+`schema.org/Recipe`, puis, à défaut, le HTML de l'article — un titre « Ingrédients »
+suivi d'une liste, un titre « Préparation » suivi d'une autre. Ce repli refuse toute page
+qui ne fournit pas au moins trois ingrédients et deux étapes, pour qu'une page de sommaire
+ne finisse pas dans la collection.
 
 Le résultat va dans `data/imported.json`. Chargez-le ensuite dans l'application avec le
 bouton **Importer** de l'en-tête : les recettes absentes sont ajoutées, les vôtres, votre
@@ -98,7 +105,7 @@ Sites vérifiés :
 | Site | État |
 |---|---|
 | 750g.com | ✅ données structurées complètes |
-| cuisine-creole.com | ✅ données structurées complètes |
+| cuisine-creole.com | ✅ structurées sur une partie, HTML lisible sur le reste |
 | cookpad.com | ✅ données structurées complètes |
 | tatiemaryse.com | ❌ aucune donnée structurée publiée — non importable |
 

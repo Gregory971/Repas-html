@@ -17,6 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { JSDOM } from 'jsdom';
 import { parseIngLine } from '../src/js/03-ingredients.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -267,6 +268,82 @@ export function versRecette(node, sourceUrl) {
     };
 }
 
+/* ---------- Repli : recette rédigée en HTML d'article ---------- */
+
+const TITRE_INGREDIENTS = /ingr[ée]dients?/i;
+const TITRE_ETAPES = /instructions?|pr[ée]paration|[ée]tapes|r[ée]alisation/i;
+
+/** Première liste qui suit un titre, sans franchir la section suivante. */
+function listeApres(titre) {
+    let n = titre.nextElementSibling;
+    let saut = 0;
+    while (n && saut < 4) {
+        if (n.tagName === 'UL' || n.tagName === 'OL') return n;
+        if (/^H[1-6]$/.test(n.tagName)) return null;
+        n = n.nextElementSibling;
+        saut++;
+    }
+    return null;
+}
+
+const textesDe = (liste) => [...liste.children]
+    .map((li) => nettoieTexte(li.textContent))
+    .filter((t) => t.length > 1 && t.length < 400);
+
+/**
+ * Beaucoup de blogs publient la recette en HTML ordinaire : un titre
+ * « Ingrédients » suivi d'une liste, un titre « Préparation » suivi d'une
+ * autre. Ce repli n'est tenté qu'à défaut de données structurées, et refuse
+ * tout ce qui ne ressemble pas franchement à une recette — sans quoi une
+ * page de sommaire finirait dans la collection.
+ */
+export function versRecetteHTML(html, sourceUrl) {
+    const doc = new JSDOM(html).window.document;
+    const zone = doc.querySelector('article, .entry-content, main') || doc.body;
+    const titres = [...zone.querySelectorAll('h2, h3, h4')];
+
+    const listeSous = (motif) => {
+        for (const h of titres) {
+            if (!motif.test(h.textContent)) continue;
+            const l = listeApres(h);
+            if (l && l.children.length) return l;
+        }
+        return null;
+    };
+
+    const listeIng = listeSous(TITRE_INGREDIENTS);
+    const listeEtapes = listeSous(TITRE_ETAPES);
+    if (!listeIng || !listeEtapes) return null;
+
+    const ingredients = textesDe(listeIng)
+        .flatMap((t) => eclateIngredient(t))
+        .map((i) => ({ ...i, name: nettoieNomIngredient(i.name) }))
+        .filter((i) => i.name)
+        .slice(0, 60);
+    const steps = textesDe(listeEtapes).slice(0, 60);
+    if (ingredients.length < 3 || steps.length < 2) return null;
+
+    const titre = nettoieTitre((doc.querySelector('h1') || {}).textContent || '');
+    if (!titre) return null;
+
+    const og = doc.querySelector('meta[property="og:image"]');
+    const texte = nettoieTexte(zone.textContent).slice(0, 4000);
+    const parts = texte.match(/(\d+)\s*(?:personnes?|parts?|portions?)/i);
+    const duree = texte.match(/(\d+)\s*(?:min(?:utes?)?|h(?:eures?)?)\b/i);
+
+    return {
+        title: titre.slice(0, 120),
+        type: devineType({ name: titre }),
+        time: duree ? Math.min(600, dureeEnMinutes(duree[0]) || 30) : 30,
+        servings: parts ? nombreDeParts(parts[0]) : 4,
+        tags: [],
+        ingredients,
+        steps,
+        image: extraitImage(og ? og.getAttribute('content') : ''),
+        source: sourceUrl
+    };
+}
+
 /* ---------- Parcours d'une page de liste ---------- */
 
 /** Liens de la page qui ressemblent à des fiches recette du même domaine. */
@@ -292,14 +369,31 @@ const lanceDirectement = process.argv[1]
 if (lanceDirectement) {
     const args = process.argv.slice(2);
     if (!args.length) {
-        console.error('usage : node tools/import-recipes.mjs <url> [...]  |  --liste <url> [--max N]');
+        console.error('usage : node tools/import-recipes.mjs <url> [...]');
+        console.error('        node tools/import-recipes.mjs --liste <url-de-categorie> [--max N]');
+        console.error('        node tools/import-recipes.mjs --depuis <fichier-d-urls>');
         process.exit(1);
     }
 
     const modeListe = args.includes('--liste');
-    const maxIdx = args.indexOf('--max');
-    const MAX = maxIdx >= 0 ? Number(args[maxIdx + 1]) : 12;
-    const cibles = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--max');
+    const valeurDe = (drapeau) => {
+        const i = args.indexOf(drapeau);
+        return i >= 0 ? args[i + 1] : null;
+    };
+    const MAX = valeurDe('--max') ? Number(valeurDe('--max')) : 12;
+    const PARAMETRES = new Set(['--max', '--depuis']);
+
+    let cibles = args.filter((a, i) => !a.startsWith('--') && !PARAMETRES.has(args[i - 1]));
+
+    // Une liste d'URL dans un fichier, une par ligne : plus commode que la
+    // ligne de commande dès qu'on importe une catégorie entière.
+    const fichier = valeurDe('--depuis');
+    if (fichier) {
+        cibles = fs.readFileSync(fichier, 'utf8')
+            .split('\n').map((l) => l.trim())
+            .filter((l) => l && !l.startsWith('#'));
+        console.log(`${cibles.length} URL lues dans ${fichier}`);
+    }
 
     let aVisiter = [];
     if (modeListe) {
@@ -325,9 +419,11 @@ if (lanceDirectement) {
         try {
             const html = await recupere(url);
             const noeuds = extraitRecipes(html);
-            if (!noeuds.length) throw new Error('aucune donnée structurée Recipe');
-            const r = versRecette(noeuds[0], url);
-            if (!r) throw new Error('recette inexploitable (titre ou ingrédients manquants)');
+            // Données structurées d'abord ; à défaut, lecture du HTML de l'article.
+            const r = noeuds.length ? versRecette(noeuds[0], url) : versRecetteHTML(html, url);
+            if (!r) throw new Error(noeuds.length
+                ? 'recette inexploitable (titre ou ingrédients manquants)'
+                : 'ni données structurées ni recette lisible dans la page');
             recettes.push(r);
             console.log(`${String(i + 1).padStart(3)}/${aVisiter.length}  ${r.title.slice(0, 46).padEnd(48)} ${r.ingredients.length} ingr. ${r.steps.length} étapes ${r.image ? 'photo' : '—'}`);
         } catch (e) {

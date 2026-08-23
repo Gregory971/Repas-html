@@ -39,6 +39,25 @@ sont lues sans jamais être modifiées. En cas de besoin :
 > Sauvegardez régulièrement via le bouton d'export : vider les données de navigation
 > efface le `localStorage`.
 
+## Catalogue de recettes
+
+`data/seed.json` contient les recettes et les aliments livrés avec le site. Un navigateur
+qui ouvre l'application pour la première fois les charge automatiquement : inutile de
+réimporter un JSON sur chaque appareil.
+
+Sur un appareil déjà utilisé, rien n'est écrasé. Pour compléter une collection existante :
+**Réglages → Ajouter les recettes du catalogue publié**. Seules les recettes absentes sont
+ajoutées ; le planning, les courses et les réglages ne bougent pas.
+
+Le catalogue ne contient **que** des recettes et des aliments — aucun réglage, aucun
+planning, aucune liste de courses, aucune liste d'exclusions. Un test le vérifie à chaque
+construction. Pour le régénérer depuis un export de l'application :
+
+```bash
+node -e "const s=require('./chemin/vers/export.json');require('fs').writeFileSync('data/seed.json',JSON.stringify({version:21,recipes:s.recipes,foodBank:s.foodBank},null,1))"
+npm run check
+```
+
 ## Hors ligne
 
 Aucun script tiers n'est chargé, et les icônes sont un sprite SVG local : la page est
@@ -57,6 +76,7 @@ n'autorise les scripts de la page que par leur empreinte, calculée à la constr
 | `src/template.html` | Markup et styles écrits à la main |
 | `src/js/*.js` | Modules ES concaténés dans la page à la construction |
 | `src/icons.svg` | Sprite d'icônes local |
+| `data/seed.json` | Catalogue de recettes et d'aliments livré avec le site |
 | `tools/build.js` | Assemble `index.html` depuis `src/` |
 | `tools/build-css.js` | Recompile le bloc `<style id="tw">` depuis le markup |
 | `tests/` | Tests des fonctions pures et de la page assemblée |

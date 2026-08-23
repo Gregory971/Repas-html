@@ -5,7 +5,7 @@ courses, inventaire du frigo et banque d'aliments.
 
 **➡️ [Ouvrir l'application](https://gregory971.github.io/Repas-html/)**
 
-Page unique et autonome, sans dépendance à installer. Version courante : **v0.23**.
+Page unique et autonome, sans dépendance à installer. Version courante : **v0.24**.
 
 Fonctionne **hors ligne** et s'**installe** comme une application (menu du navigateur →
 « Installer » / « Ajouter à l'écran d'accueil »).
@@ -21,8 +21,10 @@ Fonctionne **hors ligne** et s'**installe** comme une application (menu du navig
 - Inventaire du frigo avec quantités et dates de péremption
 - Générateur de menu local (équilibré, végétarien, express, antillais) qui **met en avant
   les recettes consommant les produits proches de la péremption**
-- Score d'équilibre de la semaine : couverture, variété, apport calorique, part végétale
+- Score d'équilibre de la semaine : couverture, variété, part végétale
 - Impression et partage du planning **comme de la liste de courses**
+- Photo par recette : depuis l'appareil photo ou la galerie, ou par adresse web
+- Panneaux latéraux repliables sur grand écran, barre de navigation sur mobile
 - Exclusions d'ingrédients, thème clair / sombre, export et import JSON
 
 ## Données
@@ -58,6 +60,27 @@ node -e "const s=require('./chemin/vers/export.json');require('fs').writeFileSyn
 npm run check
 ```
 
+## Photos des plats
+
+35 des 52 recettes du catalogue sont illustrées par des photos issues de
+**Wikimedia Commons**, sous licence libre. Les fichiers sont hébergés dans `data/photos/`
+plutôt qu'appelés à distance, et `data/photo-credits.json` porte pour chacun l'auteur, la
+licence et la page d'origine.
+
+Le choix est fait **fichier par fichier**, à la main. Une sélection automatique du premier
+résultat ramenait la capitale du Sri Lanka pour « Colombo de poulet » et celle du Ghana
+pour « Accras » : les plats sans photo certaine — surtout les spécialités antillaises —
+n'en reçoivent aucune et gardent leur vignette générée à partir de leur nom.
+
+Pour vos propres plats, le formulaire de recette accepte une photo depuis l'appareil :
+elle est réduite à 640 px et enregistrée **sur cet appareil uniquement**, jamais publiée.
+
+## Panneaux latéraux
+
+Sur grand écran, les colonnes « Recettes » et « Courses / Frigo / Aliments » se replient
+en un rail vertical pour laisser toute la largeur au planning. L'état est mémorisé.
+Sur mobile, c'est la barre du bas qui choisit la section affichée.
+
 ## Hors ligne
 
 Aucun script tiers n'est chargé, et les icônes sont un sprite SVG local : la page est
@@ -77,6 +100,9 @@ n'autorise les scripts de la page que par leur empreinte, calculée à la constr
 | `src/js/*.js` | Modules ES concaténés dans la page à la construction |
 | `src/icons.svg` | Sprite d'icônes local |
 | `data/seed.json` | Catalogue de recettes et d'aliments livré avec le site |
+| `data/photos/` | Photos des plats (Wikimedia Commons, licences libres) |
+| `data/photo-credits.json` | Auteur, licence et source de chaque photo |
+| `tools/find-photos.mjs`, `tools/fetch-photos.mjs` | Recherche et récupération des photos |
 | `tools/build.js` | Assemble `index.html` depuis `src/` |
 | `tools/build-css.js` | Recompile le bloc `<style id="tw">` depuis le markup |
 | `tests/` | Tests des fonctions pures et de la page assemblée |

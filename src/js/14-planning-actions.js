@@ -86,7 +86,7 @@ function openSlotPicker(day, slotKey) {
                 <img src="${esc(imgFor(r))}" data-fallback="${esc(recipeArtCached(r))}" width="40" height="40" loading="lazy" class="h-10 w-10 rounded-lg object-cover shrink-0 bg-surface-lowest" alt="">
                 <span class="min-w-0 flex-1">
                     <span class="block text-xs font-bold text-white truncate">${esc(r.title)}</span>
-                    <span class="block text-[10px] text-slate-400">${esc(r.time)} min • ${esc(r.calories)} kcal</span>
+                    <span class="block text-[10px] text-slate-400">${esc(r.time)} min</span>
                 </span>
                 ${score ? '<span class="text-xs shrink-0" title="Utilise un produit qui périme bientôt">⏳</span>' : ''}
                 ${banned ? '<span class="text-xs shrink-0" title="Contient un ingrédient exclu">🚫</span>' : ''}

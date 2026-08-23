@@ -18,13 +18,13 @@ import { normalizeIngredient, parseIngLine, parseQty, guessSection, normalizeUni
 
 export function rawDefaultRecipes() {
     return [
-        { id: 1, title: 'Salade de Burrata & Figues', type: 'entrée', time: 10, tags: ['Healthy', 'Végé'], calories: 280, image: '', ingredients: ['2 pièces de burrata', '6 figues', '100 g de roquette', "3 cuillères à soupe d'huile d'olive"], steps: ['Disposer la roquette', 'Ajouter la burrata et les figues'] },
-        { id: 2, title: 'Velouté de Potimarron', type: 'entrée', time: 15, tags: ['Healthy', 'Rapide'], calories: 190, image: '', ingredients: ['1 kg de potimarron', '20 cl de crème', '1 pincée de muscade'], steps: ['Cuire le potimarron', 'Mixer avec la crème'] },
-        { id: 3, title: 'Bowl Quinoa & Patates Douces', type: 'plat', time: 25, tags: ['Healthy', 'Végé'], calories: 450, image: '', ingredients: ['320 g de quinoa', '800 g de patate douce', '2 avocats'], steps: ['Cuire le quinoa', 'Rôtir la patate douce'] },
-        { id: 4, title: 'Pavé de Saumon & Asperges', type: 'plat', time: 20, tags: ['Healthy', 'Poisson'], calories: 520, image: '', ingredients: ['4 pavés de saumon', "1 botte d'asperges", '1 citron'], steps: ['Poêler le saumon', 'Cuire les asperges à la vapeur'] },
-        { id: 5, title: 'Colombo de Poulet Antillais', type: 'plat', time: 35, tags: ['Épicé', 'Antillaise'], calories: 540, image: '', ingredients: ['800 g de poulet', '2 cuillères à soupe de poudre de colombo', '1 piment', '600 g de pommes de terre'], steps: ['Mariner le poulet', 'Mijoter avec la poudre de colombo'] },
-        { id: 6, title: 'Mousse au Chocolat Noir', type: 'dessert', time: 15, tags: ['Gourmand'], calories: 310, image: '', ingredients: ['200 g de chocolat noir', '6 œufs', '50 g de sucre'], steps: ['Fondre le chocolat', 'Monter les blancs en neige'] },
-        { id: 7, title: 'Tarte Fine aux Pommes', type: 'dessert', time: 25, tags: ['Fait Maison'], calories: 270, image: '', ingredients: ['6 pommes', '1 pâte feuilletée', '40 g de beurre'], steps: ['Disposer les pommes', 'Enfourner 25 min'] }
+        { id: 1, title: 'Salade de Burrata & Figues', type: 'entrée', time: 10, tags: ['Healthy', 'Végé'], image: '', ingredients: ['2 pièces de burrata', '6 figues', '100 g de roquette', "3 cuillères à soupe d'huile d'olive"], steps: ['Disposer la roquette', 'Ajouter la burrata et les figues'] },
+        { id: 2, title: 'Velouté de Potimarron', type: 'entrée', time: 15, tags: ['Healthy', 'Rapide'], image: '', ingredients: ['1 kg de potimarron', '20 cl de crème', '1 pincée de muscade'], steps: ['Cuire le potimarron', 'Mixer avec la crème'] },
+        { id: 3, title: 'Bowl Quinoa & Patates Douces', type: 'plat', time: 25, tags: ['Healthy', 'Végé'], image: '', ingredients: ['320 g de quinoa', '800 g de patate douce', '2 avocats'], steps: ['Cuire le quinoa', 'Rôtir la patate douce'] },
+        { id: 4, title: 'Pavé de Saumon & Asperges', type: 'plat', time: 20, tags: ['Healthy', 'Poisson'], image: '', ingredients: ['4 pavés de saumon', "1 botte d'asperges", '1 citron'], steps: ['Poêler le saumon', 'Cuire les asperges à la vapeur'] },
+        { id: 5, title: 'Colombo de Poulet Antillais', type: 'plat', time: 35, tags: ['Épicé', 'Antillaise'], image: '', ingredients: ['800 g de poulet', '2 cuillères à soupe de poudre de colombo', '1 piment', '600 g de pommes de terre'], steps: ['Mariner le poulet', 'Mijoter avec la poudre de colombo'] },
+        { id: 6, title: 'Mousse au Chocolat Noir', type: 'dessert', time: 15, tags: ['Gourmand'], image: '', ingredients: ['200 g de chocolat noir', '6 œufs', '50 g de sucre'], steps: ['Fondre le chocolat', 'Monter les blancs en neige'] },
+        { id: 7, title: 'Tarte Fine aux Pommes', type: 'dessert', time: 25, tags: ['Fait Maison'], image: '', ingredients: ['6 pommes', '1 pâte feuilletée', '40 g de beurre'], steps: ['Disposer les pommes', 'Enfourner 25 min'] }
     ];
 }
 
@@ -58,7 +58,7 @@ export function defaultState() {
             { id: generateId(), category: 'Poisson', name: 'Pavé de saumon', unit: 'pce' },
             { id: generateId(), category: 'Féculent', name: 'Riz basmati', unit: 'g' }
         ],
-        settings: { household: 4, banned: [], theme: 'dark', deductFridge: true }
+        settings: { household: 4, banned: [], theme: 'dark', deductFridge: true, panels: { left: true, right: true } }
     };
 }
 
@@ -185,7 +185,7 @@ export function normalize(raw) {
     const out = {
         version: STATE_VERSION,
         recipes: [], weeks: {}, shoppingList: [], fridge: [], foodBank: [],
-        settings: { household: 4, banned: [], theme: 'dark', deductFridge: true }
+        settings: { household: 4, banned: [], theme: 'dark', deductFridge: true, panels: { left: true, right: true } }
     };
 
     const seenIds = new Set();
@@ -202,7 +202,6 @@ export function normalize(raw) {
             title: String(r.title).slice(0, 120),
             type: TYPES.includes(r.type) ? r.type : 'plat',
             time: clampInt(rawTime, 0, 600, 20),
-            calories: clampInt(r.calories, 0, 5000, 400),
             servings: clampInt(r.servings, 1, 50, 4),
             tags: Array.isArray(r.tags) ? r.tags.map(String).slice(0, 12) : [],
             // Accepte les ingrédients structurés (v0.15) comme le texte libre
@@ -271,6 +270,9 @@ export function normalize(raw) {
     out.settings.household = clampInt(s.household, 1, 20, 4);
     out.settings.banned = Array.isArray(s.banned) ? s.banned.map((b) => String(b).toLowerCase().trim()).filter(Boolean).slice(0, 60) : [];
     out.settings.theme = s.theme === 'light' ? 'light' : 'dark';
+    // Panneaux latéraux : repliés ou non, sur grand écran.
+    const panels = (s.panels && typeof s.panels === 'object') ? s.panels : {};
+    out.settings.panels = { left: panels.left !== false, right: panels.right !== false };
     out.settings.deductFridge = s.deductFridge !== false;
 
     return out;

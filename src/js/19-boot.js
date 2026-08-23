@@ -9,6 +9,7 @@ function renderAll() {
 }
 
 applyTheme();
+applyPanels();
 renderAccPicker();
 setCategoryFilter('all');
 switchPeriodFilter('all');

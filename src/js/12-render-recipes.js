@@ -66,8 +66,6 @@ function renderRecipes() {
                     <h3 class="text-xs font-bold text-white truncate" title="${esc(recipe.title)}">${esc(recipe.title)}</h3>
                     <div class="flex items-center gap-2 mt-1 text-[11px] text-slate-400">
                         <span class="flex items-center gap-0.5">${icon('schedule', 'text-[13px]')}${esc(recipe.time)} min</span>
-                        <span aria-hidden="true">•</span>
-                        <span>${esc(recipe.calories)} kcal</span>
                     </div>
                 </div>
             </div>

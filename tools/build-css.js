@@ -25,7 +25,8 @@ const OPEN = '<style id="tw">';
 const OWN = new Set([
     'glass-panel', 'glass-card-hover', 'inset-glass', 'drag-over', 'toast',
     'modal', 'chip-btn', 'no-print', 'day-active', 'glow-primary',
-    'dark', 'light', 'placing', 'ico', 'muted'
+    'dark', 'light', 'placing',
+    'panel', 'panel-body', 'panel-rail', 'panel-rail-label', 'ico', 'muted'
 ]);
 
 const escapeSel = (s) => s.replace(/[.:/[\]()#,%!]/g, (c) => '\\' + c);

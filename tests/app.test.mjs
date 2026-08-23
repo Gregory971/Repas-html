@@ -366,6 +366,7 @@ test('le score affiché est un score, pas un taux de remplissage', async () => {
 
     const score = Number($('nutri-score-pct').textContent);
     assert.ok(score > 0 && score <= 100, `score attendu dans 1..100, obtenu ${score}`);
-    assert.match($('nutri-score-desc').textContent, /kcal\/jour/);
+    assert.match($('nutri-score-desc').textContent, /jours couverts/);
+    assert.ok(!/kcal/.test($('nutri-score-desc').textContent), 'plus aucune mention de calories');
     assert.ok($('nutri-score-advice').textContent.length > 0, 'un conseil est affiché');
 });

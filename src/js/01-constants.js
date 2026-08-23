@@ -99,9 +99,6 @@ export const VULGAR_FRACTIONS = {
 
 /* ---------- Nutrition ---------- */
 
-/** Cible calorique journalière par personne, utilisée par le score d'équilibre. */
-export const KCAL_TARGET = 2100;
-export const KCAL_TOLERANCE = 500;
 
 /** Un produit du frigo est « urgent » à partir de ce nombre de jours restants. */
 export const URGENT_DAYS = 3;

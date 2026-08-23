@@ -10,7 +10,7 @@ const GLOBAL_ACTS = new Set([
     'modal', 'close-modal', 'today', 'save', 'export', 'import', 'theme',
     'new-recipe', 'week', 'week-today', 'period', 'autofill', 'print',
     'clear', 'view', 'apply-update', 'save-settings', 'import-legacy', 'load-catalog',
-    'reset-all', 'run-ai'
+    'reset-all', 'run-ai', 'panel', 'pick-photo', 'drop-photo'
 ]);
 
 document.addEventListener('click', (e) => {
@@ -41,6 +41,9 @@ document.addEventListener('click', (e) => {
         case 'save-settings': saveSettings(); break;
         case 'import-legacy': importLegacy(); break;
         case 'load-catalog': loadCatalogManually(); break;
+        case 'panel': togglePanel(btn.dataset.panel); break;
+        case 'pick-photo': $('recipe-photo-file').click(); break;
+        case 'drop-photo': clearRecipePhoto(); break;
         case 'reset-all': resetAll(); break;
         case 'run-ai':
             closeModal('ai-modal');

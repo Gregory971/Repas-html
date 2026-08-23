@@ -28,7 +28,7 @@ function showRecipeDetail(id) {
         ${tags ? `<div class="flex flex-wrap gap-1">${tags}</div>` : ''}
         <div class="flex items-center justify-around bg-surface-lowest p-2 rounded-xl border border-white/5 text-center">
             <div><span class="text-[10px] text-slate-400 block font-bold">TEMPS</span><span class="text-xs font-bold text-white">${esc(recipe.time)} min</span></div>
-            <div><span class="text-[10px] text-slate-400 block font-bold">CALORIES</span><span class="text-xs font-bold text-white">${esc(recipe.calories)} kcal</span></div>
+            <div><span class="text-[10px] text-slate-400 block font-bold">PORTIONS</span><span class="text-xs font-bold text-white">${esc(recipe.servings)}</span></div>
             <div><span class="text-[10px] text-slate-400 block font-bold">TYPE</span><span class="text-xs font-bold text-primary capitalize">${esc(recipe.type)}</span></div>
         </div>
         <div>
@@ -52,21 +52,21 @@ function showRecipeDetail(id) {
 function openRecipeForm(recipe) {
     const form = $('recipe-form');
     form.reset();
+    setPhotoPreview('');
     $('edit-recipe-id').value = recipe ? recipe.id : '';
     $('recipe-modal-title').textContent = recipe ? 'Modifier la recette' : 'Nouvelle recette';
     if (recipe) {
         $('recipe-name').value = recipe.title;
         $('recipe-type').value = recipe.type;
         $('recipe-time').value = recipe.time;
-        $('recipe-calories').value = recipe.calories;
         $('recipe-servings').value = recipe.servings || 4;
         $('recipe-ingredients').value = (recipe.ingredients || []).map((i) => ingLabel(i)).join('\n');
         $('recipe-steps').value = (recipe.steps || []).join('\n');
         $('recipe-tags').value = (recipe.tags || []).join(', ');
         $('recipe-image').value = recipe.image || '';
+        setPhotoPreview(safeImg(recipe.image));
     } else {
         $('recipe-time').value = 25;
-        $('recipe-calories').value = 450;
         $('recipe-servings').value = state.settings.household;
         $('recipe-type').value = 'plat';
     }
@@ -82,7 +82,6 @@ $('recipe-form').addEventListener('submit', (e) => {
         title: title.slice(0, 120),
         type: TYPES.includes($('recipe-type').value) ? $('recipe-type').value : 'plat',
         time: clampInt($('recipe-time').value, 0, 600, 20),
-        calories: clampInt($('recipe-calories').value, 0, 5000, 400),
         servings: clampInt($('recipe-servings').value, 1, 50, 4),
         ingredients: $('recipe-ingredients').value.split('\n').map(parseIngLine).filter(Boolean).slice(0, 60),
         steps: $('recipe-steps').value.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 60),

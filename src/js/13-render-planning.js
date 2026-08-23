@@ -42,7 +42,7 @@ function renderSlot(day, slotKey) {
         </div>
 
         <div class="flex items-center justify-between mt-auto pt-1 border-t border-white/5">
-            <span class="text-[10px] text-slate-400">${recipe.calories * portion} kcal</span>
+            <span class="text-[10px] text-slate-400">${esc(recipe.time)} min</span>
             <div class="flex items-center bg-canvas rounded-full px-1 border border-white/10">
                 <button type="button" data-act="portion" data-delta="-1" class="text-slate-400 hover:text-white px-1 text-[11px]" aria-label="Diminuer les portions">−</button>
                 <span class="text-[10px] font-bold px-1 text-primary">${portion}p</span>

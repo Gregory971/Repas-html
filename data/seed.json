@@ -9,7 +9,6 @@
    "title": "Salade de tomates au basilic",
    "type": "entrée",
    "time": 10,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -40,7 +39,6 @@
     "Ciseler le basilic",
     "Assaisonner"
    ],
-   "image": "",
    "cuisine": "française",
    "season": [
     6,
@@ -53,7 +51,6 @@
    "title": "Velouté de potiron",
    "type": "entrée",
    "time": 45,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -91,7 +88,7 @@
     "Cuire 30 min",
     "Mixer avec crème"
    ],
-   "image": "",
+   "image": "data/photos/veloute-de-potiron.jpg",
    "cuisine": "française",
    "season": [
     10,
@@ -104,7 +101,6 @@
    "title": "Soupe à l'oignon",
    "type": "entrée",
    "time": 60,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege"
@@ -147,7 +143,7 @@
     "Mijoter 30 min",
     "Gratiner avec fromage"
    ],
-   "image": "",
+   "image": "data/photos/soupe-a-l-oignon.jpg",
    "cuisine": "française",
    "season": [
     10,
@@ -162,7 +158,6 @@
    "title": "Salade César",
    "type": "entrée",
    "time": 15,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -198,7 +193,7 @@
     "Griller le poulet",
     "Assembler et assaisonner"
    ],
-   "image": "",
+   "image": "data/photos/salade-cesar.jpg",
    "cuisine": "rapide",
    "season": [
     4,
@@ -214,7 +209,6 @@
    "title": "Accras de morue",
    "type": "entrée",
    "time": 25,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -257,7 +251,7 @@
     "Incorporer morue et aromates",
     "Frire"
    ],
-   "image": "",
+   "image": "data/photos/accras-de-morue.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -279,7 +273,6 @@
    "title": "Féroce d'avocat",
    "type": "entrée",
    "time": 15,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -323,7 +316,6 @@
     "Ajouter oignon et piment",
     "Assaisonner"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -345,7 +337,6 @@
    "title": "Soupe de giraumon",
    "type": "entrée",
    "time": 50,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "vege",
@@ -383,7 +374,6 @@
     "Cuire 25 min",
     "Mixer avec lait de coco"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     10,
@@ -398,7 +388,6 @@
    "title": "Accras de légumes",
    "type": "entrée",
    "time": 35,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -441,7 +430,7 @@
     "Préparer pâte",
     "Frire"
    ],
-   "image": "",
+   "image": "data/photos/accras-de-legumes.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -463,7 +452,6 @@
    "title": "Bœuf bourguignon",
    "type": "plat",
    "time": 210,
-   "calories": 400,
    "servings": 6,
    "tags": [],
    "ingredients": [
@@ -510,7 +498,7 @@
     "Saisir la viande",
     "Mijoter 3h"
    ],
-   "image": "",
+   "image": "data/photos/b-uf-bourguignon.jpg",
    "cuisine": "française",
    "season": [
     10,
@@ -525,7 +513,6 @@
    "title": "Ratatouille niçoise",
    "type": "plat",
    "time": 65,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -574,7 +561,7 @@
     "Faire revenir oignon et ail",
     "Mijoter 45 min"
    ],
-   "image": "",
+   "image": "data/photos/ratatouille-nicoise.jpg",
    "cuisine": "française",
    "season": [
     6,
@@ -588,7 +575,6 @@
    "title": "Coq au vin",
    "type": "plat",
    "time": 115,
-   "calories": 400,
    "servings": 4,
    "tags": [],
    "ingredients": [
@@ -629,7 +615,7 @@
     "Flamber au vin",
     "Mijoter 1h30"
    ],
-   "image": "",
+   "image": "data/photos/coq-au-vin.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -645,7 +631,6 @@
    "title": "Quiche lorraine",
    "type": "plat",
    "time": 55,
-   "calories": 400,
    "servings": 6,
    "tags": [],
    "ingredients": [
@@ -686,7 +671,7 @@
     "Battre œufs et crème",
     "Cuire 35 min"
    ],
-   "image": "",
+   "image": "data/photos/quiche-lorraine.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -708,7 +693,6 @@
    "title": "Pot-au-feu",
    "type": "plat",
    "time": 210,
-   "calories": 400,
    "servings": 8,
    "tags": [],
    "ingredients": [
@@ -749,7 +733,7 @@
     "Ajouter légumes",
     "Cuire 3h"
    ],
-   "image": "",
+   "image": "data/photos/pot-au-feu.jpg",
    "cuisine": "française",
    "season": [
     10,
@@ -765,7 +749,6 @@
    "title": "Blanquette de veau",
    "type": "plat",
    "time": 150,
-   "calories": 400,
    "servings": 6,
    "tags": [],
    "ingredients": [
@@ -805,7 +788,7 @@
     "Cuire avec légumes",
     "Lier avec œufs-crème"
    ],
-   "image": "",
+   "image": "data/photos/blanquette-de-veau.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -821,7 +804,6 @@
    "title": "Risotto aux champignons",
    "type": "plat",
    "time": 40,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege"
@@ -864,7 +846,7 @@
     "Ajouter bouillon",
     "Terminer avec parmesan"
    ],
-   "image": "",
+   "image": "data/photos/risotto-aux-champignons.jpg",
    "cuisine": "française",
    "season": [
     9,
@@ -878,7 +860,6 @@
    "title": "Omelette aux fines herbes",
    "type": "plat",
    "time": 15,
-   "calories": 400,
    "servings": 2,
    "tags": [
     "vege",
@@ -915,7 +896,7 @@
     "Cuire dans beurre chaud",
     "Plier"
    ],
-   "image": "",
+   "image": "data/photos/omelette-aux-fines-herbes.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -937,7 +918,6 @@
    "title": "Pâtes carbonara",
    "type": "plat",
    "time": 20,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -974,7 +954,7 @@
     "Battre œufs et parmesan",
     "Mélanger hors du feu"
    ],
-   "image": "",
+   "image": "data/photos/pates-carbonara.jpg",
    "cuisine": "rapide",
    "season": [
     1,
@@ -996,7 +976,6 @@
    "title": "Burger maison",
    "type": "plat",
    "time": 25,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -1038,7 +1017,7 @@
     "Cuire les steaks",
     "Assembler"
    ],
-   "image": "",
+   "image": "data/photos/burger-maison.jpg",
    "cuisine": "rapide",
    "season": [
     1,
@@ -1060,7 +1039,6 @@
    "title": "Pizza margherita",
    "type": "plat",
    "time": 35,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege"
@@ -1097,7 +1075,7 @@
     "Ajouter fromage",
     "Cuire 15 min à 220°C"
    ],
-   "image": "",
+   "image": "data/photos/pizza-margherita.jpg",
    "cuisine": "rapide",
    "season": [
     1,
@@ -1119,7 +1097,6 @@
    "title": "Fish and chips",
    "type": "plat",
    "time": 35,
-   "calories": 400,
    "servings": 4,
    "tags": [],
    "ingredients": [
@@ -1153,7 +1130,7 @@
     "Préparer pâte à beignet",
     "Frire frites et poisson"
    ],
-   "image": "",
+   "image": "data/photos/fish-and-chips.jpg",
    "cuisine": "rapide",
    "season": [
     1,
@@ -1175,7 +1152,6 @@
    "title": "Cassoulet",
    "type": "plat",
    "time": 285,
-   "calories": 400,
    "servings": 8,
    "tags": [],
    "ingredients": [
@@ -1216,7 +1192,7 @@
     "Assembler en couches",
     "Cuire 4h"
    ],
-   "image": "",
+   "image": "data/photos/cassoulet.jpg",
    "cuisine": "française",
    "season": [
     10,
@@ -1231,7 +1207,6 @@
    "title": "Tarte aux légumes du soleil",
    "type": "plat",
    "time": 75,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "vege"
@@ -1273,7 +1248,7 @@
     "Disposer sur pâte",
     "Cuire 45 min"
    ],
-   "image": "",
+   "image": "data/photos/tarte-aux-legumes-du-soleil.jpg",
    "cuisine": "française",
    "season": [
     6,
@@ -1287,7 +1262,6 @@
    "title": "Colombo de poulet",
    "type": "plat",
    "time": 80,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "épicé"
@@ -1355,7 +1329,6 @@
     "Ajouter pommes de terre, patate douce et piment",
     "Verser le lait de coco, couvrir et mijoter 45 min à feu doux"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1377,7 +1350,6 @@
    "title": "Boudin créole",
    "type": "plat",
    "time": 45,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "épicé"
@@ -1419,7 +1391,6 @@
     "Faire revenir oignons et tomates",
     "Cuire 20 min"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1441,7 +1412,6 @@
    "title": "Gratin de christophine",
    "type": "plat",
    "time": 55,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "vege"
@@ -1492,7 +1462,6 @@
     "Verser dans un plat, couvrir du reste de fromage",
     "Gratiner au four 20 min à 200°C"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1514,7 +1483,6 @@
    "title": "Colombo de légumes",
    "type": "plat",
    "time": 50,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -1558,7 +1526,6 @@
     "Ajouter colombo et lait de coco",
     "Mijoter 25 min"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1580,7 +1547,6 @@
    "title": "Bokit poulet",
    "type": "plat",
    "time": 60,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "street-food"
@@ -1649,7 +1615,6 @@
     "Diviser la pâte en boules, étaler et frire 3-4 min de chaque côté",
     "Fendre les bokits chauds et garnir de poulet et de piment"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1671,7 +1636,6 @@
    "title": "Rougail saucisses",
    "type": "plat",
    "time": 40,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "épicé",
@@ -1729,7 +1693,7 @@
     "Mijoter à couvert 20 min à feu doux",
     "Servir avec du riz créole"
    ],
-   "image": "",
+   "image": "data/photos/rougail-saucisses.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1751,7 +1715,6 @@
    "title": "Poulet boucané",
    "type": "plat",
    "time": 65,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "épicé"
@@ -1814,7 +1777,7 @@
     "Cuire 40-45 min en arrosant régulièrement pour une peau croustillante",
     "Servir avec une sauce chien et du riz"
    ],
-   "image": "",
+   "image": "data/photos/poulet-boucane.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -1836,7 +1799,6 @@
    "title": "Tarte aux pommes",
    "type": "dessert",
    "time": 75,
-   "calories": 400,
    "servings": 8,
    "tags": [],
    "ingredients": [
@@ -1877,7 +1839,7 @@
     "Saupoudrer",
     "Cuire 45 min"
    ],
-   "image": "",
+   "image": "data/photos/tarte-aux-pommes.jpg",
    "cuisine": "française",
    "season": [
     9,
@@ -1892,7 +1854,6 @@
    "title": "Mousse au chocolat",
    "type": "dessert",
    "time": 15,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "rapide"
@@ -1923,7 +1884,7 @@
     "Monter blancs",
     "Incorporer"
    ],
-   "image": "",
+   "image": "data/photos/mousse-au-chocolat.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -1945,7 +1906,6 @@
    "title": "Tiramisu",
    "type": "dessert",
    "time": 30,
-   "calories": 400,
    "servings": 8,
    "tags": [],
    "ingredients": [
@@ -1992,7 +1952,7 @@
     "Alterner couches",
     "Réfrigérer"
    ],
-   "image": "",
+   "image": "data/photos/tiramisu.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -2014,7 +1974,6 @@
    "title": "Crème brûlée",
    "type": "dessert",
    "time": 65,
-   "calories": 400,
    "servings": 6,
    "tags": [],
    "ingredients": [
@@ -2049,7 +2008,7 @@
     "Cuire au bain-marie",
     "Caraméliser"
    ],
-   "image": "",
+   "image": "data/photos/creme-brulee.jpg",
    "cuisine": "française",
    "season": [
     1,
@@ -2071,7 +2030,6 @@
    "title": "Clafoutis aux cerises",
    "type": "dessert",
    "time": 60,
-   "calories": 400,
    "servings": 6,
    "tags": [],
    "ingredients": [
@@ -2112,7 +2070,7 @@
     "Verser sur cerises",
     "Cuire 45 min"
    ],
-   "image": "",
+   "image": "data/photos/clafoutis-aux-cerises.jpg",
    "cuisine": "française",
    "season": [
     6,
@@ -2124,7 +2082,6 @@
    "title": "Flan coco",
    "type": "dessert",
    "time": 80,
-   "calories": 400,
    "servings": 8,
    "tags": [],
    "ingredients": [
@@ -2165,7 +2122,6 @@
     "Ajouter laits",
     "Cuire au bain-marie 1h"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2187,7 +2143,6 @@
    "title": "Banane flambée",
    "type": "dessert",
    "time": 15,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide",
@@ -2230,7 +2185,7 @@
     "Caraméliser avec beurre et sucre",
     "Ajouter rhum et flamber"
    ],
-   "image": "",
+   "image": "data/photos/banane-flambee.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2252,7 +2207,6 @@
    "title": "Gâteau patate",
    "type": "dessert",
    "time": 75,
-   "calories": 400,
    "servings": 8,
    "tags": [
     "vege"
@@ -2294,7 +2248,6 @@
     "Mélanger avec coco et sucre",
     "Cuire 45 min"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2316,7 +2269,6 @@
    "title": "Salade de fruits tropicaux",
    "type": "dessert",
    "time": 15,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -2359,7 +2311,7 @@
     "Mélanger avec jus de citron et sucre",
     "Réfrigérer"
    ],
-   "image": "",
+   "image": "data/photos/salade-de-fruits-tropicaux.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2381,7 +2333,6 @@
    "title": "Sorbet coco-papaye",
    "type": "dessert",
    "time": 15,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "vege",
@@ -2418,7 +2369,7 @@
     "Mélanger avec lait de coco et sucre",
     "Congeler 4h"
    ],
-   "image": "",
+   "image": "data/photos/sorbet-coco-papaye.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2440,7 +2391,6 @@
    "title": "Gâteau banane-coco",
    "type": "dessert",
    "time": 60,
-   "calories": 400,
    "servings": 8,
    "tags": [
     "vege"
@@ -2488,7 +2438,6 @@
     "Mélanger tous les ingrédients",
     "Cuire 40 min"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2510,7 +2459,6 @@
    "title": "Dombré de morue",
    "type": "plat",
    "time": 45,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -2553,7 +2501,6 @@
     "Faire revenir oignons",
     "Cuire ensemble 20 min"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2575,7 +2522,6 @@
    "title": "Salade créole",
    "type": "entrée",
    "time": 15,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -2644,7 +2590,6 @@
     "Assaisonner au dernier moment pour éviter que la salade ne rende de l'eau",
     "Parsemer de ciboulette ciselée et servir frais"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2666,7 +2611,6 @@
    "title": "Colombo de porc",
    "type": "plat",
    "time": 60,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "épicé"
@@ -2722,7 +2666,6 @@
     "Ajouter les pommes de terre et un peu d'eau",
     "Couvrir et mijoter 35-40 min à feu doux en remuant régulièrement"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2744,7 +2687,6 @@
    "title": "Colombo de poisson",
    "type": "plat",
    "time": 30,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "épicé",
@@ -2807,7 +2749,7 @@
     "Verser un peu d'eau et laisser mijoter 5 min",
     "Ajouter le poisson mariné et cuire 5 min à feu doux sans trop remuer"
    ],
-   "image": "",
+   "image": "data/photos/colombo-de-poisson.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2829,7 +2771,6 @@
    "title": "Poulet à l'ananas rapide",
    "type": "plat",
    "time": 22,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -2873,7 +2814,7 @@
     "Ajouter les morceaux d'ananas, un peu de leur jus et la sauce soja",
     "Laisser réduire 3-4 min à feu vif en remuant"
    ],
-   "image": "",
+   "image": "data/photos/poulet-a-l-ananas-rapide.jpg",
    "cuisine": "rapide",
    "season": [
     1,
@@ -2895,7 +2836,6 @@
    "title": "Poulet au lait de coco, tomates et safran",
    "type": "plat",
    "time": 50,
-   "calories": 400,
    "servings": 6,
    "tags": [],
    "ingredients": [
@@ -2956,7 +2896,7 @@
     "Verser le vin blanc, couvrir et mijoter 30 min",
     "Ajouter le lait de coco 5 min avant la fin de cuisson"
    ],
-   "image": "",
+   "image": "data/photos/poulet-au-lait-de-coco-tomates-et-safran.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -2978,7 +2918,6 @@
    "title": "Cari de sauté de porc",
    "type": "plat",
    "time": 60,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "épicé"
@@ -3041,7 +2980,7 @@
     "Mouiller à hauteur, couvrir et mijoter 35-40 min à feu doux",
     "Servir avec du riz blanc et des grains"
    ],
-   "image": "",
+   "image": "data/photos/cari-de-saute-de-porc.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -3063,7 +3002,6 @@
    "title": "Curry de poulet au lait de coco",
    "type": "plat",
    "time": 30,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "rapide"
@@ -3113,7 +3051,7 @@
     "Verser le lait de coco, saler et poivrer",
     "Laisser mijoter 15 min à couvert à feu moyen"
    ],
-   "image": "",
+   "image": "data/photos/curry-de-poulet-au-lait-de-coco.jpg",
    "cuisine": "rapide",
    "season": [
     1,
@@ -3135,7 +3073,6 @@
    "title": "Riz créole aux épices",
    "type": "plat",
    "time": 25,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -3187,7 +3124,7 @@
     "Couvrir et cuire à feu doux 18-20 min sans remuer",
     "Retirer le piment et le laurier avant de servir"
    ],
-   "image": "",
+   "image": "data/photos/riz-creole-aux-epices.jpg",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -3209,7 +3146,6 @@
    "title": "Purée de fruit à pain",
    "type": "plat",
    "time": 40,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "vege"
@@ -3260,7 +3196,6 @@
     "Incorporer à la purée avec le lait de coco et le thym",
     "Rectifier l'assaisonnement et servir bien chaud"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -3282,7 +3217,6 @@
    "title": "Gratin de christophine au fromage express",
    "type": "plat",
    "time": 45,
-   "calories": 400,
    "servings": 4,
    "tags": [
     "vege",
@@ -3327,7 +3261,6 @@
     "Recouvrir de fromage râpé",
     "Enfourner 20 min à 200°C jusqu'à ce que le dessus soit doré"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,
@@ -3349,7 +3282,6 @@
    "title": "Gratin de christophine à la martiniquaise",
    "type": "plat",
    "time": 60,
-   "calories": 400,
    "servings": 6,
    "tags": [
     "vege"
@@ -3412,7 +3344,6 @@
     "Mélanger la purée de christophine et la béchamel dans un plat à gratin",
     "Saupoudrer de chapelure et enfourner 30 min à 200°C jusqu'à coloration"
    ],
-   "image": "",
    "cuisine": "antillaise",
    "season": [
     1,

@@ -1,0 +1,3861 @@
+{
+ "version": 21,
+ "_description": "Catalogue de recettes et aliments charge au premier lancement. Ne contient aucun reglage personnel, planning ni liste de courses.",
+ "_recipes": 52,
+ "_foodBank": 71,
+ "recipes": [
+  {
+   "id": 1786294502692001,
+   "title": "Salade de tomates au basilic",
+   "type": "entrée",
+   "time": 10,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "tomate",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "basilic",
+     "qty": 10,
+     "unit": "feuille",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "huile d'olive",
+     "qty": 3,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Couper les tomates",
+    "Ciseler le basilic",
+    "Assaisonner"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "id": 1786294502692218,
+   "title": "Velouté de potiron",
+   "type": "entrée",
+   "time": 45,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "healthy"
+   ],
+   "ingredients": [
+    {
+     "name": "potiron",
+     "qty": 1,
+     "unit": "kg",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "bouillon",
+     "qty": 1,
+     "unit": "l",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "crème",
+     "qty": 10,
+     "unit": "cl",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Éplucher le potiron",
+    "Faire revenir oignon",
+    "Cuire 30 min",
+    "Mixer avec crème"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692130,
+   "title": "Soupe à l'oignon",
+   "type": "entrée",
+   "time": 60,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "oignon",
+     "qty": 6,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "bouillon",
+     "qty": 1,
+     "unit": "l",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "fromage",
+     "qty": 100,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "pain",
+     "qty": 4,
+     "unit": "tranche",
+     "section": "boulangerie"
+    },
+    {
+     "name": "beurre",
+     "qty": 30,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Caraméliser les oignons",
+    "Ajouter le bouillon",
+    "Mijoter 30 min",
+    "Gratiner avec fromage"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": 1786294502692658,
+   "title": "Salade César",
+   "type": "entrée",
+   "time": 15,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "salade romaine",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "poulet",
+     "qty": 300,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "parmesan",
+     "qty": 50,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "croutons",
+     "qty": 100,
+     "unit": "g",
+     "section": "boulangerie"
+    }
+   ],
+   "steps": [
+    "Laver la salade",
+    "Griller le poulet",
+    "Assembler et assaisonner"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": 1786294502692758,
+   "title": "Accras de morue",
+   "type": "entrée",
+   "time": 25,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "morue",
+     "qty": 300,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "farine",
+     "qty": 200,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "œuf",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Dessaler la morue",
+    "Préparer pâte à beignet",
+    "Incorporer morue et aromates",
+    "Frire"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692142,
+   "title": "Féroce d'avocat",
+   "type": "entrée",
+   "time": 15,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "avocat",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "morue",
+     "qty": 200,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Écraser les avocats",
+    "Émietter la morue dessalée",
+    "Ajouter oignon et piment",
+    "Assaisonner"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692750,
+   "title": "Soupe de giraumon",
+   "type": "entrée",
+   "time": 50,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "vege",
+    "healthy"
+   ],
+   "ingredients": [
+    {
+     "name": "giraumon",
+     "qty": 1,
+     "unit": "kg",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "lait de coco",
+     "qty": 40,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "bouillon",
+     "qty": 1,
+     "unit": "l",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Éplucher le giraumon",
+    "Faire revenir oignon",
+    "Cuire 25 min",
+    "Mixer avec lait de coco"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": 1786294502692014,
+   "title": "Accras de légumes",
+   "type": "entrée",
+   "time": 35,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "carotte",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "courgette",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "farine",
+     "qty": 150,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "œuf",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Râper les légumes",
+    "Préparer pâte",
+    "Frire"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692064,
+   "title": "Bœuf bourguignon",
+   "type": "plat",
+   "time": 210,
+   "calories": 400,
+   "servings": 6,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "bœuf",
+     "qty": 1.5,
+     "unit": "kg",
+     "section": "boucherie"
+    },
+    {
+     "name": "vin rouge",
+     "qty": 75,
+     "unit": "cl",
+     "section": "boissons"
+    },
+    {
+     "name": "carotte",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "champignon",
+     "qty": 300,
+     "unit": "g",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "lardons",
+     "qty": 200,
+     "unit": "g",
+     "section": "boucherie"
+    }
+   ],
+   "steps": [
+    "Mariner la viande",
+    "Faire revenir lardons",
+    "Saisir la viande",
+    "Mijoter 3h"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": 1786294502692809,
+   "title": "Ratatouille niçoise",
+   "type": "plat",
+   "time": 65,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "healthy"
+   ],
+   "ingredients": [
+    {
+     "name": "aubergine",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "courgette",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "tomate",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "poivron",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 3,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Couper tous les légumes",
+    "Faire revenir oignon et ail",
+    "Mijoter 45 min"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": 1786294502692310,
+   "title": "Coq au vin",
+   "type": "plat",
+   "time": 115,
+   "calories": 400,
+   "servings": 4,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "poulet",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "boucherie"
+    },
+    {
+     "name": "vin blanc",
+     "qty": 50,
+     "unit": "cl",
+     "section": "boissons"
+    },
+    {
+     "name": "champignon",
+     "qty": 250,
+     "unit": "g",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 12,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "lardons",
+     "qty": 150,
+     "unit": "g",
+     "section": "boucherie"
+    }
+   ],
+   "steps": [
+    "Découper le poulet",
+    "Faire revenir lardons",
+    "Flamber au vin",
+    "Mijoter 1h30"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692233,
+   "title": "Quiche lorraine",
+   "type": "plat",
+   "time": 55,
+   "calories": 400,
+   "servings": 6,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "pâte brisée",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "lardons",
+     "qty": 200,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "œuf",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "crème",
+     "qty": 20,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "fromage",
+     "qty": 100,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Étaler la pâte",
+    "Faire revenir lardons",
+    "Battre œufs et crème",
+    "Cuire 35 min"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692038,
+   "title": "Pot-au-feu",
+   "type": "plat",
+   "time": 210,
+   "calories": 400,
+   "servings": 8,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "bœuf",
+     "qty": 1.5,
+     "unit": "kg",
+     "section": "boucherie"
+    },
+    {
+     "name": "carotte",
+     "qty": 6,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "poireau",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "navet",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "pomme de terre",
+     "qty": 8,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Mettre viande dans eau froide",
+    "Écumer",
+    "Ajouter légumes",
+    "Cuire 3h"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": 1786294502692800,
+   "title": "Blanquette de veau",
+   "type": "plat",
+   "time": 150,
+   "calories": 400,
+   "servings": 6,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "veau",
+     "qty": 1.2,
+     "unit": "kg",
+     "section": "boucherie"
+    },
+    {
+     "name": "carotte",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "champignon",
+     "qty": 250,
+     "unit": "g",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "crème",
+     "qty": 20,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "œuf",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Blanchir la viande",
+    "Cuire avec légumes",
+    "Lier avec œufs-crème"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692138,
+   "title": "Risotto aux champignons",
+   "type": "plat",
+   "time": 40,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "riz arborio",
+     "qty": 300,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "champignon",
+     "qty": 400,
+     "unit": "g",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "bouillon",
+     "qty": 1,
+     "unit": "l",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "parmesan",
+     "qty": 80,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "beurre",
+     "qty": 40,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Faire revenir champignons",
+    "Toaster le riz",
+    "Ajouter bouillon",
+    "Terminer avec parmesan"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692887,
+   "title": "Omelette aux fines herbes",
+   "type": "plat",
+   "time": 15,
+   "calories": 400,
+   "servings": 2,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "œuf",
+     "qty": 6,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "beurre",
+     "qty": 20,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "ciboulette",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "persil",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Battre œufs avec herbes",
+    "Cuire dans beurre chaud",
+    "Plier"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692706,
+   "title": "Pâtes carbonara",
+   "type": "plat",
+   "time": 20,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "pâtes",
+     "qty": 400,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "lardons",
+     "qty": 200,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "œuf",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "parmesan",
+     "qty": 50,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Cuire les pâtes",
+    "Faire revenir lardons",
+    "Battre œufs et parmesan",
+    "Mélanger hors du feu"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692181,
+   "title": "Burger maison",
+   "type": "plat",
+   "time": 25,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "pain burger",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "boulangerie"
+    },
+    {
+     "name": "steak haché",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "boucherie"
+    },
+    {
+     "name": "fromage",
+     "qty": 4,
+     "unit": "tranche",
+     "section": "frais"
+    },
+    {
+     "name": "salade",
+     "qty": 4,
+     "unit": "feuille",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "tomate",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Griller les pains",
+    "Cuire les steaks",
+    "Assembler"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692232,
+   "title": "Pizza margherita",
+   "type": "plat",
+   "time": 35,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "pâte à pizza",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sauce tomate",
+     "qty": 20,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "mozzarella",
+     "qty": 200,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "basilic",
+     "qty": 10,
+     "unit": "feuille",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Étaler la pâte",
+    "Tartiner de sauce",
+    "Ajouter fromage",
+    "Cuire 15 min à 220°C"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692509,
+   "title": "Fish and chips",
+   "type": "plat",
+   "time": 35,
+   "calories": 400,
+   "servings": 4,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "cabillaud",
+     "qty": 600,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "pomme de terre",
+     "qty": 8,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "farine",
+     "qty": 150,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "bière",
+     "qty": 20,
+     "unit": "cl",
+     "section": "boissons"
+    }
+   ],
+   "steps": [
+    "Couper frites",
+    "Préparer pâte à beignet",
+    "Frire frites et poisson"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692210,
+   "title": "Cassoulet",
+   "type": "plat",
+   "time": 285,
+   "calories": 400,
+   "servings": 8,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "haricots blancs",
+     "qty": 500,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "confit de canard",
+     "qty": 4,
+     "unit": "cuisse",
+     "section": "boucherie"
+    },
+    {
+     "name": "lardons",
+     "qty": 200,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "tomate",
+     "qty": 400,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Tremper haricots",
+    "Cuire viandes",
+    "Assembler en couches",
+    "Cuire 4h"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": 1786294502692163,
+   "title": "Tarte aux légumes du soleil",
+   "type": "plat",
+   "time": 75,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "pâte brisée",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "aubergine",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "courgette",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "tomate",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "fromage de chèvre",
+     "qty": 150,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Couper légumes en rondelles",
+    "Disposer sur pâte",
+    "Cuire 45 min"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": 1786294502692532,
+   "title": "Colombo de poulet",
+   "type": "plat",
+   "time": 80,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "épicé"
+   ],
+   "ingredients": [
+    {
+     "name": "poulet",
+     "qty": 1.2,
+     "unit": "kg",
+     "section": "boucherie"
+    },
+    {
+     "name": "colombo",
+     "qty": 3,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 3,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "pomme de terre",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "patate douce",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "lait de coco",
+     "qty": 40,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Faire mariner le poulet avec la poudre de colombo et le jus de citron vert 30 min",
+    "Faire revenir oignon et ail dans l'huile chaude",
+    "Ajouter le poulet et le faire dorer sur toutes les faces",
+    "Ajouter pommes de terre, patate douce et piment",
+    "Verser le lait de coco, couvrir et mijoter 45 min à feu doux"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692282,
+   "title": "Boudin créole",
+   "type": "plat",
+   "time": 45,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "épicé"
+   ],
+   "ingredients": [
+    {
+     "name": "boudin antillais",
+     "qty": 800,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "tomate",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "thym",
+     "qty": 2,
+     "unit": "branche",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Piquer le boudin",
+    "Faire revenir oignons et tomates",
+    "Cuire 20 min"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692323,
+   "title": "Gratin de christophine",
+   "type": "plat",
+   "time": 55,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "christophine",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "crème",
+     "qty": 20,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "fromage",
+     "qty": 150,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "muscade",
+     "qty": 1,
+     "unit": "pincée",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "beurre",
+     "qty": 20,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Éplucher et couper les christophines en cubes",
+    "Cuire à l'eau bouillante salée 15 min puis bien égoutter",
+    "Écraser grossièrement, ajouter l'oignon revenu au beurre",
+    "Mélanger avec la crème, la muscade et la moitié du fromage",
+    "Verser dans un plat, couvrir du reste de fromage",
+    "Gratiner au four 20 min à 200°C"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692907,
+   "title": "Colombo de légumes",
+   "type": "plat",
+   "time": 50,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "aubergine",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "courgette",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "pomme de terre",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "colombo",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "lait de coco",
+     "qty": 40,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Couper légumes",
+    "Faire revenir oignon",
+    "Ajouter colombo et lait de coco",
+    "Mijoter 25 min"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692294,
+   "title": "Bokit poulet",
+   "type": "plat",
+   "time": 60,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "street-food"
+   ],
+   "ingredients": [
+    {
+     "name": "farine",
+     "qty": 500,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "levure boulangère",
+     "qty": 1,
+     "unit": "sachet",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "huile",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "sel",
+     "qty": 1,
+     "unit": "pincée",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "poulet",
+     "qty": 400,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "épices créoles",
+     "qty": 2,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "huile de friture",
+     "qty": 1,
+     "unit": "l",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Délayer la levure dans un peu d'eau tiède, laisser reposer 5 min",
+    "Mélanger farine, sel, huile et levure, pétrir 5 min",
+    "Laisser lever la pâte 2h sous un torchon",
+    "Assaisonner et faire revenir le poulet avec épices et oignon",
+    "Diviser la pâte en boules, étaler et frire 3-4 min de chaque côté",
+    "Fendre les bokits chauds et garnir de poulet et de piment"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692123,
+   "title": "Rougail saucisses",
+   "type": "plat",
+   "time": 40,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "épicé",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "saucisses fumées",
+     "qty": 6,
+     "unit": "pièce",
+     "section": "boucherie"
+    },
+    {
+     "name": "tomate",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 2,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "curcuma",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "thym",
+     "qty": 2,
+     "unit": "branche",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Plonger les saucisses en eau froide, porter à ébullition 10 min puis égoutter",
+    "Couper en rondelles et faire dorer dans l'huile",
+    "Ajouter oignon et ail émincés, cuire 3 min",
+    "Incorporer les tomates concassées, le curcuma, le piment et le thym",
+    "Mijoter à couvert 20 min à feu doux",
+    "Servir avec du riz créole"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692358,
+   "title": "Poulet boucané",
+   "type": "plat",
+   "time": 65,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "épicé"
+   ],
+   "ingredients": [
+    {
+     "name": "cuisses de poulet",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "boucherie"
+    },
+    {
+     "name": "citron vert",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 4,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "sauce soja",
+     "qty": 3,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "quatre-épices",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "beurre",
+     "qty": 30,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Mixer jus de citron vert, ail, oignon, sauce soja, quatre-épices et piment",
+    "Faire mariner le poulet dans ce mélange au moins 2h au réfrigérateur",
+    "Préchauffer le four à 200°C",
+    "Disposer le poulet égoutté dans un plat, arroser de beurre fondu",
+    "Cuire 40-45 min en arrosant régulièrement pour une peau croustillante",
+    "Servir avec une sauce chien et du riz"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692291,
+   "title": "Tarte aux pommes",
+   "type": "dessert",
+   "time": 75,
+   "calories": 400,
+   "servings": 8,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "pâte brisée",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "pomme",
+     "qty": 6,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "sucre",
+     "qty": 80,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "beurre",
+     "qty": 30,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "cannelle",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Étaler la pâte",
+    "Disposer pommes tranchées",
+    "Saupoudrer",
+    "Cuire 45 min"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    9,
+    10,
+    11,
+    12,
+    1
+   ]
+  },
+  {
+   "id": 1786294502692202,
+   "title": "Mousse au chocolat",
+   "type": "dessert",
+   "time": 15,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "chocolat noir",
+     "qty": 200,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "œuf",
+     "qty": 6,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 50,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    }
+   ],
+   "steps": [
+    "Fondre le chocolat",
+    "Séparer blancs et jaunes",
+    "Monter blancs",
+    "Incorporer"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692574,
+   "title": "Tiramisu",
+   "type": "dessert",
+   "time": 30,
+   "calories": 400,
+   "servings": 8,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "mascarpone",
+     "qty": 500,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "œuf",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 100,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "café",
+     "qty": 30,
+     "unit": "cl",
+     "section": "boissons"
+    },
+    {
+     "name": "biscuits",
+     "qty": 200,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "cacao",
+     "qty": 20,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    }
+   ],
+   "steps": [
+    "Préparer crème mascarpone",
+    "Tremper biscuits",
+    "Alterner couches",
+    "Réfrigérer"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692557,
+   "title": "Crème brûlée",
+   "type": "dessert",
+   "time": 65,
+   "calories": 400,
+   "servings": 6,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "crème",
+     "qty": 50,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "œuf",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 80,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "vanille",
+     "qty": 1,
+     "unit": "gousse",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Infuser vanille dans crème",
+    "Battre jaunes et sucre",
+    "Cuire au bain-marie",
+    "Caraméliser"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692447,
+   "title": "Clafoutis aux cerises",
+   "type": "dessert",
+   "time": 60,
+   "calories": 400,
+   "servings": 6,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "cerise",
+     "qty": 500,
+     "unit": "g",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "lait",
+     "qty": 25,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "œuf",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 80,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "farine",
+     "qty": 60,
+     "unit": "g",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Laver cerises",
+    "Battre pâte",
+    "Verser sur cerises",
+    "Cuire 45 min"
+   ],
+   "image": "",
+   "cuisine": "française",
+   "season": [
+    6,
+    7
+   ]
+  },
+  {
+   "id": 1786294502692600,
+   "title": "Flan coco",
+   "type": "dessert",
+   "time": 80,
+   "calories": 400,
+   "servings": 8,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "lait de coco",
+     "qty": 40,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "lait",
+     "qty": 25,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "œuf",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 150,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "vanille",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Faire un caramel",
+    "Battre œufs et sucre",
+    "Ajouter laits",
+    "Cuire au bain-marie 1h"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692368,
+   "title": "Banane flambée",
+   "type": "dessert",
+   "time": 15,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide",
+    "flambé"
+   ],
+   "ingredients": [
+    {
+     "name": "banane",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "rhum",
+     "qty": 4,
+     "unit": "cuillère à soupe",
+     "section": "boissons"
+    },
+    {
+     "name": "beurre",
+     "qty": 30,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 50,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "cannelle",
+     "qty": 1,
+     "unit": "pincée",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Couper les bananes",
+    "Caraméliser avec beurre et sucre",
+    "Ajouter rhum et flamber"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786296918935030,
+   "title": "Gâteau patate",
+   "type": "dessert",
+   "time": 75,
+   "calories": 400,
+   "servings": 8,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "patate douce",
+     "qty": 1,
+     "unit": "kg",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "noix de coco",
+     "qty": 200,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "sucre",
+     "qty": 150,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "œuf",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "vanille",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Cuire et écraser patates",
+    "Mélanger avec coco et sucre",
+    "Cuire 45 min"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692166,
+   "title": "Salade de fruits tropicaux",
+   "type": "dessert",
+   "time": 15,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "ananas",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "mangue",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "papaye",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "sucre de canne",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-sucree"
+    }
+   ],
+   "steps": [
+    "Couper les fruits",
+    "Mélanger avec jus de citron et sucre",
+    "Réfrigérer"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692110,
+   "title": "Sorbet coco-papaye",
+   "type": "dessert",
+   "time": 15,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "lait de coco",
+     "qty": 40,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "papaye",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "sucre",
+     "qty": 100,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Mixer papaye",
+    "Mélanger avec lait de coco et sucre",
+    "Congeler 4h"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692420,
+   "title": "Gâteau banane-coco",
+   "type": "dessert",
+   "time": 60,
+   "calories": 400,
+   "servings": 8,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "banane",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "noix de coco",
+     "qty": 150,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "farine",
+     "qty": 200,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "œuf",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "frais"
+    },
+    {
+     "name": "sucre",
+     "qty": 120,
+     "unit": "g",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "beurre",
+     "qty": 80,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Écraser les bananes",
+    "Mélanger tous les ingrédients",
+    "Cuire 40 min"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692968,
+   "title": "Dombré de morue",
+   "type": "plat",
+   "time": 45,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "morue",
+     "qty": 400,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "farine",
+     "qty": 200,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "tomate",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Dessaler la morue",
+    "Préparer dombrés",
+    "Faire revenir oignons",
+    "Cuire ensemble 20 min"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692831,
+   "title": "Salade créole",
+   "type": "entrée",
+   "time": 15,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "tomate",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "concombre",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "huile",
+     "qty": 6,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "vinaigre de canne",
+     "qty": 3,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "ail",
+     "qty": 1,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ciboulette",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Couper tomates, concombre et oignon en dés",
+    "Préparer la vinaigrette : huile, vinaigre de canne, jus de citron vert, ail écrasé et piment haché",
+    "Disposer les légumes dans un saladier",
+    "Assaisonner au dernier moment pour éviter que la salade ne rende de l'eau",
+    "Parsemer de ciboulette ciselée et servir frais"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692474,
+   "title": "Colombo de porc",
+   "type": "plat",
+   "time": 60,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "épicé"
+   ],
+   "ingredients": [
+    {
+     "name": "porc",
+     "qty": 1,
+     "unit": "kg",
+     "section": "boucherie"
+    },
+    {
+     "name": "colombo",
+     "qty": 3,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 3,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "gingembre",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "pomme de terre",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Couper le porc en cubes et le faire mariner avec le colombo et le jus de citron",
+    "Faire revenir oignon, ail et gingembre dans l'huile chaude",
+    "Ajouter le porc et le faire dorer sur toutes les faces",
+    "Ajouter les pommes de terre et un peu d'eau",
+    "Couvrir et mijoter 35-40 min à feu doux en remuant régulièrement"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692484,
+   "title": "Colombo de poisson",
+   "type": "plat",
+   "time": 30,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "épicé",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "vivaneau",
+     "qty": 600,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "colombo",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "courgette",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "carotte",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 2,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "citron vert",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Couper le poisson en cubes, le faire mariner avec le colombo et le jus de citron 20 min",
+    "Faire revenir oignon, ail et piment émincés dans l'huile",
+    "Ajouter courgette et carotte en dés, cuire 5 min",
+    "Verser un peu d'eau et laisser mijoter 5 min",
+    "Ajouter le poisson mariné et cuire 5 min à feu doux sans trop remuer"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692868,
+   "title": "Poulet à l'ananas rapide",
+   "type": "plat",
+   "time": 22,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "blancs de poulet",
+     "qty": 500,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "ananas",
+     "qty": 1,
+     "unit": "boîte",
+     "section": "epicerie-sucree"
+    },
+    {
+     "name": "sauce soja",
+     "qty": 4,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "poivron",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Couper le poulet en lanières, l'oignon et le poivron en fines lamelles",
+    "Faire dorer le poulet à la poêle 5 min",
+    "Ajouter oignon et poivron, cuire 3 min",
+    "Ajouter les morceaux d'ananas, un peu de leur jus et la sauce soja",
+    "Laisser réduire 3-4 min à feu vif en remuant"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692913,
+   "title": "Poulet au lait de coco, tomates et safran",
+   "type": "plat",
+   "time": 50,
+   "calories": 400,
+   "servings": 6,
+   "tags": [],
+   "ingredients": [
+    {
+     "name": "poulet",
+     "qty": 1,
+     "unit": "kg",
+     "section": "boucherie"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 2,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "tomate",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "safran",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "curry",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "vin blanc",
+     "qty": 25,
+     "unit": "cl",
+     "section": "boissons"
+    },
+    {
+     "name": "lait de coco",
+     "qty": 35,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Faire dorer le poulet dans l'huile chaude puis réserver",
+    "Faire revenir oignon et ail 5 min",
+    "Ajouter les tomates concassées, cuire 5 min",
+    "Remettre le poulet, saupoudrer de safran et curry, saler et poivrer",
+    "Verser le vin blanc, couvrir et mijoter 30 min",
+    "Ajouter le lait de coco 5 min avant la fin de cuisson"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692179,
+   "title": "Cari de sauté de porc",
+   "type": "plat",
+   "time": 60,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "épicé"
+   ],
+   "ingredients": [
+    {
+     "name": "porc",
+     "qty": 800,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "oignon",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 3,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "gingembre",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "curcuma",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "tomate",
+     "qty": 3,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "thym",
+     "qty": 2,
+     "unit": "branche",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "clou de girofle",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Couper le porc en morceaux et le faire dorer en cocotte avec un peu d'huile",
+    "Ajouter oignon, ail et gingembre émincés",
+    "Saupoudrer de curcuma et remuer 1 min",
+    "Ajouter les tomates concassées, le thym et les clous de girofle",
+    "Mouiller à hauteur, couvrir et mijoter 35-40 min à feu doux",
+    "Servir avec du riz blanc et des grains"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692659,
+   "title": "Curry de poulet au lait de coco",
+   "type": "plat",
+   "time": 30,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "blancs de poulet",
+     "qty": 500,
+     "unit": "g",
+     "section": "boucherie"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 2,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "curry",
+     "qty": 2,
+     "unit": "cuillère à soupe",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "gingembre",
+     "qty": 1,
+     "unit": "cuillère à café",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "lait de coco",
+     "qty": 40,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Émincer l'oignon et presser l'ail, faire revenir 3-5 min dans l'huile",
+    "Couper le poulet en cubes et l'ajouter à la poêle",
+    "Saupoudrer de curry et de gingembre, bien mélanger",
+    "Verser le lait de coco, saler et poivrer",
+    "Laisser mijoter 15 min à couvert à feu moyen"
+   ],
+   "image": "",
+   "cuisine": "rapide",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692247,
+   "title": "Riz créole aux épices",
+   "type": "plat",
+   "time": 25,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "riz",
+     "qty": 300,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 1,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "thym",
+     "qty": 2,
+     "unit": "branche",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "laurier",
+     "qty": 1,
+     "unit": "feuille",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "piment",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Faire revenir oignon et ail émincés dans l'huile chaude",
+    "Ajouter le riz et remuer 2 min pour bien l'enrober",
+    "Ajouter le thym, le laurier et le piment entier",
+    "Couvrir d'eau (1,5 fois le volume de riz), saler",
+    "Couvrir et cuire à feu doux 18-20 min sans remuer",
+    "Retirer le piment et le laurier avant de servir"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692646,
+   "title": "Purée de fruit à pain",
+   "type": "plat",
+   "time": 40,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "fruit à pain",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "lait de coco",
+     "qty": 20,
+     "unit": "cl",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "oignon",
+     "qty": 1,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "ail",
+     "qty": 2,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "thym",
+     "qty": 1,
+     "unit": "branche",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "beurre",
+     "qty": 20,
+     "unit": "g",
+     "section": "frais"
+    }
+   ],
+   "steps": [
+    "Éplucher le fruit à pain et le couper en morceaux",
+    "Cuire 20 min à l'eau bouillante salée jusqu'à tendreté",
+    "Égoutter puis écraser à la fourchette ou au presse-purée",
+    "Faire revenir oignon et ail dans le beurre",
+    "Incorporer à la purée avec le lait de coco et le thym",
+    "Rectifier l'assaisonnement et servir bien chaud"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692230,
+   "title": "Gratin de christophine au fromage express",
+   "type": "plat",
+   "time": 45,
+   "calories": 400,
+   "servings": 4,
+   "tags": [
+    "vege",
+    "rapide"
+   ],
+   "ingredients": [
+    {
+     "name": "christophine",
+     "qty": 2,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "crème",
+     "qty": 15,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "fromage",
+     "qty": 100,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "ail",
+     "qty": 1,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "muscade",
+     "qty": 1,
+     "unit": "pincée",
+     "section": "epicerie-salee"
+    }
+   ],
+   "steps": [
+    "Éplucher et couper les christophines en tranches fines",
+    "Cuire 10 min à la vapeur ou à l'eau bouillante puis bien égoutter",
+    "Disposer dans un plat à gratin avec ail haché, crème et muscade",
+    "Recouvrir de fromage râpé",
+    "Enfourner 20 min à 200°C jusqu'à ce que le dessus soit doré"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "id": 1786294502692950,
+   "title": "Gratin de christophine à la martiniquaise",
+   "type": "plat",
+   "time": 60,
+   "calories": 400,
+   "servings": 6,
+   "tags": [
+    "vege"
+   ],
+   "ingredients": [
+    {
+     "name": "christophine",
+     "qty": 4,
+     "unit": "pièce",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "farine",
+     "qty": 30,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "beurre",
+     "qty": 40,
+     "unit": "g",
+     "section": "frais"
+    },
+    {
+     "name": "lait",
+     "qty": 40,
+     "unit": "cl",
+     "section": "frais"
+    },
+    {
+     "name": "chapelure",
+     "qty": 40,
+     "unit": "g",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "muscade",
+     "qty": 1,
+     "unit": "pincée",
+     "section": "epicerie-salee"
+    },
+    {
+     "name": "ail",
+     "qty": 1,
+     "unit": "gousse",
+     "section": "fruits-legumes"
+    },
+    {
+     "name": "persil",
+     "qty": 1,
+     "unit": "cuillère à soupe",
+     "section": "fruits-legumes"
+    }
+   ],
+   "steps": [
+    "Cuire les christophines épluchées à la vapeur 30 min jusqu'à tendreté",
+    "Écraser la chair en purée grossière avec l'ail et le persil",
+    "Préparer une béchamel : fondre le beurre, ajouter la farine hors du feu, puis le lait froid en fouettant",
+    "Faire épaissir la béchamel à feu moyen en remuant, assaisonner de muscade",
+    "Mélanger la purée de christophine et la béchamel dans un plat à gratin",
+    "Saupoudrer de chapelure et enfourner 30 min à 200°C jusqu'à coloration"
+   ],
+   "image": "",
+   "cuisine": "antillaise",
+   "season": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  }
+ ],
+ "foodBank": [
+  {
+   "id": 1786294502691515,
+   "category": "Viande",
+   "name": "Cuisses de poulet",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691850,
+   "category": "Viande",
+   "name": "Blancs de poulet",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691297,
+   "category": "Viande",
+   "name": "Bœuf haché",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691072,
+   "category": "Viande",
+   "name": "Côtes de porc",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691244,
+   "category": "Viande",
+   "name": "Veau",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691165,
+   "category": "Viande",
+   "name": "Lardons",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691861,
+   "category": "Viande",
+   "name": "Saucisses",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691159,
+   "category": "Viande",
+   "name": "Jambon",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691273,
+   "category": "Viande",
+   "name": "Boudin créole",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691913,
+   "category": "Viande",
+   "name": "Cabri",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691077,
+   "category": "Poisson",
+   "name": "Morue",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691602,
+   "category": "Poisson",
+   "name": "Thon albacore",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691991,
+   "category": "Poisson",
+   "name": "Saumon",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691208,
+   "category": "Poisson",
+   "name": "Cabillaud",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691079,
+   "category": "Poisson",
+   "name": "Vivaneau",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691700,
+   "category": "Poisson",
+   "name": "Maquereau",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691357,
+   "category": "Poisson",
+   "name": "Sardines fraîches",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691588,
+   "category": "Poisson",
+   "name": "Bar",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691661,
+   "category": "Légume",
+   "name": "Christophine",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691404,
+   "category": "Légume",
+   "name": "Giraumon",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691609,
+   "category": "Légume",
+   "name": "Tomate",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691004,
+   "category": "Légume",
+   "name": "Carotte",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691529,
+   "category": "Légume",
+   "name": "Courgette",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691421,
+   "category": "Légume",
+   "name": "Aubergine",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691100,
+   "category": "Légume",
+   "name": "Champignons",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691076,
+   "category": "Légume",
+   "name": "Haricots verts",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691103,
+   "category": "Légume",
+   "name": "Brocoli",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691511,
+   "category": "Légume",
+   "name": "Épinards",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691662,
+   "category": "Légume",
+   "name": "Poivron rouge",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691310,
+   "category": "Légume",
+   "name": "Oignon",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691179,
+   "category": "Féculent",
+   "name": "Riz blanc",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691621,
+   "category": "Féculent",
+   "name": "Riz complet",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691529,
+   "category": "Féculent",
+   "name": "Pâtes spaghetti",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691036,
+   "category": "Féculent",
+   "name": "Pâtes penne",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691420,
+   "category": "Féculent",
+   "name": "Pomme de terre",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691713,
+   "category": "Féculent",
+   "name": "Patate douce",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691088,
+   "category": "Féculent",
+   "name": "Lentilles vertes",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691014,
+   "category": "Féculent",
+   "name": "Quinoa",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691923,
+   "category": "Féculent",
+   "name": "Boulgour",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691525,
+   "category": "Féculent",
+   "name": "Pain",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691289,
+   "category": "Féculent",
+   "name": "Banane ti-nain",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691466,
+   "category": "Féculent",
+   "name": "Fruit à pain",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691193,
+   "category": "Fruit",
+   "name": "Ananas Victoria",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691655,
+   "category": "Fruit",
+   "name": "Mangue",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691782,
+   "category": "Fruit",
+   "name": "Papaye",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691086,
+   "category": "Fruit",
+   "name": "Banane dessert",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691690,
+   "category": "Fruit",
+   "name": "Pomme",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691409,
+   "category": "Fruit",
+   "name": "Poire",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691595,
+   "category": "Fruit",
+   "name": "Fraises",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691210,
+   "category": "Fruit",
+   "name": "Orange",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691027,
+   "category": "Fruit",
+   "name": "Goyave",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691413,
+   "category": "Fruit",
+   "name": "Maracuja",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691729,
+   "category": "Crudité",
+   "name": "Salade verte",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691987,
+   "category": "Crudité",
+   "name": "Carotte râpée",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691833,
+   "category": "Crudité",
+   "name": "Avocat",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691256,
+   "category": "Crudité",
+   "name": "Concombre",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691770,
+   "category": "Crudité",
+   "name": "Tomates cerise",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691792,
+   "category": "Crudité",
+   "name": "Radis",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691215,
+   "category": "Crudité",
+   "name": "Mangue verte",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691656,
+   "category": "Crudité",
+   "name": "Christophine crue",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691989,
+   "category": "Conserve",
+   "name": "Tomates pelées",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691414,
+   "category": "Conserve",
+   "name": "Thon à l'huile",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691155,
+   "category": "Conserve",
+   "name": "Compote de pommes",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691439,
+   "category": "Conserve",
+   "name": "Salade de fruits",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691378,
+   "category": "Conserve",
+   "name": "Lentilles (boîte)",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691993,
+   "category": "Conserve",
+   "name": "Ananas au sirop",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691891,
+   "category": "Conserve",
+   "name": "Mangue au sirop",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691888,
+   "category": "Conserve",
+   "name": "Lait de coco (boîte)",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691338,
+   "category": "Féculent",
+   "name": "Riz au lait",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691881,
+   "category": "Féculent",
+   "name": "semoule de maïs",
+   "unit": "pce"
+  },
+  {
+   "id": 1786294502691832,
+   "category": "Viande",
+   "name": "steak haché",
+   "unit": "pièce"
+  }
+ ]
+}

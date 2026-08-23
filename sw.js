@@ -12,6 +12,7 @@ const SHELL_FILES = [
     './',
     './index.html',
     './manifest.json',
+    './data/seed.json',
     './icon-192.png',
     './icon-512.png'
 ];

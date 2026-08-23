@@ -13,6 +13,8 @@ function icon(name, cls) {
 /* ---------- Chargement ---------- */
 
 let legacyNotice = null;
+// Vrai quand l'appareil n'a aucune donnee : on proposera le catalogue publie.
+let needsCatalog = false;
 
 function loadState() {
     let raw = null;
@@ -42,7 +44,8 @@ function loadState() {
 
     // Reprise des versions v0.7 → v0.15 : au premier lancement, ou tant que
     // l'utilisateur n'a rien modifié dans le jeu de démonstration.
-    if (!raw || isPristineDemo(result)) {
+    const untouched = !raw || isPristineDemo(result);
+    if (untouched) {
         const legacy = readLegacyV15();
         if (legacy) {
             const converted = normalize(convertV15(legacy.data));
@@ -52,6 +55,8 @@ function loadState() {
             }
         }
     }
+    // Aucune donnée locale et rien à reprendre : le catalogue publié prendra le relais.
+    needsCatalog = untouched && !legacyNotice;
     return result;
 }
 

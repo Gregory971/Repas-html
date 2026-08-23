@@ -290,3 +290,30 @@ async function shareShoppingList() {
         showToast('Partage impossible sur cet appareil', 'error');
     }
 }
+
+/**
+ * Bouton « Ajouter les recettes du catalogue publié » : complète la collection
+ * locale sans rien écraser.
+ */
+async function loadCatalogManually() {
+    let catalog;
+    try {
+        catalog = await fetchCatalog();
+    } catch (e) {
+        showToast('Catalogue indisponible (hors ligne ?)', 'error');
+        return;
+    }
+
+    const added = mergeCatalog(catalog);
+    if (!added.recipes && !added.foodBank) {
+        showToast('Toutes les recettes du catalogue sont déjà présentes');
+        return;
+    }
+
+    saveNow();
+    renderRecipes();
+    renderFoodBank();
+    renderPlanning();
+    closeModal('settings-modal');
+    showToast(`${added.recipes} recettes et ${added.foodBank} aliments ajoutés`);
+}

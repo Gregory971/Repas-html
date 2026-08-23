@@ -22,6 +22,19 @@ if (legacyNotice) {
     setTimeout(() => showToast(legacyNotice), 400);
 }
 
+// Appareil vierge : on installe le catalogue publie plutot que le jeu de
+// demonstration. L'interface est deja affichee, on la reactualise ensuite.
+if (needsCatalog && location.protocol !== 'file:') {
+    seedFromCatalog()
+        .then((count) => {
+            renderRecipes();
+            renderFoodBank();
+            renderPlanning();
+            setTimeout(() => showToast(`${count} recettes chargées`), 400);
+        })
+        .catch(() => { /* catalogue indisponible : le jeu de démonstration reste en place */ });
+}
+
 /* ---------- État réseau ---------- */
 
 function updateOnlineBadge() {

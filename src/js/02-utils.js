@@ -160,3 +160,12 @@ export function generateId() {
     idCounter = (idCounter + 1) % 1000;
     return Date.now() * 1000 + idCounter;
 }
+
+/** « https://www.750g.com/... » -> « 750g.com », pour créditer la source. */
+export function sourceLabel(url) {
+    try {
+        return new URL(url).hostname.replace(/^www\./, '');
+    } catch (e) {
+        return 'la source';
+    }
+}

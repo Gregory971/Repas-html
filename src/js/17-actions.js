@@ -171,6 +171,39 @@ function exportData() {
     showToast('Export généré !');
 }
 
+/**
+ * Charge un fichier de recettes importées : complète la collection sans
+ * toucher au planning, aux courses ni aux réglages.
+ */
+async function importerDesRecettes(parsed) {
+    const brutes = Array.isArray(parsed.recipes) ? parsed.recipes : [];
+    if (!brutes.length) { showToast('Ce fichier ne contient aucune recette', 'error'); return; }
+
+    // On passe par normalize pour valider et assainir, en isolant les recettes :
+    // sans cette garde, un fichier vide ferait revenir le jeu de démonstration.
+    const propres = normalize({ recipes: brutes }).recipes;
+    if (!propres.length) { showToast('Aucune recette exploitable dans ce fichier', 'error'); return; }
+
+    const ok = await confirmDialog(
+        `Ajouter ${propres.length} recette${propres.length > 1 ? 's' : ''} à votre collection ?\n\n`
+        + 'Vos recettes, votre planning et vos réglages ne sont pas modifiés.',
+        { confirmLabel: 'Ajouter' });
+    if (!ok) return;
+
+    const bilan = mergeRecipes(propres);
+    if (!bilan.recipes && !bilan.photos) { showToast('Ces recettes sont déjà dans votre collection'); return; }
+
+    saveNow();
+    renderRecipes();
+    renderPlanning();
+    closeModal('settings-modal');
+
+    const parts = [];
+    if (bilan.recipes) parts.push(`${bilan.recipes} recette${bilan.recipes > 1 ? 's' : ''}`);
+    if (bilan.photos) parts.push(`${bilan.photos} photo${bilan.photos > 1 ? 's' : ''}`);
+    showToast(`${parts.join(' et ')} ajoutée${bilan.recipes + bilan.photos > 1 ? 's' : ''}`);
+}
+
 $('import-file').addEventListener('change', (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -183,6 +216,13 @@ $('import-file').addEventListener('change', (e) => {
             showToast('Fichier JSON invalide', 'error');
             return;
         }
+        // Fichier produit par tools/import-recipes.mjs : on complète la
+        // collection au lieu de tout remplacer.
+        if (parsed && parsed.planrepasImport === 'recipes') {
+            await importerDesRecettes(parsed);
+            return;
+        }
+
         const ok = await confirmDialog('Remplacer toutes les données actuelles par le contenu du fichier ?',
             { confirmLabel: 'Importer' });
         if (!ok) return;

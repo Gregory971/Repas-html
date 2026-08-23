@@ -209,6 +209,9 @@ export function normalize(raw) {
                 ? r.ingredients.map(normalizeIngredient).filter(Boolean).slice(0, 60) : [],
             steps: Array.isArray(r.steps) ? r.steps.map(String).slice(0, 60) : [],
             image: typeof r.image === 'string' ? r.image : '',
+            // Page d'origine d'une recette importée : elle en porte le crédit.
+            source: typeof r.source === 'string' && /^https?:\/\//.test(r.source)
+                ? r.source.slice(0, 300) : undefined,
             // Champs non exploités mais conservés (aller-retour import/export)
             cuisine: typeof r.cuisine === 'string' ? r.cuisine : undefined,
             season: Array.isArray(r.season) ? r.season.map(Number).filter(Number.isFinite) : undefined

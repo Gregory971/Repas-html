@@ -30,26 +30,37 @@ async function fetchCatalog() {
  * aux courses, au frigo ni aux réglages.
  * @returns {{recipes: number, foodBank: number, photos: number}} éléments ajoutés
  */
-function mergeCatalog(catalog) {
-    const knownRecipes = new Map(state.recipes.map((r) => [catalogKey(r.title), r]));
-    const knownFoods = new Set(state.foodBank.map((f) => catalogKey(f.name)));
+/**
+ * Ajoute les recettes absentes de la collection. Une recette déjà présente
+ * n'est jamais remplacée : elle reçoit seulement la photo qui lui manque.
+ *
+ * @returns {{recipes: number, photos: number}} éléments ajoutés
+ */
+function mergeRecipes(liste) {
+    const connues = new Map(state.recipes.map((r) => [catalogKey(r.title), r]));
     let recipes = 0;
-    let foodBank = 0;
     let photos = 0;
 
-    catalog.recipes.forEach((r) => {
+    liste.forEach((r) => {
         const key = catalogKey(r.title);
-        const existante = knownRecipes.get(key);
+        const existante = connues.get(key);
         if (existante) {
-            // Recette déjà présente : on ne touche à rien, sauf pour lui donner
-            // la photo du catalogue si elle n'en a aucune.
             if (r.image && !existante.image) { existante.image = r.image; photos++; }
             return;
         }
-        knownRecipes.set(key, r);
+        connues.set(key, r);
         state.recipes.push(Object.assign({}, r, { id: generateId() }));
         recipes++;
     });
+
+    return { recipes, photos };
+}
+
+function mergeCatalog(catalog) {
+    const knownFoods = new Set(state.foodBank.map((f) => catalogKey(f.name)));
+    let foodBank = 0;
+
+    const { recipes, photos } = mergeRecipes(catalog.recipes);
 
     catalog.foodBank.forEach((f) => {
         const key = catalogKey(f.name);

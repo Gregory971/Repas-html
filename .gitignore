@@ -7,3 +7,5 @@ Thumbs.db
 desktop.ini
 .DS_Store
 node_modules/
+data/imported.json
+data/photo-candidates.json

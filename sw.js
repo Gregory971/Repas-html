@@ -4,7 +4,7 @@
  */
 'use strict';
 
-const VERSION = 'v0.24.2';
+const VERSION = 'v0.25';
 const SHELL = `planrepas-shell-${VERSION}`;   // fichiers de l'application
 const ASSETS = `planrepas-assets-${VERSION}`; // polices distantes
 
@@ -77,8 +77,11 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Polices Google : cache d'abord, mise à jour silencieuse
-    if (/fonts\.(googleapis|gstatic)\.com$/.test(url.hostname)) {
+    // Polices Google et photos de recettes importées : cache d'abord.
+    // Sans cela, une recette venue d'un site tiers perdrait son illustration
+    // dès qu'on ouvre l'application hors ligne.
+    const estImage = req.destination === 'image';
+    if (/fonts\.(googleapis|gstatic)\.com$/.test(url.hostname) || estImage) {
         event.respondWith((async () => {
             const cache = await caches.open(ASSETS);
             const cached = await cache.match(req);

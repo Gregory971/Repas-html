@@ -78,6 +78,40 @@ n'en reçoivent aucune et gardent leur vignette générée à partir de leur nom
 Pour vos propres plats, le formulaire de recette accepte une photo depuis l'appareil :
 elle est réduite à 640 px et enregistrée **sur cet appareil uniquement**, jamais publiée.
 
+## Importer des recettes depuis le web
+
+`tools/import-recipes.mjs` récupère des recettes sur les sites qui publient des données
+structurées `schema.org/Recipe`, et les met au format de l'application :
+
+```bash
+node tools/import-recipes.mjs "https://exemple.org/ma-recette/"
+node tools/import-recipes.mjs --liste "https://exemple.org/categorie/" --max 10
+```
+
+Le résultat va dans `data/imported.json`. Chargez-le ensuite dans l'application avec le
+bouton **Importer** de l'en-tête : les recettes absentes sont ajoutées, les vôtres, votre
+planning et vos réglages ne bougent pas. Chaque fiche importée affiche un lien vers sa
+page d'origine.
+
+Sites vérifiés :
+
+| Site | État |
+|---|---|
+| 750g.com | ✅ données structurées complètes |
+| cuisine-creole.com | ✅ données structurées complètes |
+| cookpad.com | ✅ données structurées complètes |
+| tatiemaryse.com | ❌ aucune donnée structurée publiée — non importable |
+
+Le script s'identifie, respecte les règles `robots.txt` du site et espace ses requêtes
+d'une seconde. Titres nettoyés de leurs appendices de référencement, mentions de
+préparation retirées des noms d'ingrédients, « sel et poivre » séparé en deux articles,
+durées ISO converties en minutes.
+
+> **`data/imported.json` est exclu du dépôt, et le catalogue publié n'est jamais modifié
+> par ce script.** Une liste d'ingrédients ne se protège pas, mais le texte des étapes et
+> les photos appartiennent à leurs auteurs : les charger dans votre application relève de
+> l'usage privé, les republier sur un site public non.
+
 ## Panneaux latéraux
 
 Sur grand écran, les colonnes « Recettes » et « Courses / Frigo / Aliments » se replient
@@ -106,6 +140,7 @@ n'autorise les scripts de la page que par leur empreinte, calculée à la constr
 | `data/photos/` | Photos des plats (Wikimedia Commons, licences libres) |
 | `data/photo-credits.json` | Auteur, licence et source de chaque photo |
 | `tools/find-photos.mjs`, `tools/fetch-photos.mjs` | Recherche et récupération des photos |
+| `tools/import-recipes.mjs` | Import de recettes depuis des sites tiers (usage privé) |
 | `tools/build.js` | Assemble `index.html` depuis `src/` |
 | `tools/build-css.js` | Recompile le bloc `<style id="tw">` depuis le markup |
 | `tests/` | Tests des fonctions pures et de la page assemblée |

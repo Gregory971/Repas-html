@@ -44,7 +44,13 @@ function showRecipeDetail(id) {
             <ol class="list-decimal list-inside text-xs text-slate-300 flex flex-col gap-1">
                 ${(recipe.steps.length ? recipe.steps : ['Non renseignée']).map((s) => `<li>${esc(s)}</li>`).join('')}
             </ol>
-        </div>`;
+        </div>
+        ${recipe.source ? `
+        <p class="text-[11px] text-slate-400 border-t border-white/10 pt-3">
+            Recette importée depuis
+            <a href="${esc(recipe.source)}" target="_blank" rel="noopener noreferrer nofollow"
+               class="text-primary hover:underline">${esc(sourceLabel(recipe.source))}</a>
+        </p>` : ''}`;
     $('recipe-detail-modal').setAttribute('aria-labelledby', 'recipe-detail-title');
     openModal('recipe-detail-modal');
 }

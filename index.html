@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="dark light">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ss5t5uIVy1CVOG6AuFFrViD57kJMr5yNnowXZVAmK8I=' 'sha256-3h9ZNGtn3km6ifnCAQHdcdOOmm0aaW/CYzuJCTcPGAo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ss5t5uIVy1CVOG6AuFFrViD57kJMr5yNnowXZVAmK8I=' 'sha256-HK909IAtlCdxFFwnHTTW0UQzwLjr+3utiYlkeXJNQNU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
     <meta name="description" content="Planification de repas : planning hebdomadaire, recettes, liste de courses et inventaire du frigo. Fonctionne hors ligne, données stockées sur votre appareil.">
     <meta name="theme-color" content="#0b1326" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#eef2f9" media="(prefers-color-scheme: light)">
-    <title>PlanRepas v0.24</title>
+    <title>PlanRepas v0.25</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192.png" type="image/png">
@@ -1809,6 +1809,10 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
+.hover\:underline:hover {
+  text-decoration-line: underline;
+}
+
 .focus\:border-primary:focus {
   --tw-border-opacity: 1;
   border-color: rgb(16 185 129 / var(--tw-border-opacity, 1));
@@ -2303,7 +2307,7 @@ video {
                 </div>
             </div>
             <h1 class="font-h1 font-bold text-xl tracking-tight text-white items-center gap-2 hidden sm:flex">
-                PlanRepas <span class="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-semibold">v0.24</span>
+                PlanRepas <span class="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-semibold">v0.25</span>
             </h1>
         </div>
 
@@ -3074,6 +3078,15 @@ video {
             return Date.now() * 1000 + idCounter;
         }
 
+        /** « https://www.750g.com/... » -> « 750g.com », pour créditer la source. */
+        function sourceLabel(url) {
+            try {
+                return new URL(url).hostname.replace(/^www\./, '');
+            } catch (e) {
+                return 'la source';
+            }
+        }
+
         /* ===== 03-ingredients.js ===== */
 
         /*
@@ -3619,6 +3632,9 @@ video {
                         ? r.ingredients.map(normalizeIngredient).filter(Boolean).slice(0, 60) : [],
                     steps: Array.isArray(r.steps) ? r.steps.map(String).slice(0, 60) : [],
                     image: typeof r.image === 'string' ? r.image : '',
+                    // Page d'origine d'une recette importée : elle en porte le crédit.
+                    source: typeof r.source === 'string' && /^https?:\/\//.test(r.source)
+                        ? r.source.slice(0, 300) : undefined,
                     // Champs non exploités mais conservés (aller-retour import/export)
                     cuisine: typeof r.cuisine === 'string' ? r.cuisine : undefined,
                     season: Array.isArray(r.season) ? r.season.map(Number).filter(Number.isFinite) : undefined
@@ -4169,26 +4185,37 @@ video {
          * aux courses, au frigo ni aux réglages.
          * @returns {{recipes: number, foodBank: number, photos: number}} éléments ajoutés
          */
-        function mergeCatalog(catalog) {
-            const knownRecipes = new Map(state.recipes.map((r) => [catalogKey(r.title), r]));
-            const knownFoods = new Set(state.foodBank.map((f) => catalogKey(f.name)));
+        /**
+         * Ajoute les recettes absentes de la collection. Une recette déjà présente
+         * n'est jamais remplacée : elle reçoit seulement la photo qui lui manque.
+         *
+         * @returns {{recipes: number, photos: number}} éléments ajoutés
+         */
+        function mergeRecipes(liste) {
+            const connues = new Map(state.recipes.map((r) => [catalogKey(r.title), r]));
             let recipes = 0;
-            let foodBank = 0;
             let photos = 0;
 
-            catalog.recipes.forEach((r) => {
+            liste.forEach((r) => {
                 const key = catalogKey(r.title);
-                const existante = knownRecipes.get(key);
+                const existante = connues.get(key);
                 if (existante) {
-                    // Recette déjà présente : on ne touche à rien, sauf pour lui donner
-                    // la photo du catalogue si elle n'en a aucune.
                     if (r.image && !existante.image) { existante.image = r.image; photos++; }
                     return;
                 }
-                knownRecipes.set(key, r);
+                connues.set(key, r);
                 state.recipes.push(Object.assign({}, r, { id: generateId() }));
                 recipes++;
             });
+
+            return { recipes, photos };
+        }
+
+        function mergeCatalog(catalog) {
+            const knownFoods = new Set(state.foodBank.map((f) => catalogKey(f.name)));
+            let foodBank = 0;
+
+            const { recipes, photos } = mergeRecipes(catalog.recipes);
 
             catalog.foodBank.forEach((f) => {
                 const key = catalogKey(f.name);
@@ -5303,7 +5330,13 @@ video {
                     <ol class="list-decimal list-inside text-xs text-slate-300 flex flex-col gap-1">
                         ${(recipe.steps.length ? recipe.steps : ['Non renseignée']).map((s) => `<li>${esc(s)}</li>`).join('')}
                     </ol>
-                </div>`;
+                </div>
+                ${recipe.source ? `
+                <p class="text-[11px] text-slate-400 border-t border-white/10 pt-3">
+                    Recette importée depuis
+                    <a href="${esc(recipe.source)}" target="_blank" rel="noopener noreferrer nofollow"
+                       class="text-primary hover:underline">${esc(sourceLabel(recipe.source))}</a>
+                </p>` : ''}`;
             $('recipe-detail-modal').setAttribute('aria-labelledby', 'recipe-detail-title');
             openModal('recipe-detail-modal');
         }
@@ -5629,6 +5662,39 @@ video {
             showToast('Export généré !');
         }
 
+        /**
+         * Charge un fichier de recettes importées : complète la collection sans
+         * toucher au planning, aux courses ni aux réglages.
+         */
+        async function importerDesRecettes(parsed) {
+            const brutes = Array.isArray(parsed.recipes) ? parsed.recipes : [];
+            if (!brutes.length) { showToast('Ce fichier ne contient aucune recette', 'error'); return; }
+
+            // On passe par normalize pour valider et assainir, en isolant les recettes :
+            // sans cette garde, un fichier vide ferait revenir le jeu de démonstration.
+            const propres = normalize({ recipes: brutes }).recipes;
+            if (!propres.length) { showToast('Aucune recette exploitable dans ce fichier', 'error'); return; }
+
+            const ok = await confirmDialog(
+                `Ajouter ${propres.length} recette${propres.length > 1 ? 's' : ''} à votre collection ?\n\n`
+                + 'Vos recettes, votre planning et vos réglages ne sont pas modifiés.',
+                { confirmLabel: 'Ajouter' });
+            if (!ok) return;
+
+            const bilan = mergeRecipes(propres);
+            if (!bilan.recipes && !bilan.photos) { showToast('Ces recettes sont déjà dans votre collection'); return; }
+
+            saveNow();
+            renderRecipes();
+            renderPlanning();
+            closeModal('settings-modal');
+
+            const parts = [];
+            if (bilan.recipes) parts.push(`${bilan.recipes} recette${bilan.recipes > 1 ? 's' : ''}`);
+            if (bilan.photos) parts.push(`${bilan.photos} photo${bilan.photos > 1 ? 's' : ''}`);
+            showToast(`${parts.join(' et ')} ajoutée${bilan.recipes + bilan.photos > 1 ? 's' : ''}`);
+        }
+
         $('import-file').addEventListener('change', (e) => {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
@@ -5641,6 +5707,13 @@ video {
                     showToast('Fichier JSON invalide', 'error');
                     return;
                 }
+                // Fichier produit par tools/import-recipes.mjs : on complète la
+                // collection au lieu de tout remplacer.
+                if (parsed && parsed.planrepasImport === 'recipes') {
+                    await importerDesRecettes(parsed);
+                    return;
+                }
+
                 const ok = await confirmDialog('Remplacer toutes les données actuelles par le contenu du fichier ?',
                     { confirmLabel: 'Importer' });
                 if (!ok) return;

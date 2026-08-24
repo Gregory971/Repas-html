@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { JSDOM, VirtualConsole } from 'jsdom';
+import { VERSION } from '../tools/build.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HTML = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -286,6 +287,17 @@ test('les empreintes de la CSP correspondent aux scripts réellement présents',
         const hash = crypto.createHash('sha256').update(m[1], 'utf8').digest('base64');
         assert.ok(policy.includes(`'sha256-${hash}'`), 'empreinte de script absente de la CSP');
     }
+});
+
+test('le service worker est synchronisé sur la version du paquet', async () => {
+    // Un sw.js désynchronisé est identique octet à octet à la version
+    // précédente : le navigateur ne détecte alors aucune mise à jour, et les
+    // anciens caches ne sont jamais purgés.
+    const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+    const match = sw.match(/^const VERSION = '([^']*)';/m);
+    assert.ok(match, 'VERSION introuvable dans sw.js');
+    assert.equal(match[1], `v${VERSION}`,
+        'sw.js n est pas synchronisé sur la version du paquet : lancez npm run build');
 });
 
 /* ==========================================================

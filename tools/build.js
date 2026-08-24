@@ -17,6 +17,7 @@ import { buildCss } from './build-css.js';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
 const OUT = path.join(ROOT, 'index.html');
+const SW = path.join(ROOT, 'sw.js');
 
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 /** « 0.23.0 » -> « 0.23 » : la version affichée suit celle du paquet. */
@@ -97,6 +98,25 @@ function buildCsp(html) {
     return `<meta http-equiv="Content-Security-Policy" content="${policy}">`;
 }
 
+/* ---------- Service worker ---------- */
+
+/**
+ * sw.js n'est pas concaténé (il tourne hors de la page qu'il met en cache),
+ * mais son VERSION doit suivre celle du paquet : sans ça le fichier est
+ * identique octet à octet d'une version à l'autre, le navigateur ne détecte
+ * donc aucune mise à jour du service worker, et les anciens caches
+ * (`planrepas-shell-*`, `planrepas-assets-*`) ne sont jamais purgés.
+ */
+function syncServiceWorkerVersion() {
+    const sw = fs.readFileSync(SW, 'utf8');
+    if (!/^const VERSION = '[^']*';/m.test(sw)) {
+        throw new Error('VERSION introuvable dans sw.js');
+    }
+    const updated = sw.replace(/^const VERSION = '[^']*';/m, `const VERSION = 'v${VERSION}';`);
+    if (updated !== sw) fs.writeFileSync(SW, updated, 'utf8');
+    return updated;
+}
+
 /* ---------- Construction ---------- */
 
 function build({ css = true } = {}) {
@@ -120,6 +140,9 @@ function build({ css = true } = {}) {
     fs.writeFileSync(OUT, html, 'utf8');
     console.log(`index.html écrit : ${(html.length / 1024).toFixed(1)} Ko (v${VERSION})`);
 
+    syncServiceWorkerVersion();
+    console.log(`sw.js synchronisé sur v${VERSION}`);
+
     if (css) buildCss(OUT);
     return OUT;
 }
@@ -134,4 +157,4 @@ if (invokedDirectly) {
     }
 }
 
-export { build, assembleScript, stripModuleSyntax, VERSION };
+export { build, assembleScript, stripModuleSyntax, syncServiceWorkerVersion, VERSION };

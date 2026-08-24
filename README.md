@@ -201,10 +201,11 @@ marqueur du gabarit n'a pas été remplacé, ou s'il reste de la syntaxe de modu
 
 Les versions sont des **tags git** : il n'y a plus de copie `Repas v0.N.html` à la racine.
 
-1. modifier `src/`, puis `npm run check`
-2. porter le numéro dans `package.json` (`version`) et dans `sw.js` (`VERSION`) —
-   sans quoi les navigateurs conservent l'ancien cache
-3. commiter, `git tag v0.23`, pousser
+1. modifier `src/`
+2. porter le numéro dans `package.json` (`version`)
+3. `npm run check` — construit `index.html`, synchronise le `VERSION` de `sw.js`
+   sur celui du paquet (sans quoi les navigateurs conservent l'ancien cache), puis teste
+4. commiter, `git tag v0.23`, pousser
 
 ## Licence
 
